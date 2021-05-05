@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect
 import yaml
+import re
 
 app = Flask(__name__,static_url_path='')
 with open('main.yaml') as maindb:
@@ -27,8 +28,24 @@ def create_board():
 	if not bid:
 		return render_template('create.html', error = "Missing board ID."), 400
 	
+        bid = bid.lstrip().rstrip()
+	
+	#remove slashes
+	if bid.startswith('/'):
+	    bid = bid[1:]
+	
+	if bid.endswith('/'):
+	    bid = bid[:-1]
+	
+	bid = bid.lower()
+	
 	if len(bid) > 4:
 		return render_template('create.html', error = "Board ID can't be longer than 4 characters."), 400
+	
+	#disallow special characters
+	valid_id_regex = re.compile('[a-z]{1,5}')
+	if not valid_id_regex.match(bid):
+	    return render_template('create.html', error = "Board ID cannot contain special characters."), 400
 	
         if config['boards'].get(bid):
             #return 'that board already exists!'
