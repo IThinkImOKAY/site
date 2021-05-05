@@ -1,0 +1,8 @@
+no_board_text: "There aren't any boards yet. Be the first to create one."
+boards:
+  g:
+    name: 'general'
+    id: 'g'
+  p:
+    name: 'programming'
+    id: 'p'
