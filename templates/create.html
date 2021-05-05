@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Create board</title>
+    <title>Create board</title>
 </head>
 <body>
-	<form action="/create_board" method="post">
-		<label for="id">Board ID:</label><br />
-		<input id="id" name="id" placeholder="board id (eg: sex)" /><br />
-		<label for="name">Board description:</label><br />
-		<textarea id="name" name="name" placeholder="board description"></textarea><br />
-		<br />
-		<input type="submit" value="Create" />
-	</form>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form action="/create_board" method="post">
+        <label for="id">Board ID:</label><br />
+        <input id="id" name="id" required maxlength="4" placeholder="board id (eg: sex)" /><br />
+        <label for="name">Board description:</label><br />
+        <textarea id="name" name="name" placeholder="board description"></textarea><br />
+        <br />
+        <input type="submit" value="Create" />
+    </form>
 </body>
 </html>
