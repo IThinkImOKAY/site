@@ -52,7 +52,7 @@ def create_board():
         else:
             config['boards'][bid] = {'id':bid,'name':bname}
             dump_it(data=config)
-            return redirect('/{}/'.format(bid))
+            return redirect(f'/{bid}/')
     else:
         return 'invalid method!', 405
 
@@ -78,7 +78,7 @@ def submit(bid):
         #if config
         config['boards'][bid]['posts'][int(pid)]=datadict
         dump_it(data=config)
-        return redirect('/{}/post/{}'.format(bid,pid))
+        return redirect(f'/{bid}/post/{pid}')
     else:
         return 'board does not exist'
 
