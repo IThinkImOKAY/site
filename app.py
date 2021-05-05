@@ -17,4 +17,7 @@ def slash():
 
 @app.route('/c/<cid>/')
 def c(cid):
-    return cid
+    if config['boards'].get(cid):
+        return render_template('board.html',title='/c/'+cid,cname=config['boards'][cid]['name'])
+    else:
+        return 'community does not exist!'
