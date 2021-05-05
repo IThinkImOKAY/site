@@ -25,10 +25,10 @@ def create_board():
         bname = request.form['name']    
 	
 	if not bid:
-		return render_template('create.html', error = "Missing board ID."). 400
+		return render_template('create.html', error = "Missing board ID."), 400
 	
 	if len(bid) > 4:
-		return render_template('create.html', error = "Board ID can't be longer than 4 characters.", 400
+		return render_template('create.html', error = "Board ID can't be longer than 4 characters."), 400
 	
         if config['boards'].get(bid):
             #return 'that board already exists!'
