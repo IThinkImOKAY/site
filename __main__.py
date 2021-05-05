@@ -25,27 +25,27 @@ def create_board():
         bid = request.form['id']
         bname = request.form['name']
 
-    if not bid:
-        return render_template('create.html', error = "Missing board ID."), 400
+        if not bid:
+            return render_template('create.html', error = "Missing board ID."), 400
 
-        bid = bid.lstrip().rstrip()
+            bid = bid.lstrip().rstrip()
 
-    #remove slashes
-    if bid.startswith('/'):
-        bid = bid[1:]
+        #remove slashes
+        if bid.startswith('/'):
+            bid = bid[1:]
 	
-    if bid.endswith('/'):
-        bid = bid[:-1]
+        if bid.endswith('/'):
+            bid = bid[:-1]
         
-    bid = bid.lower()
+        bid = bid.lower()
 
-    if len(bid) > 4:
-        return render_template('create.html', error = "Board ID can't be longer than 4 characters."), 400
+        if len(bid) > 4:
+            return render_template('create.html', error = "Board ID can't be longer than 4 characters."), 400
 
-    #disallow special characters
-    valid_id_regex = re.compile('[a-z]{1,5}')
-    if not valid_id_regex.match(bid):
-        return render_template('create.html', error = "Board ID cannot contain special characters."), 400
+        #disallow special characters
+        valid_id_regex = re.compile('[a-z]{1,5}')
+        if not valid_id_regex.match(bid):
+            return render_template('create.html', error = "Board ID cannot contain special characters."), 400
 
         if config['boards'].get(bid):
             return render_template('create.html', error = "A board with that name already exists."), 409
