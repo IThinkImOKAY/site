@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template, redirect
-import yaml
-import re
+import yaml, re, os
 
 app = Flask(__name__,static_url_path='')
-with open('main.yaml') as maindb:
+directory = os.path.dirname(os.path.abspath(__file__))
+yaml_db = os.path.join(curfold, 'main.yaml')
+with open(yaml_db) as maindb:
     config = yaml.safe_load(maindb)
 
 def dump_it(data):
@@ -14,7 +15,7 @@ def dump_it(data):
 @app.route('/', methods=['GET'])
 def slash():
     boards = config['boards']
-    communities = [config]['boards'][c]['id'] for c in config['boards']]
+    communities = [config['boards'][c]['id'] for c in config['boards']]
     return render_template('index.html',communities=communities)
 
 @app.route('/create_board', methods=['POST','GET'])
