@@ -8,8 +8,8 @@ from os import environ
 import time
 
 app = Flask(__name__,static_url_path='')
-with open('main.yaml') as maindb:
-    config = yaml.safe_load(maindb)
+#with open('main.yaml') as maindb:
+#    config = yaml.safe_load(maindb)
 
 engine = create_engine(environ.get('DB_URL'), echo = True)
 Base = declarative_base
