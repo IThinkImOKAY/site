@@ -49,8 +49,8 @@ def post_create_board():
 		return render_template('create.html', error = "A board with that name already exists."), 409
 
 	new_board = Board(name = name,
-					  description = desc,
-					  creation_ip = request.remote_addr)
+		description = desc,
+		creation_ip = request.remote_addr)
 
 	g.db.add(new_board)
 
