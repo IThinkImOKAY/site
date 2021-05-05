@@ -5,7 +5,7 @@
 -- Dumped from database version 12.6
 -- Dumped by pg_dump version 12.6
 
--- Started on 2021-05-05 22:48:04 CEST
+-- Started on 2021-05-06 00:29:40 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -51,7 +51,7 @@ CREATE SEQUENCE public."Boards_id_seq"
 
 
 --
--- TOC entry 3554 (class 0 OID 0)
+-- TOC entry 3565 (class 0 OID 0)
 -- Dependencies: 202
 -- Name: Boards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -60,7 +60,45 @@ ALTER SEQUENCE public."Boards_id_seq" OWNED BY public."Boards".id;
 
 
 --
--- TOC entry 3420 (class 2604 OID 16409)
+-- TOC entry 205 (class 1259 OID 16417)
+-- Name: Posts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."Posts" (
+    id integer NOT NULL,
+    title character varying(50),
+    body text,
+    created_utc integer,
+    creation_ip character varying(255),
+    board_id integer
+);
+
+
+--
+-- TOC entry 204 (class 1259 OID 16415)
+-- Name: Posts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."Posts_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3566 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: Posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."Posts_id_seq" OWNED BY public."Posts".id;
+
+
+--
+-- TOC entry 3427 (class 2604 OID 16409)
 -- Name: Boards id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -68,7 +106,15 @@ ALTER TABLE ONLY public."Boards" ALTER COLUMN id SET DEFAULT nextval('public."Bo
 
 
 --
--- TOC entry 3422 (class 2606 OID 16414)
+-- TOC entry 3428 (class 2604 OID 16420)
+-- Name: Posts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Posts" ALTER COLUMN id SET DEFAULT nextval('public."Posts_id_seq"'::regclass);
+
+
+--
+-- TOC entry 3430 (class 2606 OID 16414)
 -- Name: Boards Boards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -76,7 +122,25 @@ ALTER TABLE ONLY public."Boards"
     ADD CONSTRAINT "Boards_pkey" PRIMARY KEY (id);
 
 
--- Completed on 2021-05-05 22:48:04 CEST
+--
+-- TOC entry 3432 (class 2606 OID 16425)
+-- Name: Posts Posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Posts"
+    ADD CONSTRAINT "Posts_pkey" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3433 (class 2606 OID 16426)
+-- Name: Posts Posts_board_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."Posts"
+    ADD CONSTRAINT "Posts_board_id_fkey" FOREIGN KEY (board_id) REFERENCES public."Boards"(id);
+
+
+-- Completed on 2021-05-06 00:29:40 CEST
 
 --
 -- PostgreSQL database dump complete
