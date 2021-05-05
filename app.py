@@ -16,21 +16,23 @@ def slash():
     communities = [config['boards'][c]['id'] for c in config['boards']]
     return render_template('index.html',communities=communities)
 
-@app.route('/create_board', methods=['GET'])
-def get_create_board():
-    return render_template('create.html',)
-
-@app.route('/create_board', methods=['POST'])
-def post_create_board():
-    bid = request.form['id']
-    bname = request.form['name']
-    if config['boards'].get(bid):
-        return 'that board already exists!'
+@app.route('/create_board', methods=['POST','GET'])
+def create_board():
+    if request.method == 'GET':
+        return render_template('create.html',)
+    elif request.method == 'POST':
+        bid = request.form['id']
+        bname = request.form['name']    
+        if config['boards'].get(bid):
+            return 'that board already exists!'
+        else:
+            config['boards'][bid] = {'id':bid,'name':bname}
+            dump_it(data=config)
+            return redirect('/c/{}'.format(bid))
     else:
-        config['boards'][bid] = {'id':bid,'name':bname}
-        dump_it(data=config)
-        return redirect('/c/{}'.format(bid))
-    
+        return 'invalid method!'
+        
+
 @app.route('/c/<cid>/')           
 def c(cid):
     if config['boards'].get(cid):
