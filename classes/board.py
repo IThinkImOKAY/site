@@ -15,7 +15,7 @@ class Board(Base):
 		if 'created_utc' not in kwargs:
 			kwargs['created_utc'] = int(time.time())
 
-		super().__init__(**kwargs)
+		super().__init__(**kwargs)	
 
 	@property
 	def url(self):
