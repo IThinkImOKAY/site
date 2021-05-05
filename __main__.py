@@ -14,7 +14,7 @@ def dump_it(data):
 @app.route('/', methods=['GET'])
 def slash():
     boards = config['boards']
-    communities = [config['boards'][c]['id'] for c in config['boards']]
+    communities = [config]['boards'][c]['id'] for c in config['boards']]
     return render_template('index.html',communities=communities)
 
 @app.route('/create_board', methods=['POST','GET'])
