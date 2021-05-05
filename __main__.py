@@ -51,6 +51,7 @@ def create_board():
             return render_template('create.html', error = "A board with that name already exists."), 409
         else:
             config['boards'][bid] = {'id':bid,'name':bname}
+	    config['boards'][bid]['posts'] = {}
             dump_it(data=config)
             return redirect(f'/{bid}/')
     else:
