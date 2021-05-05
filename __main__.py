@@ -38,7 +38,7 @@ def create_board():
             dump_it(data=config)
             return redirect('/{}/'.format(bid))
     else:
-        return 'invalid method!'
+        return 'invalid method!', 405
         
 
 """
