@@ -23,56 +23,74 @@ def create_board():
         return render_template('create.html',)
     elif request.method == 'POST':
         bid = request.form['id']
-        bname = request.form['name']    
-	
-	if not bid:
-		return render_template('create.html', error = "Missing board ID."), 400
-	
+        bname = request.form['name']
+
+    if not bid:
+        return render_template('create.html', error = "Missing board ID."), 400
+
         bid = bid.lstrip().rstrip()
+
+    #remove slashes
+    if bid.startswith('/'):
+        bid = bid[1:]
 	
-	#remove slashes
-	if bid.startswith('/'):
-	    bid = bid[1:]
-	
-	if bid.endswith('/'):
-	    bid = bid[:-1]
-	
-	bid = bid.lower()
-	
-	if len(bid) > 4:
-		return render_template('create.html', error = "Board ID can't be longer than 4 characters."), 400
-	
-	#disallow special characters
-	valid_id_regex = re.compile('[a-z]{1,5}')
-	if not valid_id_regex.match(bid):
-	    return render_template('create.html', error = "Board ID cannot contain special characters."), 400
-	
+    if bid.endswith('/'):
+        bid = bid[:-1]
+        
+    bid = bid.lower()
+
+    if len(bid) > 4:
+        return render_template('create.html', error = "Board ID can't be longer than 4 characters."), 400
+
+    #disallow special characters
+    valid_id_regex = re.compile('[a-z]{1,5}')
+    if not valid_id_regex.match(bid):
+        return render_template('create.html', error = "Board ID cannot contain special characters."), 400
+
         if config['boards'].get(bid):
-            #return 'that board already exists!'
-		return render_template('create.html', error = "A board with that name already exists."), 409
+            return render_template('create.html', error = "A board with that name already exists."), 409
         else:
             config['boards'][bid] = {'id':bid,'name':bname}
             dump_it(data=config)
             return redirect('/{}/'.format(bid))
     else:
         return 'invalid method!', 405
-        
-
-"""
-@app.route('/c/<cid>/')           
-def c(cid):
-    if config['boards'].get(cid):
-        return render_template('board.html',title='/c/'+cid,cname=config['boards'][cid]['name'])
-    else:
-        return 'community does not exist!'
-"""
 
 @app.route('/<bid>/')
 def b(bid):
     if config['boards'].get(bid):
-        return render_template('board.html',title=f'/{bid}/',cname=config['boards'][bid]['name'])
+        return render_template('board.html',title=f'/{bid}/',bname=config['boards'][bid]['name'],bid=bid)
     else:
         return 'community does not exist!'
+
+@app.route('/<bid>/submit',methods=['POST'])
+def submit(bid):
+    title = request.form['title']
+    body = request.form['body']
+    if config['boards'].get(bid):
+        if config['boards'][bid].get('totalposts'):
+            pid = config['boards'][bid]['totalposts']+1
+            config['boards'][bid]['totalposts']+=1
+        else:
+            config['boards'][bid]['totalposts']=1
+            pid=1
+        datadict = {'title':title,'body':body}
+        #if config
+        config['boards'][bid]['posts'][int(pid)]=datadict
+        dump_it(data=config)
+        return redirect('/{}/post/{}'.format(bid,pid))
+    else:
+        return 'board does not exist'
+
+@app.route('/<bid>/post/<pid>',methods=['GET'])
+def view_post(bid,pid):
+    check = config['boards'][bid]['posts'].get(int(pid))
+    if check is not None:
+        title = config['boards'][bid]['posts'][int(pid)]['title']
+        body = config['boards'][bid]['posts'][int(pid)]['body']
+        return render_template('post.html',title=title,body=body)
+    else:
+        return 'no such post!'
 
 if __name__ == '__main__':
 	app.run()

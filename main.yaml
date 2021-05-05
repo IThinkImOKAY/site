@@ -1,8 +1,26 @@
-no_board_text: "There aren't any boards yet. Be the first to create one."
 boards:
   g:
-    name: 'general'
-    id: 'g'
+    id: g
+    name: general
+    posts:
+      1:
+        body: welcome to /g/
+        title: welcome to /g/
+    totalposts: 1
   p:
-    name: 'programming'
-    id: 'p'
+    id: p
+    name: programming
+    posts:
+      1:
+        body: welcome to /p/
+        title: welcome to /p/
+      2:
+        body: pls work
+        title: test post
+      3:
+        body: dfvg
+        title: dcfvg
+      4:
+        body: test
+        title: hi /p/
+    totalposts: 4

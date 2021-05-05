@@ -1,2 +1,12 @@
 <title>{{ title }}</title>
-Welcome to {{ title }}: {{ cname }}!
+Welcome to {{ title }}: {{ bname }}!
+<body>
+    How about creating a post?
+    <form action="/{{ bid }}/submit" method="post">
+            <label for="title">Your Title:</label>
+            <input for="text" id="title" name="title"><br>
+            <label for="body">Your Body:</label>
+            <input for="text" id="body" name="body"><br>
+            <input type="submit" value="Create Post">
+    </form>
+</body>
