@@ -28,14 +28,26 @@ def create_board():
         else:
             config['boards'][bid] = {'id':bid,'name':bname}
             dump_it(data=config)
-            return redirect('/c/{}'.format(bid))
+            return redirect('/{}/'.format(bid))
     else:
         return 'invalid method!'
         
 
+"""
 @app.route('/c/<cid>/')           
 def c(cid):
     if config['boards'].get(cid):
         return render_template('board.html',title='/c/'+cid,cname=config['boards'][cid]['name'])
     else:
         return 'community does not exist!'
+"""
+
+@app.route('/<bid>/')
+def b(bid):
+    if config['boards'].get(bid):
+        return render_template('board.html',title=f'/{bid}/',cname=config['boards'][bid]['name'])
+    else:
+        return 'community does not exist!'
+
+if __name__ == '__main__':
+	app.run()
