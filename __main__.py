@@ -74,8 +74,7 @@ def submit(bid):
         else:
             config['boards'][bid]['totalposts']=1
             pid=1
-        datadict = {'title':title,'body':body}
-        #if config
+        datadict = {'title':title,'body':body,'comments':{},'num_comments':0}
         config['boards'][bid]['posts'][int(pid)]=datadict
         dump_it(data=config)
         return redirect(f'/{bid}/post/{pid}')
@@ -88,9 +87,24 @@ def view_post(bid,pid):
     if check is not None:
         title = config['boards'][bid]['posts'][int(pid)]['title']
         body = config['boards'][bid]['posts'][int(pid)]['body']
-        return render_template('post.html',title=title,body=body)
+        comments = config['boards'][bid]['posts'][int(pid)]['comments']
+        return render_template('post.html',title=title,body=body,pid=pid,bid=bid,comments=comments)
     else:
         return 'no such post!'
+
+@app.route('/<bid>/post/<pid>/comment/',methods=['POST'])
+def comment(bid,pid):
+    body = request.form.get('body')
+    if body is not None:
+        num_comments = config['boards'][bid]['posts'][int(pid)]['num_comments']
+        com_count = int(num_comments)+1
+        config['boards'][bid]['posts'][int(pid)]['num_comments']+=1
+        commentdict = {'body':body}#,'number':num_count}
+        config['boards'][bid]['posts'][int(pid)]['comments'][com_count] = commentdict
+        dump_it(data=config)
+        return redirect(request.path.replace('/comment/',''))
+    else:
+        return 'no body provided!'
 
 if __name__ == '__main__':
 	app.run()
