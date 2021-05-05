@@ -12,6 +12,15 @@ def get_board(boardname):
 
 	return render_template('board.html', board = board)
 
+@app.route('/bid/<bid>')
+def board_by_id(bid):
+	board = g.db.query(Board).filter_by(id = bid).first()
+
+	if not board:
+		abort(404)
+
+	return redirect(board.url)
+
 @app.route('/create_board', methods = ['GET'])
 def get_create_board():
 	return render_template('create.html')
