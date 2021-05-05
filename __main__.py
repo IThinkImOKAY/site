@@ -1,15 +1,31 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, g
 import yaml
 import re
+from sqlalchemy import *
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
+from os import environ
+import time
 
 app = Flask(__name__,static_url_path='')
 with open('main.yaml') as maindb:
     config = yaml.safe_load(maindb)
 
+engine = create_engine(environ.get('DB_URL'), echo = True)
+Base = declarative_base
+
+db_session = scoped_session(sessionmaker(bind = engine))
+
 def dump_it(data):
     with open('main.yaml','w') as cf:
         yaml.dump(data,cf)
     return 'dumped!'
+
+@app.before_request
+def before_request():
+	g.timestamp = time.time()
+
+	g.db = db_session
 
 @app.route('/', methods=['GET'])
 def slash():
