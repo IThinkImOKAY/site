@@ -8,10 +8,10 @@
     <p style="color: red;">{{ error }}</p>
     {% endif %}
     <form action="/create_board" method="post">
-        <label for="id">Board ID:</label><br />
-        <input id="id" name="id" required maxlength="4" placeholder="board id (eg: sex)" /><br />
-        <label for="name">Board description:</label><br />
-        <textarea id="name" name="name" placeholder="board description"></textarea><br />
+        <label for="name">Board name:</label><br />
+        <input id="name" name="name" required maxlength="4" placeholder="board name (eg: sex)" /><br />
+        <label for="desc">Board description:</label><br />
+        <textarea id="desc" name="desc" placeholder="board description"></textarea><br />
         <br />
         <input type="submit" value="Create" />
     </form>

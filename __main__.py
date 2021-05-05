@@ -12,7 +12,7 @@ app = Flask(__name__,static_url_path='')
 #    config = yaml.safe_load(maindb)
 
 engine = create_engine(environ.get('DB_URL'), echo = True)
-Base = declarative_base
+Base = declarative_base()
 
 db_session = scoped_session(sessionmaker(bind = engine))
 
@@ -27,6 +27,11 @@ def before_request():
 
 	g.db = db_session
 
+@app.route('/ping')
+def ping():
+	return 'pong!'
+
+"""
 @app.route('/', methods=['GET'])
 def slash():
     boards = config['boards']
@@ -107,6 +112,16 @@ def view_post(bid,pid):
         return render_template('post.html',title=title,body=body)
     else:
         return 'no such post!'
+"""
+
+#import routing functions
+from routes.boards import *
+
+@app.after_request
+def after_request(response):
+	g.db.commit()
+
+	return response
 
 if __name__ == '__main__':
 	app.run()

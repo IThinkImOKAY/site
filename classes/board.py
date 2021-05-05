@@ -16,3 +16,8 @@ class Board(Base):
 			kwargs['created_utc'] = int(time.time())
 
 		super().__init__(**kwargs)
+
+	@property
+	def url(self):
+		return f'/{self.name}/'
+	
