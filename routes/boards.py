@@ -12,7 +12,7 @@ def get_board(boardname):
 
 	return render_template('board.html', board = board)
 
-@app.route('/bid/<bid>')
+@app.route('/board_id/<bid>')
 def board_by_id(bid):
 	board = g.db.query(Board).filter_by(id = bid).first()
 
