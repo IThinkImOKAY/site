@@ -3,7 +3,7 @@ import yaml, re, os
 
 app = Flask(__name__,static_url_path='')
 directory = os.path.dirname(os.path.abspath(__file__))
-yaml_db = os.path.join(curfold, 'main.yaml')
+yaml_db = os.path.join(directory, 'main.yaml')
 with open(yaml_db) as maindb:
     config = yaml.safe_load(maindb)
 
@@ -61,7 +61,9 @@ def create_board():
 @app.route('/<bid>/')
 def b(bid):
     if config['boards'].get(bid):
-        return render_template('board.html',title=f'/{bid}/',bname=config['boards'][bid]['name'],bid=bid)
+	recent_post = config['boards'][bid]['totalposts']
+        posts_list = config['boards'][bid]['posts']
+        return render_template('board.html',title=f'/{bid}/',bname=config['boards'][bid]['name'],bid=bid,recent_post=recent_post,posts_list=posts_list)
     else:
         return 'community does not exist!'
 
