@@ -1,4 +1,4 @@
-from flask import g, render_template, abort, request, redirect
+from flask import g, abort, request, redirect
 from __main__ import app
 from classes.comment import *
 from helpers.get import *
