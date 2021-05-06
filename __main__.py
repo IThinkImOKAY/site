@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, redirect, g
-import yaml
 import re
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
