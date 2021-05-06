@@ -120,9 +120,11 @@ from routes.posts import *
 
 @app.after_request
 def after_request(response):
-	g.db.commit()
-
-	return response
+    g.db.commit()
+    
+    g.db.close()
+    
+    return response
 
 if __name__ == '__main__':
 	app.run()
