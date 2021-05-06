@@ -116,6 +116,7 @@ def view_post(bid,pid):
 
 #import routing functions
 from routes.boards import *
+from routes.posts import *
 
 @app.after_request
 def after_request(response):
