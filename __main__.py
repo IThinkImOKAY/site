@@ -27,7 +27,7 @@ def before_request():
 from classes.board import *
 
 @app.route('/', methods = ['GET'])
-def slash():
+def index():
     boards = g.db.query(Board).all()
 
     return render_template('index.html', boards = boards)
