@@ -9,4 +9,9 @@ Welcome to {{ title }}: {{ bname }}!
             <input for="text" id="body" name="body"><br>
             <input type="submit" value="Create Post">
     </form>
+    Try the most <a href="/{{ bid }}/post/{{ recent_post }}"> recent post</a>.
+    Post list:
+    {%- for post in posts_list -%}
+       <li><a href="/{{ bid }}/post/{{ post|string }}">{{ post|string }}</a></li>
+    {%- endfor -%}
 </body>
