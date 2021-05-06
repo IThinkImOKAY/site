@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from __main__ import Base
 import time
 
+from .comment import *
+
 class Post(Base):
 	__tablename__ = "Posts"
 
@@ -14,6 +16,8 @@ class Post(Base):
 	board_id = Column(Integer, ForeignKey('Boards.id'))
 
 	board = relationship("Board", primaryjoin = "Post.board_id == Board.id", innerjoin = True, lazy = "joined", back_populates = "posts")
+
+	comments = relationship("Comment", primaryjoin = "Post.id == Comment.parent_id", back_populates = "parent")
 
 	def __init__(self, **kwargs):
 		if 'created_utc' not in kwargs:

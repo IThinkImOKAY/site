@@ -117,13 +117,14 @@ def view_post(bid,pid):
 #import routing functions
 from routes.boards import *
 from routes.posts import *
+from routes.comments import *
 
 @app.after_request
 def after_request(response):
     g.db.commit()
-    
+
     g.db.close()
-    
+
     return response
 
 if __name__ == '__main__':

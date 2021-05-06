@@ -15,7 +15,7 @@ def get_post(boardname, pid):
 	if not post:
 		abort(404)
 
-	return render_template('post.html', post = post)
+	return render_template('post.html', post = post, comment_count = len(post.comments))
 
 @app.route('/submit', methods = ['POST'])
 def post_submit():
