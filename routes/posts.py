@@ -37,7 +37,8 @@ def post_submit():
 
 	new_post = Post(title = title,
 		body = body,
-		board_id = board)
+		board_id = board,
+		creation_ip = request.remote_addr)
 
 	g.db.add(new_post)
 	g.db.flush()
