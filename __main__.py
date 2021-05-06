@@ -27,9 +27,13 @@ def before_request():
 
 	g.db = db_session
 
-@app.route('/ping')
-def ping():
-	return 'pong!'
+from classes.board import *
+
+@app.route('/', methods = ['GET'])
+def slash():
+    boards = g.db.query(Board).all()
+
+    return render_template('index.html', boards = boards)
 
 """
 @app.route('/', methods=['GET'])

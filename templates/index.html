@@ -1,5 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+</head>
 <body>
-    {%- for c in communities -%}
-       <li><a href="{{ '/'+c+'/' }}">{{ c }}</a></li>
-    {%- endfor -%}
+	<h2>Boards</h2>
+	<ul>
+		{%- for b in boards -%}
+		<li><a href="{{ b.url }}">/{{ b.name }}/</a></li>
+		{%- endfor -%}
+	</ul>
 </body>
+</html>
