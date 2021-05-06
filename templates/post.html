@@ -1,11 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ post.title }} - /{{ post.board.name }}/</title>
+</head>
 <body>
-    <h1> {{ title }} </h1>
-    <h3> {{ body }} </h3>
-    <form action="/{{ bid }}/post/{{ pid }}/comment" method="post">
-        <textarea id="commentbox" name="body" rows="5" cols="50" placeholder='comment goes here'></textarea><br>
-        <input type="submit" value="Comment">
-    </form>
-    {%- for comment in comments -%}
-       <li>{{ comments[comment]['body'] }}</li>
-    {%- endfor -%}
+	<h1>{{ post.title }}</h1>
+	<h3>{{ post.body }}</h3>
+	<div>
+		<h2>Reply to this post</h2>
+		<form action="/submit/comment" method="post">
+			<input type="hidden" name="parent" value="{{ post.id }}" />
+			<textarea id="comment-body-input" name="body" rows="5" cols="50" placeholder="Enter your comment..."></textarea><br />
+			<input type="submit" value="Comment" />
+		</form>
+	</div>
+	<h2>{{ comment_count }} {{ 'Comment' if comment_count == 1 else 'Comments' }}</h2>
+	{% for c in post.comments %}
+	<h6 id="c{{ c.id }}">Comment #{{ c.id }}</h6>
+	<p>{{ c.body }}</p>
+	<hr />
+	{% endfor %}
 </body>
+</html>

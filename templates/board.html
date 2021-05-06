@@ -1,17 +1,26 @@
-<title>{{ title }}</title>
-Welcome to {{ title }}: {{ bname }}!
+<title>/{{ board.name }}/</title>
+Welcome to /{{ board.name }}/: {{ board.description }}!
 <body>
     How about creating a post?
-    <form action="/{{ bid }}/submit" method="post">
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form action="/submit" method="post">
+    		<input type="hidden" name="board" value="{{ board.id }}" />
             <label for="title">Your Title:</label>
-            <input for="text" id="title" name="title"><br>
+            <input required="" id="title" name="title" /><br>
             <label for="body">Your Body:</label>
-            <input for="text" id="body" name="body"><br>
-            <input type="submit" value="Create Post">
+            <textarea id="body" required="" name="body"></textarea><br>
+            <input type="submit" value="Create Post" />
     </form>
-    Try the most <a href="/{{ bid }}/post/{{ recent_post }}"> recent post</a>.
-    Post list:
-    {%- for post in posts_list -%}
-       <li><a href="/{{ bid }}/post/{{ post|string }}">{{ post|string }}</a></li>
-    {%- endfor -%}
+    <h3>Posts in /{{ board.name }}/</h3>
+    {% for p in board.posts %}
+    <div>
+    	<h6>Post #{{ p.id }}</h6>
+    	<p><strong>{{ p.title }}</strong></p>
+    	<p>{{ p.body }}</p>
+        <p>[<a href="{{ p.permalink }}">permalink</a>]</p>
+    </div>
+    <hr />
+    {% endfor %}
 </body>
