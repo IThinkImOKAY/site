@@ -1,0 +1,3 @@
+Flask == 1.1.2
+PyYAML == 5.4.1
+SQLAlchemy == 1.4.11
