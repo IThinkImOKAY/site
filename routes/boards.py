@@ -2,6 +2,7 @@ from flask import g, render_template, abort, request, redirect
 from __main__ import app
 from classes.board import *
 import re
+from helpers.wrappers import *
 
 @app.route('/<boardname>/')
 def get_board(boardname):
@@ -22,11 +23,13 @@ def board_by_id(bid):
 	return redirect(board.url)
 
 @app.route('/create_board', methods = ['GET'])
-def get_create_board():
+@auth_required
+def get_create_board(u):
 	return render_template('create.html')
 
 @app.route('/create_board', methods = ['POST'])
-def post_create_board():
+@auth_required
+def post_create_board(u):
 	name = request.form['name']
 	desc = request.form['desc']
 

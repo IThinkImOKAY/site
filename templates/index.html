@@ -6,7 +6,7 @@
 <body>
 	<p>
 		{% if u %}
-		Logged in as /u/{{ u.username }}
+		Logged in as /u/{{ u.username }} [<a href="/create_board">create board</a>]
 		<form action="/logout" method="post">
 			<input type="submit" value="Log out" />
 		</form>
