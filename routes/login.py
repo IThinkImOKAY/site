@@ -32,10 +32,10 @@ def post_login():
 
 	user = get_user(name)
 	if not user:
-		return render_template('login.html', error = "Invalid username."), 404
+		return render_template('login.html', error = "Invalid username.", redirect = redirect_to), 404
 
 	if not user.verify_password(password):
-		return render_template('login.html', error = "Invalid password."), 401
+		return render_template('login.html', error = "Invalid password.", redirect = redirect_to), 401
 
 	if 'session_id' not in session:
 		session['session_id'] = secrets.token_hex(16)
@@ -74,15 +74,15 @@ def post_signup():
 		abort(400)
 
 	if password != password_confirm:
-		return render_template('signup.html', error = "Passwords must match."), 400
+		return render_template('signup.html', error = "Passwords must match.", redirect = redirect_to), 400
 
-	valid_name_regex = re.compile('[a-zA-Z0-9_]{3,25}')
+	valid_name_regex = re.compile('^[a-zA-Z0-9_]{3,25}$')
 	if not valid_name_regex.match(name):
-		return render_template('signup.html', error = "Usernames must be 3-25 characters long and cannot contain special characters."), 400
+		return render_template('signup.html', error = "Usernames must be 3-25 characters long and cannot contain special characters.", redirect = redirect_to), 400
 
 	existing_user = get_user(name)
 	if existing_user:
-		return render_template('signup.html', error = "Username already taken."), 409
+		return render_template('signup.html', error = "Username already taken.", redirect = redirect_to), 409
 
 	new_user = User(username = name,
 		password = password,

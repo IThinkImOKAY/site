@@ -48,8 +48,8 @@ def post_create_board():
 	    return render_template('create.html', error = "Board name can't be longer than 4 characters."), 400
 
 	#disallow special characters
-	valid_id_regex = re.compile('[a-z]{1,5}')
-	if not valid_id_regex.match(name):
+	valid_name_regex = re.compile('^[a-z]{1,5}$')
+	if not valid_name_regex.match(name):
 	    return render_template('create.html', error = "Board name cannot contain special characters."), 400
 
 	#check for already existing board
