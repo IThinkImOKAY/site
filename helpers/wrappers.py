@@ -17,7 +17,7 @@ def auth_desired(f):
 			else:
 				u = user
 
-		resp = make_response(f(*args, u, **kwargs))
+		resp = make_response(f(*args, u = u, **kwargs))
 		resp.headers.add("Cache-Control", "private" if u else "public")
 		return resp
 
@@ -38,7 +38,20 @@ def auth_required(f):
 			else:
 				abort(401)
 
-		resp = make_response(f(*args, u, **kwargs))
+		resp = make_response(f(*args, u = u, **kwargs))
+		resp.headers.add('Cache-Control', 'private')
+		return resp
+
+	return wrapper
+
+#this decorator MUST have an auth_required decorator above
+def admin_required(f):
+	@wraps(f)
+	def wrapper(*args, u, **kwargs):
+		if not u.is_admin:
+			abort(403)
+
+		resp = make_response(f(*args, u = u, **kwargs))
 		resp.headers.add('Cache-Control', 'private')
 		return resp
 

@@ -5,7 +5,7 @@
 -- Dumped from database version 12.6
 -- Dumped by pg_dump version 12.6
 
--- Started on 2021-05-07 11:46:25 CEST
+-- Started on 2021-05-07 19:30:01 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -32,7 +32,9 @@ CREATE TABLE public."Boards" (
     name character varying(4) NOT NULL,
     description text,
     created_utc integer NOT NULL,
-    creation_ip character varying(255) NOT NULL
+    creation_ip character varying(255) NOT NULL,
+    banned_utc integer DEFAULT 0,
+    ban_reason character varying(255)
 );
 
 
@@ -51,7 +53,7 @@ CREATE SEQUENCE public."Boards_id_seq"
 
 
 --
--- TOC entry 3591 (class 0 OID 0)
+-- TOC entry 3594 (class 0 OID 0)
 -- Dependencies: 202
 -- Name: Boards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -69,7 +71,9 @@ CREATE TABLE public."Comments" (
     body text,
     created_utc integer,
     creation_ip character varying(255),
-    parent_id integer
+    parent_id integer,
+    is_removed boolean DEFAULT false,
+    removal_reason character varying(255)
 );
 
 
@@ -88,7 +92,7 @@ CREATE SEQUENCE public."Comments_id_seq"
 
 
 --
--- TOC entry 3592 (class 0 OID 0)
+-- TOC entry 3595 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: Comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -107,7 +111,9 @@ CREATE TABLE public."Posts" (
     body text,
     created_utc integer,
     creation_ip character varying(255),
-    board_id integer
+    board_id integer,
+    is_removed boolean DEFAULT false,
+    removal_reason character varying(255)
 );
 
 
@@ -126,7 +132,7 @@ CREATE SEQUENCE public."Posts_id_seq"
 
 
 --
--- TOC entry 3593 (class 0 OID 0)
+-- TOC entry 3596 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: Posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -169,7 +175,7 @@ CREATE SEQUENCE public."Users_id_seq"
 
 
 --
--- TOC entry 3594 (class 0 OID 0)
+-- TOC entry 3597 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: Users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -186,7 +192,7 @@ ALTER TABLE ONLY public."Boards" ALTER COLUMN id SET DEFAULT nextval('public."Bo
 
 
 --
--- TOC entry 3443 (class 2604 OID 16436)
+-- TOC entry 3445 (class 2604 OID 16436)
 -- Name: Comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -194,7 +200,7 @@ ALTER TABLE ONLY public."Comments" ALTER COLUMN id SET DEFAULT nextval('public."
 
 
 --
--- TOC entry 3442 (class 2604 OID 16420)
+-- TOC entry 3443 (class 2604 OID 16420)
 -- Name: Posts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -202,7 +208,7 @@ ALTER TABLE ONLY public."Posts" ALTER COLUMN id SET DEFAULT nextval('public."Pos
 
 
 --
--- TOC entry 3444 (class 2604 OID 16497)
+-- TOC entry 3447 (class 2604 OID 16497)
 -- Name: Users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -210,7 +216,7 @@ ALTER TABLE ONLY public."Users" ALTER COLUMN id SET DEFAULT nextval('public."Use
 
 
 --
--- TOC entry 3450 (class 2606 OID 16414)
+-- TOC entry 3453 (class 2606 OID 16414)
 -- Name: Boards Boards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -219,7 +225,7 @@ ALTER TABLE ONLY public."Boards"
 
 
 --
--- TOC entry 3454 (class 2606 OID 16441)
+-- TOC entry 3457 (class 2606 OID 16441)
 -- Name: Comments Comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -228,7 +234,7 @@ ALTER TABLE ONLY public."Comments"
 
 
 --
--- TOC entry 3452 (class 2606 OID 16425)
+-- TOC entry 3455 (class 2606 OID 16425)
 -- Name: Posts Posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -237,7 +243,7 @@ ALTER TABLE ONLY public."Posts"
 
 
 --
--- TOC entry 3456 (class 2606 OID 16507)
+-- TOC entry 3459 (class 2606 OID 16507)
 -- Name: Users Users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -246,7 +252,7 @@ ALTER TABLE ONLY public."Users"
 
 
 --
--- TOC entry 3458 (class 2606 OID 16442)
+-- TOC entry 3461 (class 2606 OID 16442)
 -- Name: Comments Comments_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -255,7 +261,7 @@ ALTER TABLE ONLY public."Comments"
 
 
 --
--- TOC entry 3457 (class 2606 OID 16426)
+-- TOC entry 3460 (class 2606 OID 16426)
 -- Name: Posts Posts_board_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -264,7 +270,7 @@ ALTER TABLE ONLY public."Posts"
 
 
 --
--- TOC entry 3459 (class 2606 OID 16508)
+-- TOC entry 3462 (class 2606 OID 16508)
 -- Name: Users Users_banned_by_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -272,7 +278,7 @@ ALTER TABLE ONLY public."Users"
     ADD CONSTRAINT "Users_banned_by_id_fkey" FOREIGN KEY (banned_by_id) REFERENCES public."Users"(id);
 
 
--- Completed on 2021-05-07 11:46:26 CEST
+-- Completed on 2021-05-07 19:30:01 CEST
 
 --
 -- PostgreSQL database dump complete

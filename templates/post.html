@@ -6,8 +6,26 @@
         <link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>
 <body>
-	<h1>{{ post.title }}</h1>
-	<h3>{{ post.body }}</h3>
+	<p>
+		<a href="{{ post.board.url }}">&#11013 Back to /{{ post.board.name }}/</a>
+	</p>
+	<div {% if post.is_removed %} style="background-color: #fa8072;" {% endif %}>
+		<h1>{{ post.title }}</h1>
+		<h3>{{ post.body }}</h3>
+	{% if u and u.is_admin %}
+	{% if post.is_removed %}
+	<form action="/admin/approve/post/{{ post.id }}" method="post">
+		<strong>[removed{% if post.removal_reason %}: {{ post.removal_reason }}{% endif %}]</strong>
+		<input type="submit" value="Approve" />
+	</form>
+	{% else %}
+	<form action="/admin/remove/post/{{ post.id }}" method="post">
+		<input type="text" name="reason" placeholder="reason" />
+		<input type="submit" value="Remove thread" />
+	</form>
+	{% endif %}
+	{% endif %}
+	</div>
 	<div>
 		<h2>Reply to this post</h2>
 		<form action="/submit/comment" method="post">
@@ -17,11 +35,25 @@
 		</form>
 	</div>
 	<h2>{{ comment_count }} {{ 'Comment' if comment_count == 1 else 'Comments' }}</h2>
-	{% for c in post.comments %}
-	<h6 id="c{{ c.id }}">Comment #{{ c.id }}</h6>
-	<p>{{ c.body }}</p>
-	<hr />
-	Back to <a href="/{{ post.board.name }}/">/{{ post.board.name }}/</a>
+	{% for c in comment_listing %}
+	<div id="c{{ c.id }}" {% if c.is_removed %} style="background-color: #fa8072;" {% endif %}>
+		<h6>Comment #{{ c.id }}</h6>
+		<p>{{ c.body }}</p>
+		{% if u and u.is_admin %}
+		{% if c.is_removed %}
+		<form action="/admin/approve/comment/{{ c.id }}" method="post">
+			<strong>[removed{% if c.removal_reason %}: {{ c.removal_reason }}{% endif %}]</strong>
+			<input type="submit" value="Approve" />
+		</form>
+		{% else %}
+		<form action="/admin/remove/comment/{{ c.id }}" method="post">
+			<input type="text" name="reason" placeholder="reason" />
+			<input type="submit" value="Remove comment" />
+		</form>
+		{% endif %}
+		{% endif %}
+		<hr />
+	</div>
 	{% endfor %}
 	{% include "footer.html" %}
 </body>

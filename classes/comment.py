@@ -2,6 +2,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import relationship
 from __main__ import Base
 import time
+from flask import g
 
 class Comment(Base):
 	__tablename__ = "Comments"
@@ -11,6 +12,8 @@ class Comment(Base):
 	created_utc = Column(Integer)
 	creation_ip = Column(String(255))
 	parent_id = Column(Integer, ForeignKey('Posts.id'))
+	is_removed = Column(Boolean, default = False)
+	removal_reason = Column(String(255))
 
 	parent = relationship(
 		"Post",
@@ -33,3 +36,8 @@ class Comment(Base):
 	def permalink(self):
 		return f'{self.parent.permalink}#c{self.id}'
 	
+	def remove(self, reason = None):
+		self.is_removed = True
+		self.removal_reason = reason
+
+		g.db.add(self)
