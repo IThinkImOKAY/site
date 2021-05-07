@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from __main__ import Base
 from .post import *
 import time
+from flask import g
 
 class Board(Base):
 	__tablename__ = "Boards"
@@ -12,6 +13,8 @@ class Board(Base):
 	description = Column(String(255))
 	created_utc = Column(Integer)
 	creation_ip = Column(String(255))
+	is_banned = Column(Boolean, default = False)
+	ban_reason = Column(String(255))
 
 	posts = relationship("Post", primaryjoin = "Board.id == Post.board_id", back_populates = "board")
 
@@ -28,3 +31,8 @@ class Board(Base):
 	def url(self):
 		return f'/{self.name}/'
 	
+	def ban(self, reason = None):
+		self.is_banned = True
+		self.ban_reason = reason
+
+		g.db.add(self)

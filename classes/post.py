@@ -2,6 +2,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import relationship
 from __main__ import Base
 import time
+from flask import g
 
 from .comment import *
 
@@ -14,6 +15,8 @@ class Post(Base):
 	created_utc = Column(Integer)
 	creation_ip = Column(String(255))
 	board_id = Column(Integer, ForeignKey('Boards.id'))
+	is_removed = Column(Boolean, default = False)
+	removal_reason = Column(String(255))
 
 	board = relationship("Board", primaryjoin = "Post.board_id == Board.id", innerjoin = True, lazy = "joined", back_populates = "posts")
 
@@ -31,3 +34,9 @@ class Post(Base):
 	@property
 	def permalink(self):
 		return f'/{self.board.name}/{self.id}'
+
+	def remove(self, reason = None):
+		self.is_removed = True
+		self.removal_reason = reason
+
+		g.db.add(self)
