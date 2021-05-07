@@ -2,6 +2,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import relationship
 from __main__ import Base
 import time
+from flask import g
 
 class Comment(Base):
 	__tablename__ = "Comments"

@@ -15,9 +15,22 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
             <textarea id="body" required="" name="body"></textarea><br>
             <input type="submit" value="Create Post" />
     </form>
+    {% if u and u.is_admin %}
+    {% if board.is_banned %}
+    <form action="/admin/unban/board/{{ board.id }}" method="post">
+        <strong style="background-color: #fa8072;">[board banned{% if board.ban_reason %}: {{ board.ban_reason }}{% endif %}]</strong>
+        <input type="submit" value="Unban /{{ board.name }}/">
+    </form>
+    {% else %}
+    <form action="/admin/ban/board/{{ board.id }}" method="post">
+        <input type="text" name="reason" placeholder="reason" />
+        <input type="submit" value="Ban /{{ board.name }}/">
+    </form>
+    {% endif %}
+    {% endif %}
     <h3>Posts in /{{ board.name }}/</h3>
-    {% for p in board.posts %}
-    <div>
+    {% for p in post_listing %}
+    <div {% if p.is_removed %} style="background-color: #fa8072;" {% endif %}>
     	<h6>Post #{{ p.id }}</h6>
     	<p><strong>{{ p.title }}</strong></p>
     	<p>{{ p.body }}</p>

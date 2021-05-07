@@ -13,7 +13,7 @@ class Board(Base):
 	description = Column(String(255))
 	created_utc = Column(Integer)
 	creation_ip = Column(String(255))
-	banned_utc = Column(Boolean, default = False)
+	banned_utc = Column(Integer, default = False)
 	ban_reason = Column(String(255))
 
 	posts = relationship("Post", primaryjoin = "Board.id == Post.board_id", back_populates = "board")
@@ -26,6 +26,11 @@ class Board(Base):
 
 	def __repr__(self):
 		return f"<Board(id='{self.id}'; name='{self.name}')>"
+
+	@property
+	def is_banned(self):
+		return self.banned_utc > 0
+	
 
 	@property
 	def url(self):

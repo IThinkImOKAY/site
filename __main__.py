@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, g, session
+from flask import Flask, request, render_template, redirect, g, session, abort
 import re
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
@@ -42,12 +42,20 @@ from routes.boards import *
 from routes.posts import *
 from routes.comments import *
 from routes.login import *
+from routes.admin import *
 
 @app.after_request
 def after_request(response):
-    g.db.commit()
+    try:
+        g.db.commit()
 
-    g.db.close()
+        g.db.close()
+    except BaseException:
+        g.db.rollback()
+
+        g.db.close()
+
+        abort(500)
 
     return response
 
