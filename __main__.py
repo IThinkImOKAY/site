@@ -1,41 +1,50 @@
-from flask import Flask, request, render_template, redirect, g
+from flask import Flask, request, render_template, redirect, g, session
 import re
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from os import environ
 import time
+import secrets
 
 app = Flask(__name__,static_url_path='')
+
+app.config['SECRET_KEY'] = environ.get('MASTER_KEY')
 
 engine = create_engine(environ.get('DB_URL'), echo = True)
 Base = declarative_base()
 
 db_session = scoped_session(sessionmaker(bind = engine))
 
-def dump_it(data):
-    with open('main.yaml','w') as cf:
-        yaml.dump(data,cf)
-    return 'dumped!'
-
 @app.before_request
 def before_request():
-	g.timestamp = time.time()
+    g.timestamp = time.time()
 
-	g.db = db_session
+    g.db = db_session
+
+    session.permanent = True
+
+    if 'session_id' not in session:
+        session['session_id'] = secrets.token_hex(16)
 
 from classes.board import *
+from helpers.wrappers import *
 
 @app.route('/', methods = ['GET'])
-def index():
+@auth_desired
+def index(u):
     boards = g.db.query(Board).all()
 
-    return render_template('index.html', boards = boards)
+    if u:
+        return render_template('index.html', boards = boards, u = u)
+    else:
+        return render_template('index.html', boards = boards)
 
 #import routing functions
 from routes.boards import *
 from routes.posts import *
 from routes.comments import *
+from routes.login import *
 
 @app.after_request
 def after_request(response):

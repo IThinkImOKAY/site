@@ -4,6 +4,13 @@
 	<title>Home</title>
 </head>
 <body>
+	<p>
+		{% if u %}
+		Logged in as /u/{{ u.username }}
+		{% else %}
+		[<a href="/login">login</a>] [<a href="/signup">sign up</a>]
+		{% endif %}
+	</p>
 	<h2>Boards</h2>
 	<ul>
 		{%- for b in boards -%}

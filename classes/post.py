@@ -25,6 +25,9 @@ class Post(Base):
 
 		super().__init__(**kwargs)
 
+	def __repr__(self):
+		return f"<Post(id='{self.id}')>"
+
 	@property
 	def permalink(self):
 		return f'/{self.board.name}/{self.id}'

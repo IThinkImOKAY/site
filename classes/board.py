@@ -21,6 +21,9 @@ class Board(Base):
 
 		super().__init__(**kwargs)
 
+	def __repr__(self):
+		return f"<Board(id='{self.id}'; name='{self.name}')>"
+
 	@property
 	def url(self):
 		return f'/{self.name}/'

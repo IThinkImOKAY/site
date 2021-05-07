@@ -26,6 +26,9 @@ class Comment(Base):
 
 		super().__init__(**kwargs)
 
+	def __repr__(self):
+		return f"<Comment(id='{self.id}')>"
+
 	@property
 	def permalink(self):
 		return f'{self.parent.permalink}#c{self.id}'

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign up</title>
+</head>
+<body>
+	{% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+	<form action="/signup" method="post">
+		<label for="username">Username:</label><br />
+		<input type="text" name="username" required="" maxlength="25" /><br />
+		<label for="password">Password:</label><br />
+		<input type="password" name="password" required="" maxlength="750" /><br />
+		<label for="password-confirm">Confirm password:</label><br />
+		<input type="password" name="password-confirm" required="" maxlength="750" /><br />
+		<input type="submit" value="Create account" />
+	</form>
+</body>
+</html>
