@@ -86,3 +86,9 @@ def post_signup():
 	session['user_id'] = new_user.id
 
 	return redirect('/')
+
+@app.route('/logout', methods = ['POST'])
+def logout():
+	session.pop('user_id', None)
+
+	return redirect('/')
