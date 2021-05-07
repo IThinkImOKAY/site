@@ -26,10 +26,6 @@ def post_login():
 	if not password:
 		abort(400)
 
-	#valid_name_regex = re.compile('[a-zA-Z]{3, 25}')
-	#if not valid_name_regex.match(name):
-	#	return render_template('login.html', error = "Usernames must be 3-25 characters long and cannot contain special characters.")
-
 	user = get_user(name)
 	if not user:
 		return render_template('login.html', error = "Invalid username."), 404
@@ -71,6 +67,10 @@ def post_signup():
 
 	if password != password_confirm:
 		return render_template('signup.html', error = "Passwords must match."), 400
+
+	valid_name_regex = re.compile('[a-zA-Z0-9]{3,25}')
+	if not valid_name_regex.match(name):
+		return render_template('signup.html', error = "Usernames must be 3-25 characters long and cannot contain special characters."), 400
 
 	existing_user = get_user(name)
 	if existing_user:
