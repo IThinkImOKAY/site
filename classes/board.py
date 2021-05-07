@@ -13,7 +13,7 @@ class Board(Base):
 	description = Column(String(255))
 	created_utc = Column(Integer)
 	creation_ip = Column(String(255))
-	is_banned = Column(Boolean, default = False)
+	banned_utc = Column(Boolean, default = False)
 	ban_reason = Column(String(255))
 
 	posts = relationship("Post", primaryjoin = "Board.id == Post.board_id", back_populates = "board")
@@ -32,7 +32,7 @@ class Board(Base):
 		return f'/{self.name}/'
 	
 	def ban(self, reason = None):
-		self.is_banned = True
+		self.banned_utc = int(time.time())
 		self.ban_reason = reason
 
 		g.db.add(self)
