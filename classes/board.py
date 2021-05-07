@@ -13,7 +13,7 @@ class Board(Base):
 	description = Column(String(255))
 	created_utc = Column(Integer)
 	creation_ip = Column(String(255))
-	banned_utc = Column(Integer, default = False)
+	banned_utc = Column(Integer, default = 0)
 	ban_reason = Column(String(255))
 
 	posts = relationship("Post", primaryjoin = "Board.id == Post.board_id", back_populates = "board")
