@@ -8,6 +8,7 @@
     <p style="color: red;">{{ error }}</p>
     {% endif %}
 	<form action="/login" method="post">
+		<input type="hidden" name="redirect" value="{{ redirect }}" />
 		<label for="username">Username:</label><br />
 		<input type="text" name="username" required="" maxlength="25" /><br />
 		<label for="password">Password:</label><br />

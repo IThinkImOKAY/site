@@ -10,7 +10,9 @@ def get_login():
 	if 'user_id' in session:
 		return redirect('/')
 
-	return render_template('login.html')
+	redirect = request.args.get('redirect', '/')
+
+	return render_template('login.html', redirect = redirect)
 
 @app.route('/login', methods = ['POST'])
 def post_login():
@@ -19,6 +21,8 @@ def post_login():
 
 	name = request.form.get('username', '').lstrip().rstrip()
 	password = request.form.get('password', '')
+
+	redirect_to = request.form.get('redirect', '/')
 
 	if not name:
 		abort(400)
@@ -38,14 +42,16 @@ def post_login():
 
 	session['user_id'] = user.id
 
-	return redirect('/')
+	return redirect(redirect_to)
 
 @app.route('/signup', methods = ['GET'])
 def get_signup():
 	if 'user_id' in session:
 		return redirect('/')
 
-	return render_template('signup.html')
+	redirect = request.args.get('redirect', '/')
+
+	return render_template('signup.html', redirect = redirect)
 
 @app.route('/signup', methods = ['POST'])
 def post_signup():
@@ -55,6 +61,8 @@ def post_signup():
 	name = request.form.get('username', '').lstrip().rstrip()
 	password = request.form.get('password', '')	
 	password_confirm = request.form.get('password-confirm', '')
+
+	redirect_to = request.form.get('redirect', '/')
 
 	if not name:
 		abort(400)
@@ -85,7 +93,7 @@ def post_signup():
 
 	session['user_id'] = new_user.id
 
-	return redirect('/')
+	return redirect(redirect_to)
 
 @app.route('/logout', methods = ['POST'])
 def logout():
