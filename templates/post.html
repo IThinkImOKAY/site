@@ -21,6 +21,7 @@
 	<h6 id="c{{ c.id }}">Comment #{{ c.id }}</h6>
 	<p>{{ c.body }}</p>
 	<hr />
+	Back to <a href="/{{ post.board.name }}/">/{{ post.board.name }}/</a>
 	{% endfor %}
 	{% include "footer.html" %}
 </body>
