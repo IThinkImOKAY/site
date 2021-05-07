@@ -3,7 +3,7 @@
 <head>
 	<title>{{ post.title }} - /{{ post.board.name }}/</title>
 	{% set theme = request.cookies.get('theme') %}
-        <link rel="stylesheet" href="/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
+        <link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>
 <body>
 	<h1>{{ post.title }}</h1>

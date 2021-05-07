@@ -7,7 +7,7 @@ from os import environ
 import time
 import secrets
 
-app = Flask(__name__,static_url_path='')
+app = Flask(__name__)
 
 app.config['SECRET_KEY'] = environ.get('MASTER_KEY')
 
