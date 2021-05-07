@@ -56,7 +56,7 @@ def after_request(response):
 
 @app.route('/set-theme', methods=['POST'])
 def set_theme():
-    response = make_response(redirect('/'))
+    response = make_response(redirect(request.referrer))
     if request.cookies.get('theme'):
         response.delete_cookie('theme')
     else:
