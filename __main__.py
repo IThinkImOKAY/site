@@ -35,10 +35,7 @@ from helpers.wrappers import *
 def index(u):
     boards = g.db.query(Board).all()
 
-    if u:
-        return render_template('index.html', boards = boards, u = u)
-    else:
-        return render_template('index.html', boards = boards)
+    return render_template('index.html', boards = boards, u = u)
 
 #import routing functions
 from routes.boards import *
