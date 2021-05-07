@@ -1,4 +1,16 @@
 body {
     background-color: #000!important;
-    color:#fff!important;
+    color:#FFF!important;
+}
+
+a:unvisited {
+    color:#0000FF;
+}
+
+a:visited {
+    color:#805AD5
+}
+
+a:hover {
+    color:#FF5349
 }
