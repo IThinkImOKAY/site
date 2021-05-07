@@ -54,5 +54,14 @@ def after_request(response):
 
     return response
 
+@app.route('/set-theme', methods=['POST'])
+def set_theme():
+    response = make_response(redirect('/'))
+    if request.cookies.get('theme'):
+        response.delete_cookie('theme')
+    else:
+        response.set_cookie('theme', 'dark')
+    return response
+
 if __name__ == '__main__':
 	app.run()

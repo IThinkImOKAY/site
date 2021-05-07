@@ -2,6 +2,8 @@
 <html>
 <head>
 	<title>Sign up</title>
+	{% set theme = request.cookies.get('theme') %}
+        <link rel="stylesheet" href="/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>
 <body>
     {% if error %}
@@ -17,5 +19,6 @@
 		<input type="password" name="password-confirm" required="" maxlength="750" /><br />
 		<input type="submit" value="Create account" />
 	</form>
+	{% include "footer.html" %}
 </body>
 </html>

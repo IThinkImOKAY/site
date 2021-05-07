@@ -1,4 +1,6 @@
 <title>/{{ board.name }}/</title>
+{% set theme = request.cookies.get('theme') %}
+<link rel="stylesheet" href="/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 Welcome to /{{ board.name }}/: {{ board.description }}!
 <body>
     How about creating a post?
@@ -23,4 +25,5 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
     </div>
     <hr />
     {% endfor %}
+    {% include "footer.html" %}
 </body>

@@ -2,6 +2,8 @@
 <html>
 <head>
 	<title>Login</title>
+	{% set theme = request.cookies.get('theme') %}
+        <link rel="stylesheet" href="/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>
 <body>
     {% if error %}
@@ -15,5 +17,6 @@
 		<input type="password" name="password" required="" maxlength="750" /><br />
 		<input type="submit" value="Login" />
 	</form>
+	{% include "footer.html" %}
 </body>
 </html>
