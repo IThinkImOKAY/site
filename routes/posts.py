@@ -17,10 +17,7 @@ def get_post(boardname, pid, u):
 	if not post:
 		abort(404)
 
-	if (not u or not u.is_admin) and post.is_removed:
-		abort(404)
-
-	if (not u or not u.is_admin) and post.board.is_banned:
+	if not post.can_view(u):
 		abort(404)
 
 	comment_listing = [c for c in post.comments if not c.is_removed] if not u or not u.is_admin else post.comments
