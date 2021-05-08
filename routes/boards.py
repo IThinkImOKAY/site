@@ -15,9 +15,9 @@ def get_board(boardname, u):
 	if (not u or not u.is_admin) and board.is_banned:
 		abort(404)
 
-	post_listing = [p for p in board.posts if not p.is_removed] if not u or not u.is_admin else board.posts
+	#post_listing = [p for p in board.posts if not p.is_removed] if not u or not u.is_admin else board.posts
 
-	return render_template('board.html', board = board, post_listing = post_listing, u = u)
+	return render_template('board.html', board = board, u = u)
 
 @app.route('/board_id/<bid>')
 def board_by_id(bid):

@@ -29,7 +29,7 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
     {% endif %}
     {% endif %}
     <h3>Posts in /{{ board.name }}/</h3>
-    {% for p in post_listing %}
+    {% for p in board.post_list(u) %}
     <div {% if p.is_removed %} style="background-color: #fa8072;" {% endif %}>
     	<h6>Post #{{ p.id }}</h6>
     	<p><a href="{{ p.permalink }}"><strong>{{ p.title }}</strong></a></p>

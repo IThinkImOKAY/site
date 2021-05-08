@@ -30,11 +30,13 @@ class Board(Base):
 	@property
 	def is_banned(self):
 		return self.banned_utc > 0
-	
 
 	@property
 	def url(self):
 		return f'/{self.name}/'
+
+	def post_list(self, u):
+		return sorted([p for p in self.posts if p.can_view(u)], key = lambda x: x.created_utc, reverse = True)
 	
 	def ban(self, reason = None):
 		self.banned_utc = int(time.time())
