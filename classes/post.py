@@ -52,6 +52,10 @@ class Post(Base):
 
 		return True
 
+	def can_comment(self, u) -> bool:
+		if (not u or not u.is_admin) and (self.is_removed or self.board.is_banned): return False
+		else: return True
+
 	def comment_list(self, u):
 		return sorted([c for c in self.comments if c.can_view(u)], key = lambda x: x.created_utc, reverse = True)
 

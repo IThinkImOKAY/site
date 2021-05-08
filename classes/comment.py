@@ -40,8 +40,21 @@ class Comment(Base):
 		return f'{self.parent.permalink}#c{self.id}'
 
 	def can_view(self, u) -> bool:
-		if (not u or not u.is_admin) and (self.is_removed or self.parent.is_removed or self.parent.board.is_banned): return False
-		else: return True
+		if not u:
+			if self.is_removed or self.parent.is_removed or self.parent.board.is_banned:
+				return False
+
+		if u and not u.is_admin:
+			if self.parent.board.is_banned:
+				return False
+
+			if not self.is_removed and u.id != self.parent.author_id:
+				return False
+
+			if self.is_removed and u.id != self.author_id:
+				return False
+
+		return True
 	
 	def remove(self, reason = None):
 		self.is_removed = True
