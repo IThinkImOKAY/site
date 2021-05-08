@@ -48,7 +48,7 @@ class Comment(Base):
 			if self.parent.board.is_banned:
 				return False
 
-			if not self.is_removed and u.id != self.parent.author_id:
+			if not self.is_removed and self.parent.is_removed and u.id != self.parent.author_id:
 				return False
 
 			if self.is_removed and u.id != self.author_id:
