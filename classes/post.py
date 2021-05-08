@@ -47,7 +47,7 @@ class Post(Base):
 			if self.board.is_banned:
 				return False
 
-			if u.id != self.author_id:
+			if self.is_removed and u.id != self.author_id:
 				return False
 
 		return True
