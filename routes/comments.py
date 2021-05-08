@@ -33,15 +33,15 @@ def post_submit_comment(u):
 
 	parent = get_post(parent_id, graceful = False)
 
-	if (not u or not u.is_admin) and parent.is_removed:
-		abort(404)
-
-	if (not u or not u.is_admin) and parent.board.is_banned:
+	if not parent.can_comment(u):
 		abort(404)
 
 	new_comment = Comment(body = body,
 		parent_id = parent.id,
 		creation_ip = request.remote_addr)
+
+	if u:
+		new_comment.author_id = u.id
 
 	g.db.add(new_comment)
 	g.db.flush()

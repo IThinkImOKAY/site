@@ -10,6 +10,7 @@
 		<a href="{{ post.board.url }}">&#11013 Back to /{{ post.board.name }}/</a>
 	</p>
 	<div {% if post.is_removed %} style="background-color: #fa8072;" {% endif %}>
+		<h4>{{ post.author.username or 'Anonymous' }} - Post #{{ post.id }}</h4>
 		<h1>{{ post.title }}</h1>
 		<h3>{{ post.body }}</h3>
 	{% if u and u.is_admin %}
@@ -27,17 +28,19 @@
 	{% endif %}
 	</div>
 	<div>
+		{% if post.can_comment(u) %}
 		<h2>Reply to this post</h2>
 		<form action="/submit/comment" method="post">
 			<input type="hidden" name="parent" value="{{ post.id }}" />
 			<textarea id="comment-body-input" name="body" rows="5" cols="50" placeholder="Enter your comment..."></textarea><br />
 			<input type="submit" value="Comment" />
 		</form>
+		{% endif %}
 	</div>
 	<h2>{{ post.comment_count(u) }} {{ 'Comment' if post.comment_count(u) == 1 else 'Comments' }}</h2>
 	{% for c in post.comment_list(u) %}
 	<div id="c{{ c.id }}" {% if c.is_removed %} style="background-color: #fa8072;" {% endif %}>
-		<h6>Comment #{{ c.id }}</h6>
+		<h6>{{ c.author.username or 'Anonymous' }} - Comment #{{ c.id }}</h6>
 		<p>{{ c.body }}</p>
 		{% if u and u.is_admin %}
 		{% if c.is_removed %}

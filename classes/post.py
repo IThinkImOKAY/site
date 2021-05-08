@@ -17,10 +17,13 @@ class Post(Base):
 	board_id = Column(Integer, ForeignKey('Boards.id'))
 	is_removed = Column(Boolean, default = False)
 	removal_reason = Column(String(255))
+	author_id = Column(Integer, ForeignKey('Users.id'))
 
 	board = relationship("Board", primaryjoin = "Post.board_id == Board.id", innerjoin = True, lazy = "joined", back_populates = "posts")
 
 	comments = relationship("Comment", primaryjoin = "Post.id == Comment.parent_id", back_populates = "parent")
+
+	author = relationship("User", primaryjoin = "Post.author_id == User.id", uselist = False)
 
 	def __init__(self, **kwargs):
 		if 'created_utc' not in kwargs:
@@ -36,6 +39,20 @@ class Post(Base):
 		return f'/{self.board.name}/{self.id}'
 
 	def can_view(self, u) -> bool:
+		if not u:
+			if self.is_removed or self.board.is_banned:
+				return False
+
+		if u and not u.is_admin:
+			if self.board.is_banned:
+				return False
+
+			if self.is_removed and u.id != self.author_id:
+				return False
+
+		return True
+
+	def can_comment(self, u) -> bool:
 		if (not u or not u.is_admin) and (self.is_removed or self.board.is_banned): return False
 		else: return True
 
