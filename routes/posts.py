@@ -20,9 +20,10 @@ def get_post(boardname, pid, u):
 	if not post.can_view(u):
 		abort(404)
 
-	comment_listing = [c for c in post.comments if not c.is_removed] if not u or not u.is_admin else post.comments
+	#comment_listing = [c for c in post.comments if not c.is_removed] if not u or not u.is_admin else post.comments
 
-	return render_template('post.html', post = post, comment_listing = comment_listing, comment_count = len(comment_listing), u = u)
+	#return render_template('post.html', post = post, comment_listing = comment_listing, comment_count = len(comment_listing), u = u)
+	return render_template('post.html', post = post, u = u)
 
 @app.route('/submit', methods = ['POST'])
 @auth_desired

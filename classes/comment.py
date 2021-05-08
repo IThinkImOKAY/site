@@ -35,6 +35,10 @@ class Comment(Base):
 	@property
 	def permalink(self):
 		return f'{self.parent.permalink}#c{self.id}'
+
+	def can_view(self, u) -> bool:
+		if (not u or not u.is_admin) and (self.is_removed or self.parent.is_removed or self.parent.board.is_banned): return False
+		else: return True
 	
 	def remove(self, reason = None):
 		self.is_removed = True
