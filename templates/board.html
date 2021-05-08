@@ -32,9 +32,8 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
     {% for p in post_listing %}
     <div {% if p.is_removed %} style="background-color: #fa8072;" {% endif %}>
     	<h6>Post #{{ p.id }}</h6>
-    	<p><strong>{{ p.title }}</strong></p>
+    	<p><a href="{{ p.permalink }}"><strong>{{ p.title }}</strong></a></p>
     	<p>{{ p.body }}</p>
-        <p>[<a href="{{ p.permalink }}">permalink</a>]</p>
     </div>
     <hr />
     {% endfor %}
