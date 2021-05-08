@@ -4,6 +4,16 @@ from classes.comment import *
 from helpers.get import *
 from helpers.wrappers import *
 
+@app.route('/comment/<int:cid>', methods = ['GET'])
+@auth_desired
+def comment_by_id(cid, u):
+	comment = get_comment(cid, graceful = False)
+
+	if not comment.can_view(u):
+		abort(404)
+
+	return redirect(comment.permalink)
+
 @app.route('/submit/comment', methods = ['POST'])
 @auth_desired
 def post_submit_comment(u):
