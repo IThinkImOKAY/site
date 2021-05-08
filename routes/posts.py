@@ -53,6 +53,9 @@ def post_submit(u):
 		board_id = board.id,
 		creation_ip = request.remote_addr)
 
+	if u:
+		new_post.author_id = u.id
+
 	g.db.add(new_post)
 	g.db.flush()
 

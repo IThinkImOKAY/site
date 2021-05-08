@@ -23,6 +23,8 @@ class Post(Base):
 
 	comments = relationship("Comment", primaryjoin = "Post.id == Comment.parent_id", back_populates = "parent")
 
+	author = relationship("User", primaryjoin = "Post.author_id == User.id", uselist = False)
+
 	def __init__(self, **kwargs):
 		if 'created_utc' not in kwargs:
 			kwargs['created_utc'] = int(time.time())
