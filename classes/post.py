@@ -17,6 +17,7 @@ class Post(Base):
 	board_id = Column(Integer, ForeignKey('Boards.id'))
 	is_removed = Column(Boolean, default = False)
 	removal_reason = Column(String(255))
+	author_id = Column(Integer, ForeignKey('Users.id'))
 
 	board = relationship("Board", primaryjoin = "Post.board_id == Board.id", innerjoin = True, lazy = "joined", back_populates = "posts")
 

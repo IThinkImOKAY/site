@@ -14,6 +14,7 @@ class Comment(Base):
 	parent_id = Column(Integer, ForeignKey('Posts.id'))
 	is_removed = Column(Boolean, default = False)
 	removal_reason = Column(String(255))
+	author_id = Column(Integer, ForeignKey('Users.id'))
 
 	parent = relationship(
 		"Post",
