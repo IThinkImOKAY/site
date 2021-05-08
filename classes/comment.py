@@ -24,6 +24,8 @@ class Comment(Base):
 		back_populates = "comments"
 	)
 
+	author = relationship("User", primaryjoin = "Comment.author_id == User.id", uselist = False)
+
 	def __init__(self, **kwargs):
 		if 'created_utc' not in kwargs:
 			kwargs['created_utc'] = int(time.time())

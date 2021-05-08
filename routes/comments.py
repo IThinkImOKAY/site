@@ -43,6 +43,9 @@ def post_submit_comment(u):
 		parent_id = parent.id,
 		creation_ip = request.remote_addr)
 
+	if u:
+		new_comment.author_id = u.id
+
 	g.db.add(new_comment)
 	g.db.flush()
 
