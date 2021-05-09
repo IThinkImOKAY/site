@@ -33,10 +33,7 @@ def auth_required(f):
 			u = get_user_id(session['user_id'])
 
 		if not u:
-			if request.method == 'GET':
-				return redirect(f'/login?redirect={request.path}')
-			else:
-				abort(401)
+			abort(401)
 
 		resp = make_response(f(*args, u = u, **kwargs))
 		resp.headers.add('Cache-Control', 'private')

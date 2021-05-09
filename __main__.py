@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from os import environ
 import time
 import secrets
+from urllib.parse import quote, urlencode
 
 app = Flask(__name__)
 
@@ -67,6 +68,17 @@ def set_theme():
     else:
         response.set_cookie('theme', 'dark')
     return response
+
+@app.errorhandler(401)
+def handle_401(e):
+    g.db.rollback()
+    g.db.close()
+
+    queries = urlencode(dict(request.args))
+    path = request.path
+    full_path = quote(f"{path}?{queries}", safe = '')
+
+    return redirect(f"/login?redirect={full_path}")
 
 if __name__ == '__main__':
 	app.run()
