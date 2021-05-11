@@ -1,4 +1,4 @@
-from __main__ import app
+from __main__ import app, limiter
 from flask import g, session, redirect, abort, render_template, request
 from helpers.get import *
 import re
@@ -54,6 +54,7 @@ def get_signup():
 	return render_template('signup.html', redirect = redirect)
 
 @app.route('/signup', methods = ['POST'])
+@limiter.limit("1/6hours")
 def post_signup():
 	if 'user_id' in session:
 		return redirect('/')
