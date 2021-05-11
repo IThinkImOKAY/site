@@ -1,2 +1,6 @@
 # Specify filepatterns you want git to ignore.
 __pycache__/
+*.egg-info/
+*.pyc
+dist/
+build/
