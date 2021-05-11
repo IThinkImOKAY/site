@@ -14,7 +14,7 @@ app = Flask(__name__)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=[None],
+    default_limits=['100/minute'],
 )
 
 app.config['SECRET_KEY'] = environ.get('MASTER_KEY')
