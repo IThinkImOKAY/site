@@ -1,5 +1,5 @@
 from flask import g, abort, request, redirect
-from __main__ import app
+from __main__ import app, limiter
 from classes.comment import *
 from helpers.get import *
 from helpers.wrappers import *
@@ -15,6 +15,7 @@ def comment_by_id(cid, u):
 	return redirect(comment.permalink)
 
 @app.route('/submit/comment', methods = ['POST'])
+@limiter.limit("1/minute")
 @auth_desired
 def post_submit_comment(u):
 	parent_id = int(request.form.get("parent"))

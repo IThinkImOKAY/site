@@ -1,5 +1,5 @@
 from flask import g, render_template, abort, request, redirect
-from __main__ import app
+from __main__ import app, limiter
 from classes.post import *
 from helpers.get import *
 from helpers.wrappers import *
@@ -26,6 +26,7 @@ def get_post(boardname, pid, u):
 	return render_template('post.html', post = post, u = u)
 
 @app.route('/submit', methods = ['POST'])
+@limiter.limit("1/3minutes")
 @auth_desired
 def post_submit(u):
 	board_id = int(request.form.get("board", 1))

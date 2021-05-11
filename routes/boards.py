@@ -1,5 +1,5 @@
 from flask import g, render_template, abort, request, redirect
-from __main__ import app
+from __main__ import app, limiter
 from classes.board import *
 import re
 from helpers.wrappers import *
@@ -34,6 +34,7 @@ def get_create_board(u):
 	return render_template('create.html')
 
 @app.route('/create_board', methods = ['POST'])
+@limiter.limit("1/3days")
 @auth_required
 def post_create_board(u):
 	name = request.form['name']
