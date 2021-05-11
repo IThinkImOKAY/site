@@ -7,8 +7,15 @@ from os import environ
 import time
 import secrets
 from urllib.parse import quote, urlencode
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=[None],
+)
 
 app.config['SECRET_KEY'] = environ.get('MASTER_KEY')
 
