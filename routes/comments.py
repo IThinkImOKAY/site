@@ -15,7 +15,7 @@ def comment_by_id(cid, u):
 	return redirect(comment.permalink)
 
 @app.route('/submit/comment', methods = ['POST'])
-@limiter.limit("1/minute")
+@limiter.limit("1/10seconds;5/1minute;30/1hour")
 @auth_desired
 def post_submit_comment(u):
 	parent_id = int(request.form.get("parent"))
