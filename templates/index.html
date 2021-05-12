@@ -6,16 +6,6 @@
         <link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>
 <body>
-	<p>
-		{% if u %}
-		Logged in as /u/{{ u.username }} [<a href="/create_board">create board</a>]
-		<form action="/logout" method="post">
-			<input type="submit" value="Log out" />
-		</form>
-		{% else %}
-		[<a href="/login">login</a>] [<a href="/signup">sign up</a>]
-		{% endif %}
-	</p>
 	<h2>Boards</h2>
 	<ul>
 		{%- for b in boards -%}
