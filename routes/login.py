@@ -100,4 +100,4 @@ def post_signup():
 def logout():
 	session.pop('user_id', None)
 
-	return redirect('/')
+	return redirect(request.referrer)

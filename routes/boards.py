@@ -31,7 +31,7 @@ def board_by_id(bid):
 @app.route('/create_board', methods = ['GET'])
 @auth_required
 def get_create_board(u):
-	return render_template('create.html')
+	return render_template('create.html', u = u)
 
 @app.route('/create_board', methods = ['POST'])
 @limiter.limit("1/3days")

@@ -1,6 +1,7 @@
 <title>/{{ board.name }}/</title>
 {% set theme = request.cookies.get('theme') %}
 <link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
+{% include "header.html" %}
 Welcome to /{{ board.name }}/: {{ board.description }}!
 <body>
     How about creating a post?

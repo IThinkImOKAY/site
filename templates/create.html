@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>
 <body>
+    {% include "header.html" %}
     {% if error %}
     <p style="color: red;">{{ error }}</p>
     {% endif %}
