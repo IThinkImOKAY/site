@@ -11,10 +11,14 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+
+app.config["RATELIMIT_STORAGE_URL"] = environ.get("REDIS_URL", "memory://")
+
 limiter = Limiter(
     app,
     key_func=get_remote_address,
     default_limits=['100/minute'],
+    strategy="fixed-window"
 )
 
 app.config['SECRET_KEY'] = environ.get('MASTER_KEY')
@@ -58,6 +62,8 @@ def after_request(response):
         g.db.commit()
 
         g.db.close()
+    except AttributeError:
+        pass
     except BaseException:
         g.db.rollback()
 
