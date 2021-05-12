@@ -5,7 +5,7 @@ import re
 import secrets
 from classes.user import *
 
-@app.route('/login', methods = ['GET'])
+@app.get('/login')
 def get_login():
 	if 'user_id' in session:
 		return redirect('/')
@@ -14,7 +14,7 @@ def get_login():
 
 	return render_template('login.html', redirect = redirect)
 
-@app.route('/login', methods = ['POST'])
+@app.post('/login')
 def post_login():
 	if 'user_id' in session:
 		return redirect('/')
@@ -44,7 +44,7 @@ def post_login():
 
 	return redirect(redirect_to)
 
-@app.route('/signup', methods = ['GET'])
+@app.get('/signup')
 def get_signup():
 	if 'user_id' in session:
 		return redirect('/')
@@ -53,7 +53,7 @@ def get_signup():
 
 	return render_template('signup.html', redirect = redirect)
 
-@app.route('/signup', methods = ['POST'])
+@app.post('/signup')
 @limiter.limit("1/6hours")
 def post_signup():
 	if 'user_id' in session:
@@ -96,7 +96,7 @@ def post_signup():
 
 	return redirect(redirect_to)
 
-@app.route('/logout', methods = ['POST'])
+@app.post('/logout')
 def logout():
 	session.pop('user_id', None)
 

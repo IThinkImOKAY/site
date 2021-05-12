@@ -1,9 +1,9 @@
-from __main__ import app
+from __main__ import app, cache
 from flask import g, redirect
 from helpers.get import *
 from helpers.wrappers import *
 
-@app.route('/admin/remove/post/<int:pid>', methods = ['POST'])
+@app.post('/admin/remove/post/<int:pid>')
 @auth_required
 @admin_required
 def admin_remove_post(pid, u):
@@ -15,7 +15,7 @@ def admin_remove_post(pid, u):
 
 	return redirect(target.permalink)
 
-@app.route('/admin/remove/comment/<int:cid>', methods = ['POST'])
+@app.post('/admin/remove/comment/<int:cid>')
 @auth_required
 @admin_required
 def admin_remove_comment(cid, u):
@@ -25,9 +25,11 @@ def admin_remove_comment(cid, u):
 
 	target.remove(reason = reason)
 
+	cache.delete_memoized(target.parent.comment_list)
+
 	return redirect(target.permalink)
 
-@app.route('/admin/ban/board/<int:bid>', methods = ['POST'])
+@app.post('/admin/ban/board/<int:bid>')
 @auth_required
 @admin_required
 def admin_ban_board(bid, u):
@@ -39,7 +41,7 @@ def admin_ban_board(bid, u):
 
 	return redirect(target.url)
 
-@app.route('/admin/approve/post/<int:pid>', methods = ['POST'])
+@app.post('/admin/approve/post/<int:pid>')
 @auth_required
 @admin_required
 def admin_approve_post(pid, u):
@@ -55,7 +57,7 @@ def admin_approve_post(pid, u):
 
 	return redirect(target.permalink)
 
-@app.route('/admin/approve/comment/<int:cid>', methods = ['POST'])
+@app.post('/admin/approve/comment/<int:cid>')
 @auth_required
 @admin_required
 def admin_approve_comment(cid, u):
@@ -69,9 +71,11 @@ def admin_approve_comment(cid, u):
 
 	g.db.add(target)
 
+	cache.delete_memoized(target.parent.comment_list)
+
 	return redirect(target.permalink)
 
-@app.route('/admin/unban/board/<int:bid>', methods = ['POST'])
+@app.post('/admin/unban/board/<int:bid>')
 @auth_required
 @admin_required
 def admin_unban_board(bid, u):

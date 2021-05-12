@@ -1,6 +1,6 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
-from __main__ import Base
+from __main__ import Base, cache
 import time
 from flask import g
 
@@ -24,7 +24,7 @@ class Comment(Base):
 		back_populates = "comments"
 	)
 
-	author = relationship("User", primaryjoin = "Comment.author_id == User.id", uselist = False)
+	author = relationship("User", lazy = "joined", primaryjoin = "Comment.author_id == User.id", uselist = False)
 
 	def __init__(self, **kwargs):
 		if 'created_utc' not in kwargs:

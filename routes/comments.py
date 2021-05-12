@@ -1,10 +1,10 @@
 from flask import g, abort, request, redirect
-from __main__ import app, limiter
+from __main__ import app, limiter, cache
 from classes.comment import *
 from helpers.get import *
 from helpers.wrappers import *
 
-@app.route('/comment/<int:cid>', methods = ['GET'])
+@app.get('/comment/<int:cid>')
 @auth_desired
 def comment_by_id(cid, u):
 	comment = get_comment(cid, graceful = False)
@@ -14,7 +14,7 @@ def comment_by_id(cid, u):
 
 	return redirect(comment.permalink)
 
-@app.route('/submit/comment', methods = ['POST'])
+@app.post('/submit/comment')
 @limiter.limit("1/10seconds;5/1minute;30/1hour")
 @auth_desired
 def post_submit_comment(u):
@@ -48,5 +48,7 @@ def post_submit_comment(u):
 	g.db.flush()
 
 	g.db.refresh(new_comment)
+
+	cache.delete_memoized(new_comment.parent.comment_list)
 
 	return redirect(new_comment.permalink)
