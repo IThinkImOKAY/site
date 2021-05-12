@@ -4,7 +4,7 @@ from classes.board import *
 import re
 from helpers.wrappers import *
 
-@app.route('/<boardname>/')
+@app.get('/<boardname>/')
 @auth_desired
 def get_board(boardname, u):
 	board = g.db.query(Board).filter_by(name = boardname).first()
@@ -19,7 +19,7 @@ def get_board(boardname, u):
 
 	return render_template('board.html', board = board, u = u)
 
-@app.route('/board_id/<bid>')
+@app.get('/board_id/<bid>')
 def board_by_id(bid):
 	board = g.db.query(Board).filter_by(id = bid).first()
 
@@ -28,12 +28,12 @@ def board_by_id(bid):
 
 	return redirect(board.url)
 
-@app.route('/create_board', methods = ['GET'])
+@app.get('/create_board')
 @auth_required
 def get_create_board(u):
 	return render_template('create.html', u = u)
 
-@app.route('/create_board', methods = ['POST'])
+@app.post('/create_board')
 @limiter.limit("1/3days")
 @auth_required
 def post_create_board(u):

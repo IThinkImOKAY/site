@@ -4,7 +4,7 @@ from classes.comment import *
 from helpers.get import *
 from helpers.wrappers import *
 
-@app.route('/comment/<int:cid>', methods = ['GET'])
+@app.get('/comment/<int:cid>')
 @auth_desired
 def comment_by_id(cid, u):
 	comment = get_comment(cid, graceful = False)
@@ -14,7 +14,7 @@ def comment_by_id(cid, u):
 
 	return redirect(comment.permalink)
 
-@app.route('/submit/comment', methods = ['POST'])
+@app.post('/submit/comment')
 @limiter.limit("1/10seconds;5/1minute;30/1hour")
 @auth_desired
 def post_submit_comment(u):

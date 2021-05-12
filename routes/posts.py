@@ -4,7 +4,7 @@ from classes.post import *
 from helpers.get import *
 from helpers.wrappers import *
 
-@app.route('/<boardname>/<int:pid>', methods = ['GET'])
+@app.get('/<boardname>/<int:pid>')
 @auth_desired
 def get_post(boardname, pid, u):
 
@@ -25,7 +25,7 @@ def get_post(boardname, pid, u):
 	#return render_template('post.html', post = post, comment_listing = comment_listing, comment_count = len(comment_listing), u = u)
 	return render_template('post.html', post = post, u = u)
 
-@app.route('/submit', methods = ['POST'])
+@app.post('/submit')
 @limiter.limit("1/3minutes")
 @auth_desired
 def post_submit(u):

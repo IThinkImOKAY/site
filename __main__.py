@@ -42,7 +42,7 @@ def before_request():
 from classes.board import *
 from helpers.wrappers import *
 
-@app.route('/', methods = ['GET'])
+@app.get('/')
 @auth_desired
 def index(u):
     boards = g.db.query(Board).all()
@@ -73,7 +73,7 @@ def after_request(response):
 
     return response
 
-@app.route('/set-theme', methods=['POST'])
+@app.post('/set-theme')
 def set_theme():
     response = make_response(redirect(request.referrer))
     if request.cookies.get('theme'):
