@@ -1,5 +1,5 @@
 from flask import g, abort, request, redirect
-from __main__ import app, limiter
+from __main__ import app, limiter, cache
 from classes.comment import *
 from helpers.get import *
 from helpers.wrappers import *
@@ -48,5 +48,7 @@ def post_submit_comment(u):
 	g.db.flush()
 
 	g.db.refresh(new_comment)
+
+	cache.delete_memoized(new_comment.parent.comment_list)
 
 	return redirect(new_comment.permalink)

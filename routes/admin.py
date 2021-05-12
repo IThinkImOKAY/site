@@ -1,4 +1,4 @@
-from __main__ import app
+from __main__ import app, cache
 from flask import g, redirect
 from helpers.get import *
 from helpers.wrappers import *
@@ -24,6 +24,8 @@ def admin_remove_comment(cid, u):
 	reason = request.form.get("reason", "")
 
 	target.remove(reason = reason)
+
+	cache.delete_memoized(target.parent.comment_list)
 
 	return redirect(target.permalink)
 
@@ -68,6 +70,8 @@ def admin_approve_comment(cid, u):
 	target.removal_reason = ""
 
 	g.db.add(target)
+
+	cache.delete_memoized(target.parent.comment_list)
 
 	return redirect(target.permalink)
 

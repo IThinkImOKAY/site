@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, g, session, abort
+from flask_caching import Cache
 import re
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
@@ -14,6 +15,10 @@ app = Flask(__name__)
 
 app.config["RATELIMIT_STORAGE_URL"] = environ.get("REDIS_URL", "memory://")
 
+app.config["CACHE_TYPE"] = "RedisCache"
+app.config["CACHE_REDIS_URL"] = environ.get("REDIS_URL")
+app.config["CACHE_DEFAULT_TIMEOUT"] = 300
+
 limiter = Limiter(
     app,
     key_func=get_remote_address,
@@ -21,12 +26,15 @@ limiter = Limiter(
     strategy="fixed-window"
 )
 
+
 app.config['SECRET_KEY'] = environ.get('MASTER_KEY')
 
 engine = create_engine(environ.get('DB_URL'), echo = True)
 Base = declarative_base()
 
 db_session = scoped_session(sessionmaker(bind = engine))
+
+cache = Cache(app)
 
 @app.before_request
 def before_request():

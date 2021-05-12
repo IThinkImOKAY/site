@@ -1,6 +1,6 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
-from __main__ import Base
+from __main__ import Base, cache
 import time
 from flask import g
 
@@ -56,7 +56,8 @@ class Post(Base):
 		if (not u or not u.is_admin) and (self.is_removed or self.board.is_banned): return False
 		else: return True
 
-	def comment_list(self, u):
+	@cache.memoize(timeout = 900)
+	def comment_list(self, u = None):
 		return sorted([c for c in self.comments if c.can_view(u)], key = lambda x: x.created_utc, reverse = True)
 
 	def comment_count(self, u):
