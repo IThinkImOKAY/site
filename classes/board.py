@@ -36,9 +36,9 @@ class Board(Base):
 		return f'/{self.name}/'
 
 	@cache.memoize(timeout = 900)
-	def post_list(self, u):
+	def post_list(self, u = None):
 		return sorted([p for p in self.posts if p.can_view(u)], key = lambda x: x.created_utc, reverse = True)
-	
+
 	def ban(self, reason = None):
 		self.banned_utc = int(time.time())
 		self.ban_reason = reason
