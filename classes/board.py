@@ -1,6 +1,6 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
-from __main__ import Base
+from __main__ import Base, cache
 from .post import *
 import time
 from flask import g
@@ -35,6 +35,7 @@ class Board(Base):
 	def url(self):
 		return f'/{self.name}/'
 
+	@cache.memoize(timeout = 900)
 	def post_list(self, u):
 		return sorted([p for p in self.posts if p.can_view(u)], key = lambda x: x.created_utc, reverse = True)
 	

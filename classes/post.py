@@ -19,11 +19,17 @@ class Post(Base):
 	removal_reason = Column(String(255))
 	author_id = Column(Integer, ForeignKey('Users.id'))
 
-	board = relationship("Board", primaryjoin = "Post.board_id == Board.id", innerjoin = True, lazy = "joined", back_populates = "posts")
+	board = relationship(
+		"Board",
+		primaryjoin = "Post.board_id == Board.id",
+		innerjoin = True,
+		lazy = "joined",
+		back_populates = "posts"
+	)
 
 	comments = relationship("Comment", primaryjoin = "Post.id == Comment.parent_id", back_populates = "parent")
 
-	author = relationship("User", primaryjoin = "Post.author_id == User.id", uselist = False)
+	author = relationship("User", lazy = "joined", primaryjoin = "Post.author_id == User.id", uselist = False)
 
 	def __init__(self, **kwargs):
 		if 'created_utc' not in kwargs:
