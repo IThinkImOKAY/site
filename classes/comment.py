@@ -55,7 +55,7 @@ class Comment(Base):
 				return False
 
 		return True
-	
+
 	def remove(self, reason = None):
 		self.is_removed = True
 		self.removal_reason = reason

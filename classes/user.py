@@ -37,4 +37,3 @@ class User(Base):
 
 	def verify_password(self, password) -> bool:
 		return check_password(password, self.passhash)
-	
