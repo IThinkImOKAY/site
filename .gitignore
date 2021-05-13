@@ -2,5 +2,6 @@
 __pycache__/
 dist/
 build/
+dump.rdb
 *.egg-info/
 *.pyc
