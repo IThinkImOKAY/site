@@ -60,11 +60,6 @@ def post_create_board(u):
 	if not valid_name_regex.match(name):
 	    return render_template('create.html', error = "Board name cannot contain special characters."), 400
 
-    #one board every 3 days for non-admins
-    #last_created_board = g.db.query(Board).filter(
-
-    #    )
-
 	#check for already existing board
 	existing_board = g.db.query(Board).filter_by(name = name).first()
 	if existing_board:
@@ -72,6 +67,7 @@ def post_create_board(u):
 
 	new_board = Board(name = name,
 		description = desc,
+        creator_id = u.id,
 		creation_ip = request.remote_addr)
 
 	g.db.add(new_board)
