@@ -56,7 +56,7 @@ def post_create_board(u):
         return render_template('create.html', error = "Board name can't be longer than 5 characters.", u = u), 400
 
     #disallow special characters
-    valid_name_regex = re.compile('^[a-z]{1,5}$')
+    valid_name_regex = re.compile('^[a-z0-9]{1,5}$')
     if not valid_name_regex.match(name):
         return render_template('create.html', error = "Board name cannot contain special characters.", u = u), 400
 
