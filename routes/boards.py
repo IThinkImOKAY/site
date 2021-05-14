@@ -33,7 +33,7 @@ def get_create_board(u):
 
 @app.post('/create_board')
 @limiter.limit("1/3days")
-@auth_required
+#@auth_required
 def post_create_board(u):
 	name = request.form['name']
 	desc = request.form['desc']
@@ -59,6 +59,11 @@ def post_create_board(u):
 	valid_name_regex = re.compile('^[a-z]{1,5}$')
 	if not valid_name_regex.match(name):
 	    return render_template('create.html', error = "Board name cannot contain special characters."), 400
+
+    #one board every 3 days for non-admins
+    #last_created_board = g.db.query(Board).filter(
+
+    #    )
 
 	#check for already existing board
 	existing_board = g.db.query(Board).filter_by(name = name).first()
