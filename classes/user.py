@@ -44,7 +44,7 @@ class User(Base):
         return _formkey
 
     def validate_formkey(self, formkey) -> bool:
-        return validate_hash(formkey, self.formkey)
+        return formkey == self.formkey
 
     @property
     def is_banned(self):
