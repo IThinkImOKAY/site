@@ -65,5 +65,5 @@ def validate_formkey(f):
         if not u.validate_formkey(formkey):
             abort(403)
 
-        return f(*args, u, **kwargs)
+        return f(*args, u = u, **kwargs)
     return wrapper

@@ -18,10 +18,12 @@
 	{% if post.is_removed %}
 	<form action="/admin/approve/post/{{ post.id }}" method="post">
 		<strong>[removed{% if post.removal_reason %}: {{ post.removal_reason }}{% endif %}]</strong>
+        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 		<input type="submit" value="Approve" />
 	</form>
 	{% else %}
 	<form action="/admin/remove/post/{{ post.id }}" method="post">
+        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 		<input type="text" name="reason" placeholder="reason" />
 		<input type="submit" value="Remove thread" />
 	</form>
@@ -47,10 +49,12 @@
 		{% if c.is_removed %}
 		<form action="/admin/approve/comment/{{ c.id }}" method="post">
 			<strong>[removed{% if c.removal_reason %}: {{ c.removal_reason }}{% endif %}]</strong>
+            <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 			<input type="submit" value="Approve" />
 		</form>
 		{% else %}
 		<form action="/admin/remove/comment/{{ c.id }}" method="post">
+            <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 			<input type="text" name="reason" placeholder="reason" />
 			<input type="submit" value="Remove comment" />
 		</form>
