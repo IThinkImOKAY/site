@@ -15,8 +15,6 @@ def get_board(boardname, u):
 	if (not u or not u.is_admin) and board.is_banned:
 		abort(404)
 
-	#post_listing = [p for p in board.posts if not p.is_removed] if not u or not u.is_admin else board.posts
-
 	return render_template('board.html', board = board, u = u)
 
 @app.get('/board_id/<bid>')
@@ -48,10 +46,10 @@ def post_create_board(u):
 	#remove slashes
 	if name.startswith('/'):
 	    name = name[1:]
-	
+
 	if name.endswith('/'):
 	    name = name[:-1]
-	
+
 	name = name.lower()
 
 	if len(name) > 5:
