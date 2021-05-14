@@ -16,6 +16,7 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
             <textarea id="body" required="" name="body"></textarea><br>
             <input type="submit" value="Create Post" />
     </form>
+    <p>Board created by /u/{{ board.creator.username }}</p>
     {% if u and u.is_admin %}
     {% if board.is_banned %}
     <form action="/admin/unban/board/{{ board.id }}" method="post">

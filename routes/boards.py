@@ -7,69 +7,79 @@ from helpers.wrappers import *
 @app.get('/<boardname>/')
 @auth_desired
 def get_board(boardname, u):
-	board = g.db.query(Board).filter_by(name = boardname).first()
+    board = g.db.query(Board).filter_by(name = boardname).first()
 
-	if not board:
-		abort(404)
+    if not board:
+        abort(404)
 
-	if (not u or not u.is_admin) and board.is_banned:
-		abort(404)
+    if (not u or not u.is_admin) and board.is_banned:
+        abort(404)
 
-	return render_template('board.html', board = board, u = u)
+    return render_template('board.html', board = board, u = u)
 
 @app.get('/board_id/<bid>')
 def board_by_id(bid):
-	board = g.db.query(Board).filter_by(id = bid).first()
+    board = g.db.query(Board).filter_by(id = bid).first()
 
-	if not board:
-		abort(404)
+    if not board:
+        abort(404)
 
-	return redirect(board.url)
+    return redirect(board.url)
 
 @app.get('/create_board')
 @auth_required
 def get_create_board(u):
-	return render_template('create.html', u = u)
+    return render_template('create.html', u = u)
 
 @app.post('/create_board')
-@limiter.limit("1/3days")
-#@auth_required
+#@limiter.limit("1/3days")
+@auth_required
 def post_create_board(u):
-	name = request.form['name']
-	desc = request.form['desc']
+    name = request.form['name']
+    desc = request.form['desc']
 
-	if not name:
-	    return render_template('create.html', error = "Missing board name."), 400
+    if not name:
+        return render_template('create.html', error = "Missing board name.", u = u), 400
 
-	name = name.lstrip().rstrip()
+    name = name.lstrip().rstrip()
 
-	#remove slashes
-	if name.startswith('/'):
-	    name = name[1:]
+    #remove slashes
+    if name.startswith('/'):
+        name = name[1:]
 
-	if name.endswith('/'):
-	    name = name[:-1]
+    if name.endswith('/'):
+        name = name[:-1]
 
-	name = name.lower()
+    name = name.lower()
 
-	if len(name) > 5:
-	    return render_template('create.html', error = "Board name can't be longer than 5 characters."), 400
+    if len(name) > 5:
+        return render_template('create.html', error = "Board name can't be longer than 5 characters.", u = u), 400
 
-	#disallow special characters
-	valid_name_regex = re.compile('^[a-z]{1,5}$')
-	if not valid_name_regex.match(name):
-	    return render_template('create.html', error = "Board name cannot contain special characters."), 400
+    #disallow special characters
+    valid_name_regex = re.compile('^[a-z]{1,5}$')
+    if not valid_name_regex.match(name):
+        return render_template('create.html', error = "Board name cannot contain special characters.", u = u), 400
 
-	#check for already existing board
-	existing_board = g.db.query(Board).filter_by(name = name).first()
-	if existing_board:
-		return render_template('create.html', error = "A board with that name already exists."), 409
+    #1 board per every 3 days for non-admins
+    if not u.is_admin:
+        last_board = bool(g.db.query(Board).filter(
+            Board.creator_id == u.id,
+            Board.created_utc > int(time.time()) - 3*24*60*60
+        ).first())
 
-	new_board = Board(name = name,
-		description = desc,
+        if last_board:
+            return render_template('create.html', error = "You can only create one board every 3 days.", u = u), 429
+
+    #check for already existing board
+    existing_board = g.db.query(Board).filter_by(name = name).first()
+    if existing_board:
+        return render_template('create.html', error = "A board with that name already exists.", u = u), 409
+
+    new_board = Board(name = name,
+        description = desc,
         creator_id = u.id,
-		creation_ip = request.remote_addr)
+        creation_ip = request.remote_addr)
 
-	g.db.add(new_board)
+    g.db.add(new_board)
 
-	return redirect(new_board.url)
+    return redirect(new_board.url)

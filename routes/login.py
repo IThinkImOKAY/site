@@ -10,9 +10,9 @@ def get_login():
 	if 'user_id' in session:
 		return redirect('/')
 
-	redirect = request.args.get('redirect', '/')
+	redirect_to = request.args.get('redirect', '/')
 
-	return render_template('login.html', redirect = redirect)
+	return render_template('login.html', redirect = redirect_to)
 
 @app.post('/login')
 def post_login():
@@ -60,7 +60,7 @@ def post_signup():
 		return redirect('/')
 
 	name = request.form.get('username', '').lstrip().rstrip()
-	password = request.form.get('password', '')	
+	password = request.form.get('password', '')
 	password_confirm = request.form.get('password-confirm', '')
 
 	redirect_to = request.form.get('redirect', '/')
