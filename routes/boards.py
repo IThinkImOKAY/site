@@ -34,6 +34,7 @@ def get_create_board(u):
 @app.post('/create_board')
 #@limiter.limit("1/3days")
 @auth_required
+@validate_formkey
 def post_create_board(u):
     name = request.form['name']
     desc = request.form['desc']

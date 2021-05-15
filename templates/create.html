@@ -11,6 +11,7 @@
     <p style="color: red;">{{ error }}</p>
     {% endif %}
     <form action="/create_board" method="post">
+        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
         <label for="name">Board name:</label><br />
         <input id="name" name="name" required maxlength="5" placeholder="board name (eg: sex)" /><br />
         <label for="desc">Board description:</label><br />

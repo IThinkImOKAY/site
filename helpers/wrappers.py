@@ -53,3 +53,17 @@ def admin_required(f):
         return resp
 
     return wrapper
+
+def validate_formkey(f):
+    @wraps(f)
+    def wrapper(*args, u, **kwargs):
+        formkey = request.form.get("formkey", "")
+
+        if not formkey:
+            abort(403)
+
+        if not u.validate_formkey(formkey):
+            abort(403)
+
+        return f(*args, u = u, **kwargs)
+    return wrapper

@@ -21,10 +21,12 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
     {% if board.is_banned %}
     <form action="/admin/unban/board/{{ board.id }}" method="post">
         <strong style="background-color: #fa8072;">[board banned{% if board.ban_reason %}: {{ board.ban_reason }}{% endif %}]</strong>
+        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
         <input type="submit" value="Unban /{{ board.name }}/">
     </form>
     {% else %}
     <form action="/admin/ban/board/{{ board.id }}" method="post">
+        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
         <input type="text" name="reason" placeholder="reason" />
         <input type="submit" value="Ban /{{ board.name }}/">
     </form>

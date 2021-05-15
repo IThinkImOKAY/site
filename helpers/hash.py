@@ -5,7 +5,7 @@ import hmac
 from os import environ
 
 def hash(input) -> str:
-	msg = bytes(input, 'utc-16')
+	msg = bytes(input, 'utf-16')
 
 	return hmac.new(bytes(environ.get('MASTER_KEY'), 'utf-16'),
 		msg,
