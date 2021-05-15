@@ -9,6 +9,7 @@ class Comment(Base):
 
     id = Column(Integer, Sequence('Comments_id_seq'), primary_key = True)
     body = Column(String(10000))
+    body_html = Column(String(10000))
     created_utc = Column(Integer)
     creation_ip = Column(String(255))
     parent_id = Column(Integer, ForeignKey('Posts.id'))

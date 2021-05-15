@@ -12,6 +12,7 @@ class Post(Base):
     id = Column(Integer, Sequence('Posts_id_seq'), primary_key = True)
     title = Column(String(50))
     body = Column(String(255))
+    body_html = Column(String(10000))
     created_utc = Column(Integer)
     creation_ip = Column(String(255))
     board_id = Column(Integer, ForeignKey('Boards.id'))

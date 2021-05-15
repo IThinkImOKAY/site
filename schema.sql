@@ -5,7 +5,7 @@
 -- Dumped from database version 12.6
 -- Dumped by pg_dump version 12.6
 
--- Started on 2021-05-14 23:11:12 CEST
+-- Started on 2021-05-15 16:32:20 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -75,7 +75,8 @@ CREATE TABLE public."Comments" (
     parent_id integer,
     is_removed boolean DEFAULT false,
     removal_reason character varying(255),
-    author_id integer
+    author_id integer,
+    body_html character varying(10000)
 );
 
 
@@ -110,13 +111,14 @@ ALTER SEQUENCE public."Comments_id_seq" OWNED BY public."Comments".id;
 CREATE TABLE public."Posts" (
     id integer NOT NULL,
     title character varying(50),
-    body text,
+    body character varying(10000),
     created_utc integer,
     creation_ip character varying(255),
     board_id integer,
     is_removed boolean DEFAULT false,
     removal_reason character varying(255),
-    author_id integer
+    author_id integer,
+    body_html character varying(10000)
 );
 
 
@@ -308,7 +310,7 @@ ALTER TABLE ONLY public."Users"
     ADD CONSTRAINT "Users_banned_by_id_fkey" FOREIGN KEY (banned_by_id) REFERENCES public."Users"(id);
 
 
--- Completed on 2021-05-14 23:11:12 CEST
+-- Completed on 2021-05-15 16:32:21 CEST
 
 --
 -- PostgreSQL database dump complete
