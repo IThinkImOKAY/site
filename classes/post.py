@@ -39,8 +39,7 @@ class Post(Base):
         if 'created_utc' not in kwargs:
             kwargs['created_utc'] = int(time.time())
 
-        if 'body_html' not in kwargs:
-            kwargs['body_html'] = render(kwargs['body'])
+        kwargs['body_html'] = render(kwargs['body'])
 
         super().__init__(**kwargs)
 

@@ -4,6 +4,8 @@ from __main__ import Base, cache
 import time
 from flask import g
 
+from helpers.markdown import *
+
 class Comment(Base):
     __tablename__ = "Comments"
 
@@ -31,6 +33,8 @@ class Comment(Base):
     def __init__(self, **kwargs):
         if 'created_utc' not in kwargs:
             kwargs['created_utc'] = int(time.time())
+
+        kwargs['body_html'] = render(kwargs['body'])
 
         super().__init__(**kwargs)
 

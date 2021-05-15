@@ -44,7 +44,7 @@
 	{% for c in post.comment_list(u) %}
 	<div id="c{{ c.id }}" {% if c.is_removed %} style="background-color: #fa8072;" {% endif %}>
 		<h6>{{ c.author.username or 'Anonymous' }} - Comment #{{ c.id }}</h6>
-		<p>{{ c.body }}</p>
+		<p>{{ c.body_html|markdown }}</p>
 		{% if u and u.is_admin %}
 		{% if c.is_removed %}
 		<form action="/admin/approve/comment/{{ c.id }}" method="post">
