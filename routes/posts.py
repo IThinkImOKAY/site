@@ -3,6 +3,7 @@ from __main__ import app, limiter, cache
 from classes.post import *
 from helpers.get import *
 from helpers.wrappers import *
+import bleach
 
 @app.get('/<boardname>/<int:pid>')
 @auth_desired
@@ -21,6 +22,24 @@ def get_post(boardname, pid, u):
         abort(404)
 
     return render_template('post.html', post = post, u = u)
+
+@app.get('/<boardname>/<int:pid>.source')
+@auth_desired
+def get_post_markdown(boardname, pid, u):
+
+    b = get_board(boardname, graceful = False)
+
+    post = g.db.query(Post).filter(
+        Post.id == pid,
+        Post.board_id == b.id).first()
+
+    if not post:
+        abort(404)
+
+    if not post.can_view(u):
+        abort(404)
+
+    return bleach.clean(post.body, tags = [])
 
 @app.post('/submit')
 @limiter.limit("1/3minutes")

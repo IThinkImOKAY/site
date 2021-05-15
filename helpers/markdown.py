@@ -1,7 +1,7 @@
 from mistletoe import Document, HTMLRenderer
-from autolink import linkify
-from bs4 import BeautifulSoup
-import bleach
+from bleach.sanitizer import Cleaner
+from bleach.linkifier import LinkifyFilter
+from functools import partial
 
 ALLOWED_TAGS = [
     'h1',
@@ -36,15 +36,17 @@ ALLOWED_PROTOCOLS = [
 ]
 
 # add target="_blank" and ref="nofollow noopener noreferrer" to outgoing links
-def blank_nofollow_noopener_noreferrer(html) -> str:
-    soup = BeautifulSoup(html, 'html.parser')
+def blank_nofollow_noopener_noreferrer(attrs, new = False) -> str:
+    attrs[(None, 'target')] = "_blank"
+    attrs[(None, 'rel')] = "nofollow noopener noreferrer"
 
-    for link in soup.find_all('a'):
-        link.attrs['target'] = "_blank"
+    return attrs
 
-        link.attrs['rel'] = "nofollow noopener noreferrer"
-
-    return str(soup)
+cleaner = Cleaner(tags = ALLOWED_TAGS,
+    attributes = ALLOWED_ATTRS,
+    protocols = ALLOWED_PROTOCOLS,
+    filters = [partial(LinkifyFilter, callbacks = [blank_nofollow_noopener_noreferrer], skip_tags = ['pre'])]
+)
 
 def render(text) -> str:
     _rendered = ""
@@ -52,10 +54,6 @@ def render(text) -> str:
     with HTMLRenderer() as renderer:
         _rendered = renderer.render(Document(text))
 
-    _rendered = linkify(_rendered)
-
-    _rendered = blank_nofollow_noopener_noreferrer(_rendered)
-
-    _rendered = bleach.clean(_rendered, tags = ALLOWED_TAGS, attributes = ALLOWED_ATTRS, protocols = ALLOWED_PROTOCOLS)
+    _rendered = cleaner.clean(_rendered)
 
     return _rendered
