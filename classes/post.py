@@ -6,6 +6,8 @@ from flask import g
 
 from .comment import *
 
+from helpers.markdown import *
+
 class Post(Base):
     __tablename__ = "Posts"
 
@@ -36,6 +38,9 @@ class Post(Base):
     def __init__(self, **kwargs):
         if 'created_utc' not in kwargs:
             kwargs['created_utc'] = int(time.time())
+
+        if 'body_html' not in kwargs:
+            kwargs['body_html'] = render(kwargs['body'])
 
         super().__init__(**kwargs)
 

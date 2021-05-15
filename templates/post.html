@@ -13,7 +13,7 @@
 	<div {% if post.is_removed %} style="background-color: #fa8072;" {% endif %}>
 		<h4>{{ post.author.username or 'Anonymous' }} - Post #{{ post.id }}</h4>
 		<h1>{{ post.title }}</h1>
-		<h3>{{ post.body }}</h3>
+		<p>{{ post.body_html|markdown }}</p>
 	{% if u and u.is_admin %}
 	{% if post.is_removed %}
 	<form action="/admin/approve/post/{{ post.id }}" method="post">
