@@ -5,6 +5,8 @@ from helpers.get import *
 from helpers.wrappers import *
 import bleach
 
+from helpers.markdown import *
+
 @app.get('/<boardname>/<int:pid>')
 @auth_desired
 def get_post(boardname, pid, u):
