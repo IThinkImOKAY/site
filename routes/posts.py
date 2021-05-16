@@ -44,32 +44,37 @@ def get_post_markdown(boardname, pid, u):
 
     return bleach.clean(post.body, tags = [])
 
-@app.post('/submit')
+@app.post('/<boardname>/')
 @limiter.limit("1/3minutes")
 @auth_desired
-def post_submit(u):
+def post_submit(boardname, u):
     board_id = int(request.form.get("board", 1))
     title = request.form.get("title")
     body = request.form.get("body")
 
+    title = title.lstrip().rstrip()
+
+    # top-level post must have a title
     if not title:
         abort(400)
 
     if not body:
         abort(400)
 
-    title = title.lstrip().rstrip()
     body = body.lstrip().rstrip()
 
     if len(title) > 50:
         abort(400)
 
-    board = get_board_id(board_id, graceful = False)
+    board = get_board(boardname, graceful = False)
     if (not u or not u.is_admin) and board.is_banned:
         abort(404)
 
+    post_html = render_md(body)
+
     new_post = Post(title = title,
         body = body,
+        body_html = post_html,
         board_id = board.id,
         creation_ip = request.remote_addr)
 
