@@ -8,7 +8,7 @@ Welcome to /{{ board.name }}/: {{ board.description }}!
     {% if error %}
     <p style="color: red;">{{ error }}</p>
     {% endif %}
-    <form action="/submit" method="post">
+    <form action="/{{ board.name }}/" method="post">
     		<input type="hidden" name="board" value="{{ board.id }}" />
             <label for="title">Your Title:</label>
             <input required="" id="title" name="title" /><br>
