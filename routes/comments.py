@@ -1,54 +1,61 @@
 from flask import g, abort, request, redirect
 from __main__ import app, limiter, cache
-from classes.comment import *
+from classes.post import *
 from helpers.get import *
 from helpers.wrappers import *
+from helpers.markdown import *
 
-@app.get('/comment/<int:cid>')
+@app.get('/post_id/<int:pid>')
 @auth_desired
-def comment_by_id(cid, u):
-	comment = get_comment(cid, graceful = False)
+def post_by_id(pid, u):
+    post = get_post(pid, graceful = False)
 
-	if not comment.can_view(u):
-		abort(404)
+    if not post.can_view(u):
+        abort(404)
 
-	return redirect(comment.permalink)
+    return redirect(post.permalink)
 
-@app.post('/submit/comment')
+@app.post('/<boardname>/<int:pid>')
 @limiter.limit("1/10seconds;5/1minute;30/1hour")
 @auth_desired
-def post_submit_comment(u):
-	parent_id = int(request.form.get("parent"))
-	body = request.form.get("body")
+def post_submit_reply(boardname, pid, u):
+    body = request.form.get("body")
 
-	if not parent_id:
-		abort(400)
+    if 'title' in request.form:
+        return "Replies cannot have titles.", 400
 
-	if not body:
-		abort(400)
+    parent = get_post(pid, graceful = False)
 
-	body = body.lstrip().rstrip()
+    if not parent.board.name == boardname:
+        abort(404)
 
-	if len(body) > 10000:
-		abort(400)
+    if not body:
+        abort(400)
 
-	parent = get_post(parent_id, graceful = False)
+    body = body.lstrip().rstrip()
 
-	if not parent.can_comment(u):
-		abort(404)
+    if len(body) > 10000:
+        abort(400)
 
-	new_comment = Comment(body = body,
-		parent_id = parent.id,
-		creation_ip = request.remote_addr)
+    if not parent.can_comment(u):
+        abort(404)
 
-	if u:
-		new_comment.author_id = u.id
+    reply_html = render_md(body, context = parent)
 
-	g.db.add(new_comment)
-	g.db.flush()
+    new_reply = Post(body = body,
+        body_html = reply_html,
+        parent_id = parent.id,
+        board_id = parent.board.id,
+        creation_ip = request.remote_addr)
 
-	g.db.refresh(new_comment)
+    if u:
+        new_reply.author_id = u.id
 
-	cache.delete_memoized(new_comment.parent.comment_list)
+    g.db.add(new_reply)
+    g.db.flush()
 
-	return redirect(new_comment.permalink)
+    g.db.refresh(new_reply)
+
+    cache.delete_memoized(new_reply.parent.comment_list)
+
+    return redirect(new_reply.permalink)

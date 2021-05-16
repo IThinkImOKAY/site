@@ -40,7 +40,7 @@ class Board(Base):
 
     @cache.memoize(timeout = 900)
     def post_list(self, u = None):
-        return sorted([p for p in self.posts if p.can_view(u)], key = lambda x: x.created_utc, reverse = True)
+        return sorted([p for p in self.posts if p.can_view(u) and p.is_top_level], key = lambda x: x.created_utc, reverse = True)
 
     def ban(self, reason = None):
         self.banned_utc = int(time.time())

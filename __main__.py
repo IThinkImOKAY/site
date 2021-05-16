@@ -10,6 +10,7 @@ import secrets
 from urllib.parse import quote, urlencode
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flaskext.markdown import Markdown
 
 app = Flask(__name__)
 
@@ -35,6 +36,7 @@ Base = declarative_base()
 db_session = scoped_session(sessionmaker(bind = engine))
 
 cache = Cache(app)
+Markdown(app)
 
 @app.before_request
 def before_request():

@@ -10,19 +10,19 @@
 	<p>
 		<a href="{{ post.board.url }}">&#11013 Back to /{{ post.board.name }}/</a>
 	</p>
-	<div {% if post.is_removed %} style="background-color: #fa8072;" {% endif %}>
+	<div id="p{{ post.id }}" class="submission" {% if post.is_removed %} style="background-color: #fa8072;" {% endif %}>
 		<h4>{{ post.author.username or 'Anonymous' }} - Post #{{ post.id }}</h4>
 		<h1>{{ post.title }}</h1>
-		<h3>{{ post.body }}</h3>
+		<p>{{ post.body_html|markdown }}</p>
 	{% if u and u.is_admin %}
 	{% if post.is_removed %}
-	<form action="/admin/approve/post/{{ post.id }}" method="post">
+	<form action="/admin/approve/{{ post.id }}" method="post">
 		<strong>[removed{% if post.removal_reason %}: {{ post.removal_reason }}{% endif %}]</strong>
         <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 		<input type="submit" value="Approve" />
 	</form>
 	{% else %}
-	<form action="/admin/remove/post/{{ post.id }}" method="post">
+	<form action="/admin/remove/{{ post.id }}" method="post">
         <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 		<input type="text" name="reason" placeholder="reason" />
 		<input type="submit" value="Remove thread" />
@@ -33,30 +33,30 @@
 	<div>
 		{% if post.can_comment(u) %}
 		<h2>Reply to this post</h2>
-		<form action="/submit/comment" method="post">
-			<input type="hidden" name="parent" value="{{ post.id }}" />
+		<form action="/{{ post.board.name }}/{{ post.id }}" method="post">
 			<textarea id="comment-body-input" name="body" rows="5" cols="50" placeholder="Enter your comment..."></textarea><br />
+            <p>Use ++pid to mention a post, or +++board to mention a board.</p>
 			<input type="submit" value="Comment" />
 		</form>
 		{% endif %}
 	</div>
 	<h2>{{ post.comment_count(u) }} {{ 'Comment' if post.comment_count(u) == 1 else 'Comments' }}</h2>
 	{% for c in post.comment_list(u) %}
-	<div id="c{{ c.id }}" {% if c.is_removed %} style="background-color: #fa8072;" {% endif %}>
+	<div id="p{{ c.id }}" class="submission" {% if c.is_removed %} style="background-color: #fa8072;" {% endif %}>
 		<h6>{{ c.author.username or 'Anonymous' }} - Comment #{{ c.id }}</h6>
-		<p>{{ c.body }}</p>
+		<p>{{ c.body_html|markdown }}</p>
 		{% if u and u.is_admin %}
 		{% if c.is_removed %}
-		<form action="/admin/approve/comment/{{ c.id }}" method="post">
+		<form action="/admin/approve/{{ c.id }}" method="post">
 			<strong>[removed{% if c.removal_reason %}: {{ c.removal_reason }}{% endif %}]</strong>
             <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 			<input type="submit" value="Approve" />
 		</form>
 		{% else %}
-		<form action="/admin/remove/comment/{{ c.id }}" method="post">
+		<form action="/admin/remove/{{ c.id }}" method="post">
             <input type="hidden" name="formkey" value="{{ u.formkey }}" />
 			<input type="text" name="reason" placeholder="reason" />
-			<input type="submit" value="Remove comment" />
+			<input type="submit" value="Remove" />
 		</form>
 		{% endif %}
 		{% endif %}
