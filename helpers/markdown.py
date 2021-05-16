@@ -102,8 +102,6 @@ class CustomRenderer(HTMLRenderer):
         return _output
 
     def render_board_mention(self, token):
-        print("render board mention...")
-
         _output = ""
 
         target_board = get_board(token.target_board_name)
