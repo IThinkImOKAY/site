@@ -23,7 +23,8 @@ def get_post(boardname, pid, u):
     if not post.can_view(u):
         abort(404)
 
-    return render_template('post.html', post = post, u = u)
+    if post.is_top_level: return render_template('post.html', post = post, u = u)
+    else: return redirect(post.permalink)
 
 @app.get('/<boardname>/<int:pid>.source')
 @auth_desired
