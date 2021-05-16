@@ -1,12 +1,8 @@
 from sqlalchemy import *
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from __main__ import Base, cache
 import time
 from flask import g
-
-from .comment import *
-
-from helpers.markdown import *
 
 class Post(Base):
     __tablename__ = "Posts"
@@ -21,6 +17,7 @@ class Post(Base):
     is_removed = Column(Boolean, default = False)
     removal_reason = Column(String(255))
     author_id = Column(Integer, ForeignKey('Users.id'))
+    parent_id = Column(Integer, ForeignKey('Posts.id'))
 
     board = relationship(
         "Board",
@@ -31,15 +28,13 @@ class Post(Base):
         back_populates = "posts"
     )
 
-    comments = relationship("Comment", primaryjoin = "Post.id == Comment.parent_id", back_populates = "parent")
+    parent = relationship("Post", primaryjoin = "Post.parent_id == Post.id", backref = "comments", remote_side = [id])
 
     author = relationship("User", lazy = "joined", primaryjoin = "Post.author_id == User.id", uselist = False)
 
     def __init__(self, **kwargs):
         if 'created_utc' not in kwargs:
             kwargs['created_utc'] = int(time.time())
-
-        kwargs['body_html'] = render(kwargs['body'])
 
         super().__init__(**kwargs)
 
@@ -49,7 +44,12 @@ class Post(Base):
     @property
     @cache.memoize(timeout = 900)
     def permalink(self):
-        return f'/{self.board.name}/{self.id}'
+        if self.is_top_level: return f'/{self.board.name}/{self.id}'
+        else: return f'{self.parent.permalink}#p{self.id}'
+
+    @property
+    def is_top_level(self):
+        return not bool(self.parent_id)
 
     def can_view(self, u) -> bool:
         if not u:
@@ -75,6 +75,9 @@ class Post(Base):
 
     def comment_count(self, u):
         return len(self.comment_list(u))
+
+    def has_comment(self, cid) -> bool:
+        return bool([c for c in self.comments if c.id == cid])
 
     def remove(self, reason = None):
         self.is_removed = True
