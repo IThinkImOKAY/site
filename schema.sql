@@ -5,7 +5,7 @@
 -- Dumped from database version 12.6
 -- Dumped by pg_dump version 12.6
 
--- Started on 2021-05-16 22:46:02 CEST
+-- Started on 2021-05-18 17:57:42 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -78,7 +78,8 @@ CREATE TABLE public."Posts" (
     removal_reason character varying(255),
     author_id integer,
     body_html character varying(10000),
-    parent_id integer
+    parent_id integer,
+    mentions integer[]
 );
 
 
@@ -244,7 +245,7 @@ ALTER TABLE ONLY public."Users"
     ADD CONSTRAINT "Users_banned_by_id_fkey" FOREIGN KEY (banned_by_id) REFERENCES public."Users"(id);
 
 
--- Completed on 2021-05-16 22:46:03 CEST
+-- Completed on 2021-05-18 17:57:43 CEST
 
 --
 -- PostgreSQL database dump complete
