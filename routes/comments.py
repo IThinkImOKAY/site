@@ -1,4 +1,7 @@
 from flask import g, abort, request, redirect
+from bs4 import BeautifulSoup
+import re
+
 from __main__ import app, limiter, cache
 from classes.post import *
 from helpers.get import *
@@ -42,6 +45,9 @@ def post_submit_reply(boardname, pid, u):
 
     reply_html = render_md(body, context = parent)
 
+    if len(reply_html) > 10000:
+        abort(400)
+
     new_reply = Post(body = body,
         body_html = reply_html,
         parent_id = parent.id,
@@ -53,6 +59,23 @@ def post_submit_reply(boardname, pid, u):
 
     g.db.add(new_reply)
     g.db.flush()
+
+    # get mentions
+
+    soup = BeautifulSoup(reply_html, 'html.parser')
+    for m in soup.find_all('a', href = re.compile(r"^#p[0-9]{1,}"), limit = 15):
+        mention_id = int(m['href'].lstrip('#p'))
+
+        mention = get_post(mention_id)
+
+        if mention:
+            mentions_set = set(mention.mentions)
+            mentions_set.add(new_reply.id)
+
+            mention.mentions = list(mentions_set)
+
+            g.db.add(mention)
+
 
     g.db.refresh(new_reply)
 
