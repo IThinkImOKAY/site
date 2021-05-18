@@ -87,7 +87,7 @@ class CustomRenderer(HTMLRenderer):
             _output += "<del>"
 
         if self.context and (self.context.has_comment(target_post.id) or target_post.id == self.context.id):
-            _output += f'<a href="{self.context.permalink}#p{target_post.id}">++{target_post.id}'
+            _output += f'<a href="#p{target_post.id}">++{target_post.id}'
 
             if target_post.id == self.context.id:
                 _output += " (OP)"
@@ -124,7 +124,7 @@ class CustomRenderer(HTMLRenderer):
         if not self.context:
             return f"++{token.target}"
 
-        _output = f'<a href="{self.context.permalink}#p{self.context.id}">++{self.context.id} (OP)</a>'
+        _output = f'<a href="#p{self.context.id}">++{self.context.id} (OP)</a>'
         return _output
 
 # add ref="nofollow noopener noreferrer" to outgoing links
