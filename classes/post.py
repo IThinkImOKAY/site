@@ -1,5 +1,5 @@
 from sqlalchemy import *
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 from __main__ import Base, cache
 import time
 from flask import g
@@ -18,6 +18,7 @@ class Post(Base):
     removal_reason = Column(String(255))
     author_id = Column(Integer, ForeignKey('Users.id'))
     parent_id = Column(Integer, ForeignKey('Posts.id'))
+    mentions = Column(ARRAY(Integer), default = [])
 
     board = relationship(
         "Board",
