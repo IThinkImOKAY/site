@@ -2,6 +2,20 @@ from __main__ import app, cache
 from flask import g, redirect
 from helpers.get import *
 from helpers.wrappers import *
+from helpers.markdown import *
+
+def rerender_post(p):
+    if p.is_top_level:
+        p.body_html = render_md(p.body)
+    else:
+        p.body_html = render_md(p.body, context = p.parent)
+
+    g.db.add(p)
+
+def rerender_replies(p):
+    for m in p.mentions:
+        _post = get_post(m)
+        rerender_post(_post)
 
 @app.post('/admin/remove/<int:pid>')
 @auth_required
@@ -13,6 +27,8 @@ def admin_remove_post(pid, u):
     reason = request.form.get("reason", "")
 
     target.remove(reason = reason)
+
+    rerender_replies(target)
 
     cache.delete_memoized(target.board.post_list)
 
@@ -48,6 +64,8 @@ def admin_approve_post(pid, u):
     target.removal_reason = ""
 
     g.db.add(target)
+
+    rerender_replies(target)
 
     cache.delete_memoized(target.board.post_list)
 
