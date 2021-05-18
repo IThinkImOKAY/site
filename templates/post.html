@@ -14,6 +14,7 @@
 		<h4>{{ post.author.username or 'Anonymous' }} - Post #{{ post.id }}</h4>
 		<h1>{{ post.title }}</h1>
 		<p>{{ post.body_html|markdown }}</p>
+        <p style="font-size: 10px;">{% for re in post.mentions %} <a href="#p{{ re }}">++{{ re }}</a>{% endfor %}</p>
 	{% if u and u.is_admin %}
 	{% if post.is_removed %}
 	<form action="/admin/approve/{{ post.id }}" method="post">
@@ -34,7 +35,7 @@
 		{% if post.can_comment(u) %}
 		<h2>Reply to this post</h2>
 		<form action="/{{ post.board.name }}/{{ post.id }}" method="post">
-			<textarea id="comment-body-input" name="body" rows="5" cols="50" placeholder="Enter your comment..."></textarea><br />
+			<textarea id="comment-body-input" name="body" rows="5" cols="50" maxlength="10000" placeholder="Enter your comment..."></textarea><br />
             <p>Use ++pid to mention a post, or +++board to mention a board.</p>
 			<input type="submit" value="Comment" />
 		</form>
@@ -45,6 +46,7 @@
 	<div id="p{{ c.id }}" class="submission" {% if c.is_removed %} style="background-color: #fa8072;" {% endif %}>
 		<h6>{{ c.author.username or 'Anonymous' }} - Comment #{{ c.id }}</h6>
 		<p>{{ c.body_html|markdown }}</p>
+        <p style="font-size: 11px;">{% for re in c.mentions %} <a href="#p{{ re }}">++{{ re }}</a>{% endfor %}</p>
 		{% if u and u.is_admin %}
 		{% if c.is_removed %}
 		<form action="/admin/approve/{{ c.id }}" method="post">
