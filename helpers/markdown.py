@@ -122,7 +122,7 @@ class CustomRenderer(HTMLRenderer):
 
     def render_op_mention(self, token):
         if not self.context:
-            return "++OP"
+            return f"++{token.target}"
 
         _output = f'<a href="{self.context.permalink}#p{self.context.id}">++{self.context.id} (OP)</a>'
         return _output
