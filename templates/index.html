@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Home</title>
+	<title>Home | {{ "SITE_NAME"|environ }}</title>
 	{% set theme = request.cookies.get('theme') %}
         <link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
 </head>

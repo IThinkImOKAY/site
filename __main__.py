@@ -38,6 +38,11 @@ db_session = scoped_session(sessionmaker(bind = engine))
 cache = Cache(app)
 Markdown(app)
 
+def env(name):
+    return environ.get(name, "Null")
+
+app.jinja_env.filters['environ'] = env
+
 @app.before_request
 def before_request():
     g.timestamp = time.time()
