@@ -1,4 +1,15 @@
 <p>
+    <center>
+    <defaults>
+    {%- for d in defaults -%}
+        <span><a href='/{{ d }}/'>/{{ d }}/</a></span>
+        {% if d != defaults[-1] %}
+        -
+        {% endif %}
+    </defaults>
+    {%- endfor -%}
+    </center>
+    <hr>
 	{% if u %}
 	Logged in as /u/{{ u.username }} [<a href="/create_board">create board</a>]
 	<form action="/logout" method="post">

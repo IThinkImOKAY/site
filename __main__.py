@@ -11,6 +11,7 @@ from urllib.parse import quote, urlencode
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flaskext.markdown import Markdown
+import yaml
 
 app = Flask(__name__)
 
@@ -19,6 +20,13 @@ app.config["RATELIMIT_STORAGE_URL"] = environ.get("REDIS_URL", "memory://")
 app.config["CACHE_TYPE"] = "RedisCache"
 app.config["CACHE_REDIS_URL"] = environ.get("REDIS_URL")
 app.config["CACHE_DEFAULT_TIMEOUT"] = 300
+app.jinja_env.globals = {}
+
+with open('main.yaml') as yamldb:
+    config = yaml.safe_load(yamldb)
+    defaults = config['defaults']
+    
+app.jinja_env.globals['defaults'] = defaults
 
 limiter = Limiter(
     app,

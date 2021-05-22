@@ -6,3 +6,4 @@ SQLAlchemy == 1.4.11
 bcrypt == 3.2.0
 bleach == 3.3.0
 mistletoe == 0.7.2
+PyYAML == 5.4.1
