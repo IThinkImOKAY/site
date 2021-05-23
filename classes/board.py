@@ -10,7 +10,10 @@ class Board(Base):
 
     id = Column(Integer, Sequence('Boards_id_seq'), primary_key = True)
     name = Column(String(5))
+    title = Column(String(25))
     description = Column(String(255))
+    sidebar = Column(String(10000))
+    sidebar_html = Column(String)
     created_utc = Column(Integer)
     creation_ip = Column(String(255))
     banned_utc = Column(Integer, default = 0)
