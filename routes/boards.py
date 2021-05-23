@@ -3,6 +3,7 @@ from __main__ import app, limiter
 from classes.board import *
 import re
 from helpers.wrappers import *
+from helpers.markdown import *
 
 @app.get('/<boardname>/')
 @auth_desired
@@ -32,17 +33,19 @@ def get_create_board(u):
     return render_template('create.html', u = u)
 
 @app.post('/create_board')
-#@limiter.limit("1/3days")
+@limiter.limit("10/hour")
 @auth_required
 @validate_formkey
 def post_create_board(u):
-    name = request.form['name']
-    desc = request.form['desc']
+    name = request.form.get("name", "")
+    title = request.form.get("title", name)
+    description = request.form.get("description", "")
+    sidebar = request.form.get("sidebar", description)
+
+    name = name.lstrip().rstrip()
 
     if not name:
         return render_template('create.html', error = "Missing board name.", u = u), 400
-
-    name = name.lstrip().rstrip()
 
     #remove slashes
     if name.startswith('/'):
@@ -55,6 +58,11 @@ def post_create_board(u):
 
     if len(name) > 5:
         return render_template('create.html', error = "Board name can't be longer than 5 characters.", u = u), 400
+
+    title = title.lstrip().rstrip()
+
+    if len(title) > 25:
+        return render_template('create.html', error = "Board title can't be longer than 25 characters.", u = u), 400
 
     #disallow special characters
     valid_name_regex = re.compile('^[a-z0-9]{1,5}$')
@@ -76,8 +84,13 @@ def post_create_board(u):
     if existing_board:
         return render_template('create.html', error = "A board with that name already exists.", u = u), 409
 
+    sidebar_html = render_md(sidebar)
+
     new_board = Board(name = name,
-        description = desc,
+        title = title,
+        description = description,
+        sidebar = sidebar,
+        sidebar_html = sidebar_html,
         creator_id = u.id,
         creation_ip = request.remote_addr)
 
