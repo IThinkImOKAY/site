@@ -5,7 +5,7 @@
 -- Dumped from database version 12.6
 -- Dumped by pg_dump version 12.6
 
--- Started on 2021-05-18 17:57:42 CEST
+-- Started on 2021-05-23 23:51:54 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,12 +30,15 @@ SET default_table_access_method = heap;
 CREATE TABLE public."Boards" (
     id integer NOT NULL,
     name character varying(5) NOT NULL,
-    description text,
+    title character varying(25),
     created_utc integer NOT NULL,
     creation_ip character varying(255) NOT NULL,
     banned_utc integer DEFAULT 0,
     ban_reason character varying(255),
-    creator_id integer
+    creator_id integer,
+    description character varying(255),
+    sidebar character varying(10000),
+    sidebar_html text
 );
 
 
@@ -245,7 +248,7 @@ ALTER TABLE ONLY public."Users"
     ADD CONSTRAINT "Users_banned_by_id_fkey" FOREIGN KEY (banned_by_id) REFERENCES public."Users"(id);
 
 
--- Completed on 2021-05-18 17:57:43 CEST
+-- Completed on 2021-05-23 23:51:54 CEST
 
 --
 -- PostgreSQL database dump complete
