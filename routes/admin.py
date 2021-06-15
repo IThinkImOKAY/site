@@ -92,3 +92,56 @@ def admin_unban_board(bid, u):
     g.db.add(target)
 
     return redirect(target.url)
+
+@app.post('/*/admin/purge_comments_cache/<pid>')
+@auth_required
+@admin_required
+@validate_formkey
+def admin_purge_cached_comments(pid, u):
+    target = get_post(pid, graceful = False)
+
+    if not target.is_top_level:
+        abort(400)
+
+    cache.delete_memoized(target.comment_list)
+
+    return redirect(target.permalink)
+
+@app.post('/*/admin/move')
+@auth_required
+@admin_required
+@validate_formkey
+def admin_move_post(u):
+    pid = request.form.get("post")
+
+    if not pid:
+        abort(400)
+
+    targets_query = g.db.query(Post).filter(
+        or_(
+            Post.id == pid,
+            Post.parent_id == pid
+        )
+    )
+
+    op = [x for x in targets_query.all() if x.is_top_level][0]
+
+    # only top level posts can be moved
+    if not op:
+        abort(400)
+
+    dest = get_board(request.form.get("dest"), graceful = False)
+
+    if dest.id == op.board_id:
+        abort(409)
+
+    cache.delete_memoized(op.board.post_list)
+    cache.delete_memoized(dest.post_list)
+
+    targets_query.update({Post.board_id: dest.id}, synchronize_session = False)
+
+    g.db.flush()
+
+    g.db.refresh(op)
+
+    return redirect(op.permalink)
