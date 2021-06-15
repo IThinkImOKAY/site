@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %} - {{ sitename }}</title>
+</head>
+<body>
+    <nav class="w-full p-5 bg-black bg-opacity-50 fixed top-0 left-0 flex flex-row justify-center sm:justify-between">
+        <a href="/" class="text-lg font-bold lowercase text-white">{{ sitename }}</a>
+        <div class="text-white space-x-2 hidden sm:block">
+            <a href="#">link</a>
+            <a href="#">another link</a>
+        </div>
+    </nav>
+    <div class="w-full h-screen flex flex-wrap justify-center content-center bg-gray-400">
+        <div class="sm:rounded shadow p-6 bg-white w-full sm:w-auto">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
