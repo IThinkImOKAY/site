@@ -19,7 +19,7 @@ def post_by_id(pid, u):
     return redirect(post.permalink)
 
 @app.post('/<boardname>/<int:pid>')
-@limiter.limit("1/10seconds;5/1minute;30/1hour")
+@limiter.limit("10/1minute;30/1hour")
 @auth_desired
 def post_submit_reply(boardname, pid, u):
     body = request.form.get("body")
