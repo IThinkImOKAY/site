@@ -32,10 +32,13 @@ def post_submit_reply(boardname, pid, u):
     if not parent.board.name == boardname:
         abort(404)
 
+    body = body.lstrip().rstrip()
+
     if not body:
         abort(400)
 
-    body = body.lstrip().rstrip()
+    # ugly hack to make post/board mentions work
+    body = body.replace('>>', '\>\>')
 
     if len(body) > 10000:
         abort(400)
