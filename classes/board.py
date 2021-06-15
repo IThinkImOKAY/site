@@ -39,9 +39,9 @@ class Board(Base):
     def url(self):
         return f'/{self.name}/'
 
-    @cache.memoize(timeout = 900)
-    def post_list(self, u = None):
-        return sorted([p for p in self.posts if p.can_view(u) and p.is_top_level], key = lambda x: x.created_utc, reverse = True)
+    @cache.memoize()
+    def post_list(self):
+        return sorted([p for p in self.posts if p.is_top_level], key = lambda x: x.last_bumped_utc, reverse = True)
 
     def ban(self, reason = None):
         self.banned_utc = int(time.time())
