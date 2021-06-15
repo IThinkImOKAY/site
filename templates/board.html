@@ -1,45 +1,99 @@
-<title>/{{ board.name }}/</title>
-{% set theme = request.cookies.get('theme') %}
-<link rel="stylesheet" href="/static/{{ 'light.css' if theme == None else theme+'.css' }}" type="text/css"/>
-{% include "header.html" %}
-Welcome to /{{ board.name }}/: {{ board.description }}!
-<body>
-    How about creating a post?
-    {% if error %}
-    <p style="color: red;">{{ error }}</p>
-    {% endif %}
-    <form action="/{{ board.name }}/" method="post">
-    		<input type="hidden" name="board" value="{{ board.id }}" />
-            <label for="title">Your Title:</label>
-            <input required="" id="title" name="title" /><br>
-            <label for="body">Your Body:</label>
-            <textarea id="body" required="" name="body"></textarea><br>
-            <input type="submit" value="Create Post" />
-    </form>
-    <p>Board created by /u/{{ board.creator.username }}</p>
-    {% if u and u.is_admin %}
-    {% if board.is_banned %}
-    <form action="/admin/unban/board/{{ board.id }}" method="post">
-        <strong style="background-color: #fa8072;">[board banned{% if board.ban_reason %}: {{ board.ban_reason }}{% endif %}]</strong>
-        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
-        <input type="submit" value="Unban /{{ board.name }}/">
-    </form>
-    {% else %}
-    <form action="/admin/ban/board/{{ board.id }}" method="post">
-        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
-        <input type="text" name="reason" placeholder="reason" />
-        <input type="submit" value="Ban /{{ board.name }}/">
-    </form>
-    {% endif %}
-    {% endif %}
-    <h3>Posts in /{{ board.name }}/</h3>
-    {% for p in board.post_list(u) %}
-    <div class="submission" {% if p.is_removed %} style="background-color: #fa8072;" {% endif %}>
-    	<h6>{{ p.author.username or 'Anonymous' }} - Post #{{ p.id }}</h6>
-    	<p><a href="{{ p.permalink }}"><strong>{{ p.title }}</strong></a></p>
-    	<p>{{ p.body_html|markdown }}</p>
+{% extends "layouts/index.html" %}
+{% block title %}/{{ board.name }}/: {{ board.title }}{% endblock %}
+{% block body %}
+<h1 class="text-center font-bold text-3xl pt-4">/{{ board.name }}/ - {{ board.title }}</h1>
+<p class="text-center text-muted text-lg pb-4">{{ board.description }}</p>
+<p class="text-center"><a href="#">Mod log</a> · <a href="#">Mods</a></p>
+<div class="my-2">
+    <hr />
+    <div class="p-2 flex justify-center">
+        <div>
+            <p id="post-toggle-parent" class="text-center text-xl">[<a id="post-toggle" href="javascript:togglePostForm()">Start a new thread</a>]</p>
+            <form id="submit-post-form" class="p-2 hidden" action="/{{ board.name }}/" method="post">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Options</td>
+                            <td>
+                                <input type="text" name="options" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Subject</td>
+                            <td>
+                                <input type="text" name="title" />
+                                <input type="submit" value="Post">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Comment</td>
+                            <td>
+                                <textarea required="" name="body"></textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
     </div>
     <hr />
-    {% endfor %}
-    {% include "footer.html" %}
-</body>
+</div>
+<div class="flex flex-row justify-between">
+    <div class="flex-grow p-3">
+        {% if u and u.is_admin %}
+        <div class="w-full block bg-color-secondary md:hidden p-2 border border-gray-400">
+            <p class="text-center font-bold text-muted">Admin panel</p>
+            <p><strong>Created by: </strong>/u/{{ board.creator.username }}</p>
+            <p><strong>Creation IP: </strong>{{ board.creation_ip }}</p>
+            {% if board.is_banned %}
+            <p><strong>Ban reason: </strong>{% if board.ban_reason %}{{ board.ban_reason }}{% else %}<span class="text-red-600">no reason provided</span>{% endif %}</p>
+            <form action="/*/admin/unban/board/{{ board.id }}" method="post">
+                <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+                <input type="submit" value="Unban /{{ board.name }}/" class="w-full mt-3 text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-green-500 hover:bg-green-600" />
+            </form>
+            {% else %}
+            <form action="/*/admin/ban/board/{{ board.id }}" method="post" class="space-y-2">
+                <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+                <textarea class="w-full rounded p-2 transition duration-100 border border-gray-300 focus:border-red-400" placeholder="reason" name="reason"></textarea>
+                <input type="submit" value="Ban /{{ board.name }}/" class="w-full text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-red-500 hover:bg-red-600" />
+            </form>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% set posts = board.post_list() %}
+        {% include "post_listing.html" %}
+    </div>
+    {% if u and u.is_admin %}
+    <div class="flex-shrink-0 flex-grow-0 w-72 hidden md:block m-5 text-sm">
+        <div class="border border-gray-400 rounded bg-color-secondary">
+            <div class="p-3 font-semibold text-muted border-b border-gray-400">
+                Admin panel
+            </div>
+            <div class="p-3">
+                <div class="py-2">
+                    <p><strong>Created by: </strong>/u/{{ board.creator.username }}</p>
+                    <p><strong>Creation IP: </strong>{{ board.creation_ip }}</p>
+                </div>
+                <div class="p-2">
+                    {% if board.is_banned %}
+                    <p class="text-muted text-sm font-bold my-1">Board banned</p>
+                    <p class="mt-2"><strong>Reason: </strong>{% if board.ban_reason %}{{ board.ban_reason }}{% else %}<span class="text-red-600">no reason provided</span>{% endif %}</p>
+                    <form action="/*/admin/unban/board/{{ board.id }}" method="post">
+                        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+                        <input type="submit" value="Unban /{{ board.name }}/" class="w-full mt-3 text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-green-500 hover:bg-green-600" />
+                    </form>
+                    {% else %}
+                    <p class="text-muted text-sm font-bold my-1">Ban board</p>
+                    <form action="/*/admin/ban/board/{{ board.id }}" method="post" class="space-y-2">
+                        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+                        <textarea class="w-full rounded p-2 transition duration-100 border border-gray-300 focus:border-red-400" placeholder="reason" name="reason"></textarea>
+                        <input type="submit" value="Ban /{{ board.name }}/" class="w-full text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-red-500 hover:bg-red-600" />
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
