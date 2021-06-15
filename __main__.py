@@ -42,10 +42,15 @@ db_session = scoped_session(sessionmaker(bind = engine))
 cache = Cache(app)
 Markdown(app)
 
-def env(name):
-    return environ.get(name, "Null")
+THEMES = [
+    'Light',
+    'Dark'
+]
 
-app.jinja_env.filters['environ'] = env
+app.jinja_env.globals['defaultboards'] = ymlconfig.get('default_boards', ['/x/', '/y/', '/z/'])
+app.jinja_env.globals['sitename'] = environ.get('SITE_NAME', 'sex')
+app.jinja_env.globals['sitecolor'] = environ.get('SITE_COLOR', '#000000')
+app.jinja_env.globals['themes'] = THEMES
 
 @app.before_request
 def before_request():
@@ -66,7 +71,7 @@ from helpers.wrappers import *
 def index(u):
     boards = g.db.query(Board).all()
 
-    return render_template('index.html', boards = boards, u = u)
+    return render_template('home.html', boards = boards, u = u)
 
 #import routing functions
 from routes.boards import *
@@ -95,10 +100,17 @@ def after_request(response):
 @app.post('/set-theme')
 def set_theme():
     response = make_response(redirect(request.referrer))
-    if request.cookies.get('theme'):
-        response.delete_cookie('theme')
-    else:
-        response.set_cookie('theme', 'dark')
+    #if request.cookies.get('theme'):
+    #    response.delete_cookie('theme')
+    #else:
+    #    response.set_cookie('theme', 'dark')
+    theme = request.form.get('theme', 'light')
+
+    if theme not in THEMES:
+        abort(400)
+
+    response.set_cookie('theme', theme.lower())
+
     return response
 
 @app.errorhandler(401)
