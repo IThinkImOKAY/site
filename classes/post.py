@@ -82,12 +82,13 @@ class Post(Base):
         if (not u or not u.is_admin) and (self.is_removed or self.board.is_banned): return False
         else: return True
 
-    @cache.memoize(timeout = 900)
+    @cache.memoize()
     def comment_list(self, u = None):
         return sorted([c for c in self.comments if c.can_view(u)], key = lambda x: x.created_utc, reverse = True)
 
-    def comment_count(self, u):
-        return len(self.comment_list(u))
+    #@property
+    #def comment_count(self):
+    #    return len(self.comments)
 
     def has_comment(self, cid) -> bool:
         return bool([c for c in self.comments if c.id == cid])
