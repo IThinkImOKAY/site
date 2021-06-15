@@ -1,0 +1,95 @@
+body {
+    font-family: arial,helvetica,sans-serif;
+    font-size: 10pt;
+    background-color: #000000;
+}
+
+a {
+    color: #f8f4ff;
+}
+
+a:hover {
+    color: #FF5349;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #a9a9a9;
+}
+
+h1, h2, h3, h4, h5, h6, p, label {
+    color: #f8f4ff;
+}
+
+.text-muted {
+    color: #e5e4e2;
+}
+
+.bg-color-secondary {
+    background-color: #2e2e2e;
+}
+
+.usercontent a {
+    color: #1e90ff;
+    text-decoration: underline;
+}
+
+.usercontent h1 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.usercontent h2 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.usercontent h3 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.usercontent h4 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.usercontent h5 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.usercontent h6 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.post {
+    min-width: 20%;
+}
+
+.post-reply {
+    background-color: #212121;
+}
+
+#submit-post-form table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+#submit-post-form table tbody tr td:first-child {
+    padding: 3px;
+    background-color: #d1d1d1;
+    border: 1px solid #a9a9a9;
+}
+
+#submit-post-form input[type="text"], #submit-post-form textarea {
+    border: 1px solid #a9a9a9;
+    padding: 3px;
+}
+
+#submit-post-form input[type="submit"] {
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid #a9a9a9;
+}
