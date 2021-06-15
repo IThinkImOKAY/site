@@ -54,10 +54,6 @@ def post_submit(boardname, u):
 
     title = title.lstrip().rstrip()
 
-    # top-level post must have a title
-    if not title:
-        abort(400)
-
     if not body:
         abort(400)
 
