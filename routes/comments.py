@@ -82,9 +82,9 @@ def post_submit_reply(boardname, pid, u):
 
             g.db.add(mention)
 
-
     g.db.refresh(new_reply)
 
     cache.delete_memoized(new_reply.parent.comment_list)
+    cache.delete_memoized(new_reply.board.post_list)
 
     return redirect(new_reply.permalink)
