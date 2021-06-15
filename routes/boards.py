@@ -83,13 +83,9 @@ def post_create_board(u):
     if existing_board:
         return render_template('create.html', error = "A board with that name already exists.", u = u), 409
 
-    sidebar_html = render_md(sidebar)
-
     new_board = Board(name = name,
         title = title,
         description = description,
-        sidebar = sidebar,
-        sidebar_html = sidebar_html,
         creator_id = u.id,
         creation_ip = request.remote_addr)
 
