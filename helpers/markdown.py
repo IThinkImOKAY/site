@@ -41,7 +41,7 @@ ALLOWED_PROTOCOLS = [
 ]
 
 class PostMention(SpanToken):
-    pattern = re.compile(r"\+\+([0-9]{1,10})")
+    pattern = re.compile(r"\\>\\>([0-9]{1,10})")
     target_post_id = ""
     precedence = 6
 
@@ -49,7 +49,7 @@ class PostMention(SpanToken):
         self.target_post_id = match.group(1)
 
 class BoardMention(SpanToken):
-    pattern = re.compile(r"\+\+\+([a-z]{1,5})/?")
+    pattern = re.compile(r"\\>\\>>/([a-z]{1,5})/?")
     target_board_name = ""
     precedence = 6
 
@@ -57,7 +57,7 @@ class BoardMention(SpanToken):
         self.target_board_name = match.group(1)
 
 class OPMention(SpanToken):
-    pattern = re.compile(r"\+\+([oO][pP])")
+    pattern = re.compile(r"\\>\\>([oO][pP])")
     precedence = 6
 
     def __init__(self, match):
@@ -80,24 +80,19 @@ class CustomRenderer(HTMLRenderer):
         target_post = get_post(token.target_post_id)
 
         if not target_post:
-            _output = f"++{token.target_post_id}"
+            _output = f'<del>>>{token.target_post_id} #</del>'
             return _output
 
-        if target_post.is_removed:
-            _output += "<del>"
-
         if self.context and (self.context.has_comment(target_post.id) or target_post.id == self.context.id):
-            _output += f'<a href="#p{target_post.id}">++{target_post.id}'
+            _output += f'<a href="#p{target_post.id}">>>{target_post.id}'
 
             if target_post.id == self.context.id:
                 _output += " (OP)"
 
-            _output += "</a>"
         else:
-            _output += f'<a href="{target_post.permalink}">+++{target_post.board.name}/{target_post.id}</a>'
+            _output += f'<a href="{target_post.permalink}">>>>/{target_post.board.name}/{target_post.id}'
 
-        if target_post.is_removed:
-            _output += "</del>"
+        _output += " #</a>"
 
         return _output
 
@@ -107,13 +102,13 @@ class CustomRenderer(HTMLRenderer):
         target_board = get_board(token.target_board_name)
 
         if not target_board:
-            _output = f"+++{token.target_board_name}"
+            _output = f">>>/{token.target_board_name}/"
             return _output
 
         if target_board.is_banned:
             _output += "<del>"
 
-        _output += f'<a href="{target_board.url}">+++{target_board.name}</a>'
+        _output += f'<a href="{target_board.url}">>>>/{target_board.name}/</a>'
 
         if target_board.is_banned:
             _output += "</del>"
@@ -122,9 +117,9 @@ class CustomRenderer(HTMLRenderer):
 
     def render_op_mention(self, token):
         if not self.context:
-            return f"++{token.target}"
+            return f">>{token.target}"
 
-        _output = f'<a href="#p{self.context.id}">++{self.context.id} (OP)</a>'
+        _output = f'<a href="#p{self.context.id}">>>{self.context.id} (OP) #</a>'
         return _output
 
 # add ref="nofollow noopener noreferrer" to outgoing links
