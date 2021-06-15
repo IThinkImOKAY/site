@@ -9,8 +9,8 @@ class Post(Base):
 
     id = Column(Integer, Sequence('Posts_id_seq'), primary_key = True)
     title = Column(String(50))
-    body = Column(String(255))
-    body_html = Column(String(10000))
+    body = Column(String(10000))
+    body_html = Column(String)
     created_utc = Column(Integer)
     creation_ip = Column(String(255))
     board_id = Column(Integer, ForeignKey('Boards.id'))
@@ -19,17 +19,24 @@ class Post(Base):
     author_id = Column(Integer, ForeignKey('Users.id'))
     parent_id = Column(Integer, ForeignKey('Posts.id'))
     mentions = Column(ARRAY(Integer), default = [])
+    last_bumped_utc = Column(Integer, default = int(time.time()))
+    comment_count = Column(Integer, server_default = FetchedValue())
 
     board = relationship(
         "Board",
-        lazy = "joined",
         innerjoin = True,
         primaryjoin = "Post.board_id == Board.id",
         uselist = False,
         back_populates = "posts"
     )
 
-    parent = relationship("Post", primaryjoin = "Post.parent_id == Post.id", backref = "comments", remote_side = [id])
+    parent = relationship(
+        "Post",
+        #lazy = "joined",
+        primaryjoin = "Post.parent_id == Post.id",
+        backref = "comments",
+        remote_side = [id]
+    )
 
     author = relationship("User", lazy = "joined", primaryjoin = "Post.author_id == User.id", uselist = False)
 
