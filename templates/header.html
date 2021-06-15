@@ -1,10 +1,60 @@
-<p>
-	{% if u %}
-	Logged in as /u/{{ u.username }} [<a href="/create_board">create board</a>]
-	<form action="/logout" method="post">
-		<input type="submit" value="Log out" />
-	</form>
-	{% else %}
-	[<a href="/login">login</a>] [<a href="/signup">sign up</a>]
-	{% endif %}
-</p>
+<nav id="site-header" class="w-full sticky top-0 z-10 shadow-sm p-3 bg-color-secondary flex flex-row justify-between">
+    <div>
+        <a href="javascript:openNav()" id="toggle-mobile-nav" class="inline-block md:hidden text-lg text-gray-500 hover:text-gray-600 cursor-pointer mr-3">
+            <i class="fas fa-bars"></i>
+        </a>
+        <a href="/" class="text-lg font-bold lowercase" style="color: #{{ sitecolor  }}">{{ sitename }}</a>
+    </div>
+    <div class="hidden md:flex text-muted text-sm flex-wrap content-center relative -translate-x-2/4">
+        <span class="text-center">{% for b in defaultboards %}<a href="{{ b }}">{{b}}</a> · {% endfor %} [<a href="#" class="hover:text-blue-600">edit</a>]{% if u %} · [<a href="/*/create_board">create</a>]{% endif %}</span>
+    </div>
+    <div class="hidden md:flex text-muted font-semibold text-xs flex-wrap content-center">
+        {% if u %}
+        <span>{{ u.username }}{% if u.is_admin %} [<a href="/admin/" class="text-red-500">A</a>]{% endif %} [<a href="#">prefs</a>] [<a href="#">inbox</a>] [<form class="inline" action="/*/logout" method="post"><input type="submit" value="logout" class="font-semibold hover:text-red-500 cursor-pointer p-0 m-0 bg-transparent" /></form>]</span>
+        {% else %}
+        <span>[<a href="/*/login">login</a>] [<a href="/*/signup">register</a>]</span>
+        {% endif %}
+    </div>
+</nav>
+
+<div id="mobile-sidenav" class="h-full bg-color-secondary shadow w-0 fixed z-20 top-0 left-0 overflow-x-hidden transition-all duration-200">
+    <a href="javascript:closeNav()" class="float-right">
+        <i class="fas fa-times p-3 text-2xl text-gray-500 hover:text-gray-600 cursor-pointer"></i>
+    </a>
+    <ul class="text-muted text-lg p-3 font-semibold border-b border-gray-300 space-y-2">
+        {% if u %}
+        <li>
+            <a href="#">/u/{{ u.username }}</a>
+        </li>
+        {% if u.is_admin %}
+        <li>
+            <a href="/admin/">Admin Tools</a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="#">Account Settings</a>
+        </li>
+        <li>
+            <a href="#">Inbox</a>
+        </li>
+        <li>
+            <form class="inline" action="/*/logout" method="post"><input type="submit" value="Log out" class="font-semibold hover:text-red-500 cursor-pointer p-0 m-0 bg-transparent" /></form>
+        </li>
+        {% else %}
+        <li>
+            <a href="/login">Log in</a>
+        </li>
+        <li>
+            <a href="/signup">Register</a>
+        </li>
+        {% endif %}
+    </ul>
+    <ul class="text-gray-500 text-lg p-3 border-b border-gray-300 space-y-2">
+        {% for b in defaultboards %}
+        <li>
+            <a href="{{ b }}">{{ b }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a class="block text-muted text-lg p-3 font-semibold" href="#">Customize</a>
+</div>
