@@ -50,10 +50,18 @@ class Post(Base):
         return f"<Post(id='{self.id}')>"
 
     @property
-    @cache.memoize(timeout = 900)
+    #@cache.memoize(timeout = 900)
     def permalink(self):
         if self.is_top_level: return f'/{self.board.name}/{self.id}'
         else: return f'{self.parent.permalink}#p{self.id}'
+
+    @property
+    def created_date(self):
+        return time.strftime("%Y/%m/%d (%a) %H:%M:%S UTC", time.gmtime(self.created_utc))
+
+    @property
+    def last_bumped_date(self):
+        return time.strftime("%y/%m/%d %H:%M:%S UTC", time.gmtime(self.last_bumped_utc))
 
     @property
     def is_top_level(self):
@@ -61,13 +69,10 @@ class Post(Base):
 
     def can_view(self, u) -> bool:
         if not u:
-            if self.is_removed or self.board.is_banned:
+            if self.is_removed or (self.parent and self.parent.is_removed):
                 return False
 
         if u and not u.is_admin:
-            if self.board.is_banned:
-                return False
-
             if self.is_removed and u.id != self.author_id:
                 return False
 
