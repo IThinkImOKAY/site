@@ -57,9 +57,12 @@ def post_submit_reply(boardname, pid, u):
         board_id = parent.board.id,
         creation_ip = request.remote_addr)
 
+    parent.last_bumped_utc = int(g.timestamp)
+
     if u:
         new_reply.author_id = u.id
 
+    g.db.add(parent)
     g.db.add(new_reply)
     g.db.flush()
 
