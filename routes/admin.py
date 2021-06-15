@@ -3,6 +3,7 @@ from flask import g, redirect
 from helpers.get import *
 from helpers.wrappers import *
 from helpers.markdown import *
+import threading
 
 def rerender_post(p):
     if p.is_top_level:
@@ -12,12 +13,7 @@ def rerender_post(p):
 
     g.db.add(p)
 
-def rerender_replies(p):
-    for m in p.mentions:
-        _post = get_post(m)
-        rerender_post(_post)
-
-@app.post('/admin/remove/<int:pid>')
+@app.post('/*/admin/remove/<int:pid>')
 @auth_required
 @admin_required
 @validate_formkey
@@ -26,18 +22,24 @@ def admin_remove_post(pid, u):
 
     reason = request.form.get("reason", "")
 
-    target.remove(reason = reason)
+    _redirect = target.board.url if target.is_top_level else target.parent.permalink
 
-    rerender_replies(target)
+    #rerender_thread = threading.Thread(target = rerender_replies, args = (target,))
+    #rerender_thread.run()
 
-    cache.delete_memoized(target.board.post_list)
+    if target.is_top_level:
+        cache.delete_memoized(target.board.post_list)
 
-    if not target.is_top_level:
+        # delete children
+        g.db.query(Post).filter_by(parent_id = target.id).delete(synchronize_session = False)
+    else:
         cache.delete_memoized(target.parent.comment_list)
 
-    return redirect(target.permalink)
+    g.db.delete(target)
 
-@app.post('/admin/ban/board/<int:bid>')
+    return redirect(_redirect)
+
+@app.post('/*/admin/ban/board/<int:bid>')
 @auth_required
 @admin_required
 @validate_formkey
@@ -50,7 +52,7 @@ def admin_ban_board(bid, u):
 
     return redirect(target.url)
 
-@app.post('/admin/approve/<int:pid>')
+@app.post('/*/admin/approve/<int:pid>')
 @auth_required
 @admin_required
 @validate_formkey
@@ -74,7 +76,7 @@ def admin_approve_post(pid, u):
 
     return redirect(target.permalink)
 
-@app.post('/admin/unban/board/<int:bid>')
+@app.post('/*/admin/unban/board/<int:bid>')
 @auth_required
 @admin_required
 @validate_formkey
