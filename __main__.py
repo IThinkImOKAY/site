@@ -11,8 +11,12 @@ from urllib.parse import quote, urlencode
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flaskext.markdown import Markdown
+import yaml
 
-app = Flask(__name__)
+with open('config.yml', 'r') as _ymlconfig:
+    ymlconfig = yaml.safe_load(_ymlconfig)
+
+app = Flask(__name__, static_folder = "./_static")
 
 app.config["RATELIMIT_STORAGE_URL"] = environ.get("REDIS_URL", "memory://")
 
