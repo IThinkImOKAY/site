@@ -27,12 +27,12 @@ def board_by_id(bid):
 
     return redirect(board.url)
 
-@app.get('/create_board')
+@app.get('/*/create_board')
 @auth_required
 def get_create_board(u):
     return render_template('create.html', u = u)
 
-@app.post('/create_board')
+@app.post('/*/create_board')
 @limiter.limit("10/hour")
 @auth_required
 @validate_formkey
@@ -40,7 +40,6 @@ def post_create_board(u):
     name = request.form.get("name", "")
     title = request.form.get("title", name)
     description = request.form.get("description", "")
-    sidebar = request.form.get("sidebar", description)
 
     name = name.lstrip().rstrip()
 
