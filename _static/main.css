@@ -1,0 +1,44 @@
+// core css, doesn't change based on theme
+
+body {
+    margin-top: 50px;
+}
+
+.usercontent a {
+    color: #1e90ff;
+    text-decoration: underline;
+}
+
+.usercontent h1 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.usercontent h2 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.usercontent h3 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.usercontent h4 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.usercontent h5 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.usercontent h6 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.post {
+    min-width: 20%;
+}
