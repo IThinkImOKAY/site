@@ -4,6 +4,8 @@ from __main__ import Base, cache
 import time
 from flask import g
 
+from helpers.time import age_string
+
 class Post(Base):
     __tablename__ = "Posts"
 
@@ -62,6 +64,10 @@ class Post(Base):
     @property
     def last_bumped_date(self):
         return time.strftime("%y/%m/%d %H:%M:%S UTC", time.gmtime(self.last_bumped_utc))
+
+    @property
+    def age(self):
+        return age_string(self.created_utc)
 
     @property
     def is_top_level(self):
