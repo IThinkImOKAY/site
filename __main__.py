@@ -52,6 +52,10 @@ app.jinja_env.globals['sitename'] = environ.get('SITE_NAME', 'sex')
 app.jinja_env.globals['sitecolor'] = environ.get('SITE_COLOR', '#000000')
 app.jinja_env.globals['themes'] = THEMES
 
+@app.template_filter('session')
+def filter_session(x, default = None):
+    return session.get(x, default)
+
 @app.before_request
 def before_request():
     g.timestamp = time.time()
