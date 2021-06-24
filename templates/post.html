@@ -1,7 +1,7 @@
 {% extends "layouts/index.html" %}
 {% block title %}{% if post.title %}{{ post.title }}{% else %}Thread #{{ post.id }}{% endif %} - /{{ post.board.name }}/: {{ post.board.title }}{% endblock %}
 {% block body %}
-<h1 class="text-center font-bold text-3xl pt-4">/{{ post.board.name }}/ - {{ post.board.title }}</h1>
+<h1 class="text-center font-bold text-3xl pt-4">/{{ post.board.name }}/ - {{ post.board.title }} <i id="toggle-fav" class="fas fa-star fa-fw cursor-pointer {% if post.board._favorite %}text-yellow-500{% else %}text-muted{% endif %}" onclick="toggleFavorite('{{ post.board.name }}')"></i></h1>
 <p class="text-center text-muted text-lg pb-4">{{ post.board.description }}</p>
 <p class="text-center"><a href="#">Mod log</a> · <a href="#">Mods</a></p>
 <div class="my-2">
