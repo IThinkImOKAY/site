@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, g, session, abort
+from flask import Flask, request, render_template, redirect, g, session, abort, jsonify
 from flask_caching import Cache
 import re
 from sqlalchemy import *
