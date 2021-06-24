@@ -1,7 +1,8 @@
 {% extends "layouts/index.html" %}
 {% block title %}/{{ board.name }}/: {{ board.title }}{% endblock %}
 {% block body %}
-<h1 class="text-center font-bold text-3xl pt-4">/{{ board.name }}/ - {{ board.title }}</h1>
+{% set favs = 'favorites'|session([]) %}
+<h1 class="text-center font-bold text-3xl pt-4">/{{ board.name }}/ - {{ board.title }} <i id="toggle-fav" class="fas fa-star fa-fw cursor-pointer {% if board._favorite %}text-yellow-500{% else %}text-muted{% endif %}" onclick="toggleFavorite('{{ board.name }}')"></i></h1>
 <p class="text-center text-muted text-lg pb-4">{{ board.description }}</p>
 <p class="text-center"><a href="#">Mod log</a> · <a href="#">Mods</a></p>
 <div class="my-2">
