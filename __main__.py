@@ -127,6 +127,9 @@ def toggle_favorite():
     if not valid_name_regex.match(board):
         abort(400)
 
+    if len(favs) > 15:
+        abort(409)
+
     if favs:
         if board in favs:
             session['favorites'] = [x for x in favs if x != board]
