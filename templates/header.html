@@ -1,3 +1,4 @@
+{% set topboards = 'favorites'|session(defaultboards) %}
 <nav id="site-header" class="w-full fixed top-0 left-0 z-10 shadow-sm p-3 bg-color-secondary flex flex-row justify-between">
     <div>
         <a href="javascript:openNav()" id="toggle-mobile-nav" class="inline-block md:hidden text-lg text-gray-500 hover:text-gray-600 cursor-pointer mr-3">
@@ -6,7 +7,7 @@
         <a href="/" class="text-lg font-bold lowercase" style="color: #{{ sitecolor  }}">{{ sitename }}</a>
     </div>
     <div class="hidden md:flex text-muted text-sm flex-wrap content-center relative -translate-x-2/4">
-        <span class="text-center">{% for b in defaultboards %}<a href="{{ b }}">{{b}}</a> · {% endfor %} [<a href="#" class="hover:text-blue-600">edit</a>]{% if u %} · [<a href="/*/create_board">create</a>]{% endif %}</span>
+        <span class="text-center"><span id="header-boardlist" >[{% for b in (topboards if topboards else defaultboards) %}  <a href="{{ b }}">{{b}}</a>  {% endfor %}]</span>{% if u %}  [<a href="/*/create_board">create</a>]{% endif %}</span>
     </div>
     <div class="hidden md:flex text-muted font-semibold text-xs flex-wrap content-center">
         {% if u %}
@@ -42,19 +43,18 @@
         </li>
         {% else %}
         <li>
-            <a href="/login">Log in</a>
+            <a href="/*/login">Log in</a>
         </li>
         <li>
-            <a href="/signup">Register</a>
+            <a href="/*/signup">Register</a>
         </li>
         {% endif %}
     </ul>
-    <ul class="text-gray-500 text-lg p-3 border-b border-gray-300 space-y-2">
-        {% for b in defaultboards %}
+    <ul id="mobile-boardlist" class="text-gray-500 text-lg p-3 border-b border-gray-300 space-y-2">
+        {% for b in (topboards if topboards else defaultboards) %}
         <li>
             <a href="{{ b }}">{{ b }}</a>
         </li>
         {% endfor %}
     </ul>
-    <a class="block text-muted text-lg p-3 font-semibold" href="#">Customize</a>
 </div>
