@@ -16,6 +16,8 @@ def get_board(boardname, u):
     if (not u or not u.is_admin) and board.is_banned:
         abort(404)
 
+    board.__dict__["_favorite"] = board.url in session.get("favorites", [])
+
     return render_template('board.html', board = board, u = u)
 
 @app.get('/board_id/<bid>')
