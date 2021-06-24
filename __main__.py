@@ -117,6 +117,29 @@ def set_theme():
 
     return response
 
+@app.post('/toggle-favorite')
+def toggle_favorite():
+
+    board = request.form.get('board')
+    favs = session.get('favorites', [])
+
+    valid_name_regex = re.compile('^/[a-z0-9]{1,5}/$')
+    if not valid_name_regex.match(board):
+        abort(400)
+
+    if favs:
+        if board in favs:
+            session['favorites'] = [x for x in favs if x != board]
+        else:
+            favs.append(board)
+            session['favorites'] = favs
+    else:
+        session['favorites'] = [request.form.get('board')]
+
+    #print(f"setting favorites to {session['favorites']}")
+
+    return jsonify(session['favorites'])
+
 @app.errorhandler(401)
 def handle_401(e):
     g.db.rollback()
