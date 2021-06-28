@@ -54,7 +54,7 @@ def get_signup():
     return render_template('signup.html', redirect = redirect)
 
 @app.post('/*/signup')
-@limiter.limit("1/6hours")
+@limiter.limit("6/hour")
 def post_signup():
     if 'user_id' in session:
         return redirect('/')
