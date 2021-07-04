@@ -5,3 +5,5 @@ build/
 dump.rdb
 *.egg-info/
 *.pyc
+.sass-cache/
+*.css.map
