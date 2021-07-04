@@ -45,7 +45,8 @@ body {
 #toggle-mobile-nav {
   display: inline-block;
   margin-right: 5px;
-  font-size: 1rem; }
+  font-size: 1rem;
+  color: #f8f4ff; }
 
 #mobile-sidenav {
   height: 100%;
