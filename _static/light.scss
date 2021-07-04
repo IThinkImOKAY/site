@@ -1,0 +1,25 @@
+// background colors
+$color-primary: #fafafa;
+$color-secondary: white;
+
+//font
+$font-family: arial,helvetica,sans-serif;
+
+// link colors
+$link-unvisited: #0000FF;
+$link-visited: #805AD5;
+$link-hover: #FF5349;
+
+// text colors
+$text-primary: #1f1f1f;
+$text-muted: #808080;
+// for post header text
+$post-text-muted: #212121;
+
+// post reply background
+$post-reply: #e0e0e0;
+
+// post form table colors
+$submit-color: #d1d1d1;
+
+@import 'main.scss';
