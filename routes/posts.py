@@ -23,8 +23,6 @@ def get_post(boardname, pid, u):
     if not post.can_view(u):
         abort(404)
 
-    b.__dict__["_favorite"] = b.url in session.get("favorites", [])
-
     if post.is_top_level: return render_template('post.html', post = post, u = u)
     else: return redirect(post.permalink)
 
