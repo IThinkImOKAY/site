@@ -2,15 +2,16 @@
 {% block title %}/{{ board.name }}/: {{ board.title }}{% endblock %}
 {% block body %}
 {% set favs = 'favorites'|session([]) %}
-<h1 class="text-center font-bold text-3xl pt-4">/{{ board.name }}/ - {{ board.title }} <i id="toggle-fav" class="fas fa-star fa-fw cursor-pointer {% if board._favorite %}text-yellow-500{% else %}text-muted{% endif %}" onclick="toggleFavorite('{{ board.name }}')"></i></h1>
-<p class="text-center text-muted text-lg pb-4">{{ board.description }}</p>
-<p class="text-center"><a href="#">Mod log</a> · <a href="#">Mods</a></p>
+<div id="board-header">
+    <h1>/{{ board.name }}/ - {{ board.title }} <i id="toggle-fav" class="fas fa-star fa-fw" onclick="toggleFavorite('{{ board.name }}')"></i></h1>
+    <p>{{ board.description }}</p>
+    <p class="text-muted"><a href="#">Mod log</a> · <a href="#">Mods</a></p>
+</div>
 <div class="my-2">
-    <hr />
-    <div class="p-2 flex justify-center">
+    <div id="submit-wrapper" >
         <div>
-            <p id="post-toggle-parent" class="text-center text-xl">[<a id="post-toggle" href="javascript:togglePostForm()">Start a new thread</a>]</p>
-            <form id="submit-post-form" class="p-2 hidden" action="/{{ board.name }}/" method="post">
+            <h2 id="post-toggle-parent">[<a id="post-toggle" href="javascript:togglePostForm()">Start a new thread</a>]</h2>
+            <form id="submit-post-form" class="hidden" action="/{{ board.name }}/" method="post">
                 <table>
                     <tbody>
                         <tr>
@@ -38,63 +39,40 @@
         </div>
     </div>
     <hr />
+    <div id="board-links">
+        [<a href="/">Home</a>]
+    </div>
+    <hr />
 </div>
-<div class="flex flex-row justify-between">
-    <div class="flex-grow p-3">
+<div id="board-view-wrapper">
+    <div id="board-view">
         {% if u and u.is_admin %}
-        <div class="w-full block bg-color-secondary md:hidden p-2 border border-gray-400">
-            <p class="text-center font-bold text-muted">Admin panel</p>
+        <fieldset class="fieldset-side">
+            <legend>Admin panel</legend>
             <p><strong>Created by: </strong>/u/{{ board.creator.username }}</p>
             <p><strong>Creation IP: </strong>{{ board.creation_ip }}</p>
             {% if board.is_banned %}
-            <p><strong>Ban reason: </strong>{% if board.ban_reason %}{{ board.ban_reason }}{% else %}<span class="text-red-600">no reason provided</span>{% endif %}</p>
+            <p class="text-danger">Board banned</p>
+            <p><strong>Ban reason: </strong>{% if board.ban_reason %}{{ board.ban_reason }}{% else %}<span class="text-danger">no reason provided</span>{% endif %}</p>
             <form action="/*/admin/unban/board/{{ board.id }}" method="post">
                 <input type="hidden" name="formkey" value="{{ u.formkey }}" />
-                <input type="submit" value="Unban /{{ board.name }}/" class="w-full mt-3 text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-green-500 hover:bg-green-600" />
+                <input type="submit" value="Unban /{{ board.name }}/" class="btn-success" />
             </form>
             {% else %}
-            <form action="/*/admin/ban/board/{{ board.id }}" method="post" class="space-y-2">
+            <p>Ban board</p>
+            <form action="/*/admin/ban/board/{{ board.id }}" method="post">
                 <input type="hidden" name="formkey" value="{{ u.formkey }}" />
-                <textarea class="w-full rounded p-2 transition duration-100 border border-gray-300 focus:border-red-400" placeholder="reason" name="reason"></textarea>
-                <input type="submit" value="Ban /{{ board.name }}/" class="w-full text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-red-500 hover:bg-red-600" />
+                <textarea placeholder="reason" name="reason"></textarea>
+                <input type="submit" value="Ban /{{ board.name }}/" class="btn-danger" />
             </form>
             {% endif %}
-        </div>
+        </fieldset>
         {% endif %}
         {% set posts = board.post_list() %}
         {% include "post_listing.html" %}
     </div>
-    {% if u and u.is_admin %}
-    <div class="flex-shrink-0 flex-grow-0 w-72 hidden md:block m-5 text-sm">
-        <div class="border border-gray-400 rounded bg-color-secondary">
-            <div class="p-3 font-semibold text-muted border-b border-gray-400">
-                Admin panel
-            </div>
-            <div class="p-3">
-                <div class="py-2">
-                    <p><strong>Created by: </strong>/u/{{ board.creator.username }}</p>
-                    <p><strong>Creation IP: </strong>{{ board.creation_ip }}</p>
-                </div>
-                <div class="p-2">
-                    {% if board.is_banned %}
-                    <p class="text-muted text-sm font-bold my-1">Board banned</p>
-                    <p class="mt-2"><strong>Reason: </strong>{% if board.ban_reason %}{{ board.ban_reason }}{% else %}<span class="text-red-600">no reason provided</span>{% endif %}</p>
-                    <form action="/*/admin/unban/board/{{ board.id }}" method="post">
-                        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
-                        <input type="submit" value="Unban /{{ board.name }}/" class="w-full mt-3 text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-green-500 hover:bg-green-600" />
-                    </form>
-                    {% else %}
-                    <p class="text-muted text-sm font-bold my-1">Ban board</p>
-                    <form action="/*/admin/ban/board/{{ board.id }}" method="post" class="space-y-2">
-                        <input type="hidden" name="formkey" value="{{ u.formkey }}" />
-                        <textarea class="w-full rounded p-2 transition duration-100 border border-gray-300 focus:border-red-400" placeholder="reason" name="reason"></textarea>
-                        <input type="submit" value="Ban /{{ board.name }}/" class="w-full text-white rounded font-semibold p-2 cursor-pointer transition duration-100 bg-red-500 hover:bg-red-600" />
-                    </form>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 </div>
+<hr />
+[<a href="#">Back to top</a>]
+<hr />
 {% endblock %}
