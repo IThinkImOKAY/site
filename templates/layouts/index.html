@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="/_static/main.css" type="text/css">
-    <link href="/_static/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/_static/fontawesome/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %} - {{ sitename }}</title>
@@ -17,17 +15,17 @@
         {% endblock %}
     </div>
 </div>
-<div class="flex justify-end m-2">
+<div id="theme-selector">
     <form action="/set-theme" method="post">
-        <select name="theme" class="p-2 rounded bg-gray-100 w-56 border border-gray-400">
+        <select name="theme">
             {% for t in themes %}
             <option value="{{ t }}">{{ t }}</option>
             {% endfor %}
         </select>
-        <input type="submit" class="p-2 rounded border border-gray-400" value="Set theme" />
+        <input type="submit" value="Set theme" />
     </form>
 </div>
-<div class="text-center m-5 space-x-4">
+<div id="footer" class="text-muted">
     <a href="https://www.redditinc.com/policies/content-policy">Rules</a>
     <a href="https://github.com/qwertygvcx/site">GitHub</a>
     <a href="https://trollface.dk">Admin Tools</a>
@@ -39,7 +37,7 @@
     <!-- css overrides for disabled js -->
     <style type="text/css">
         #submit-post-form {
-            display: block;
+            display: block!important;
         }
     </style>
 </noscript>
