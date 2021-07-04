@@ -1,16 +1,16 @@
 const openNav = () => {
-    document.getElementById("mobile-sidenav").classList.replace("w-0", "w-72");
+    document.getElementById("mobile-sidenav").classList.add("open");
 };
 
 const closeNav = () => {
-    document.getElementById("mobile-sidenav").classList.replace("w-72", "w-0");
+    document.getElementById("mobile-sidenav").classList.remove("open");
 };
 
 const togglePostForm = () => {
 	const i = document.getElementById("submit-post-form");
 
 	if (i.classList.contains("hidden")) {
-		i.classList.replace("hidden", "block");
+		i.classList.replace("hidden", "show");
 		document.getElementById("post-toggle-parent").remove();
 	}
 };
@@ -52,8 +52,6 @@ const toggleFavorite = (board) => {
 			`).join(' ')}`;
 
 		const btn = document.getElementById("toggle-fav");
-		btn.classList.toggle('text-yellow-500');
-		btn.classList.toggle('text-muted');
 	};
 
 	xhr.onerror = () => alert("Failed to save settings.");
