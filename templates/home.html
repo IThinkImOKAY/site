@@ -1,16 +1,16 @@
 {% extends "layouts/index.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-    <div class="flex justify-center">
+<div>
+    <div>
+        <h1>Boards</h1><br />
         <div>
-            <h1 class="block text-2xl">Boards</h1><br />
-            <div>
-                <ul class="list-disc list-inside">
-                    {%- for b in boards -%}
-                    <li><a href="{{ b.url }}">/{{ b.name }}/</a></li>
-                    {%- endfor -%}
-                </ul>
-            </div>
+            <ul>
+                {%- for b in boards -%}
+                <li><a href="{{ b.url }}">/{{ b.name }}/</a></li>
+                {%- endfor -%}
+            </ul>
         </div>
     </div>
+</div>
 {% endblock %}
