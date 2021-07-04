@@ -79,7 +79,7 @@ def post_signup():
 
     valid_name_regex = re.compile('^[a-zA-Z0-9_]{3,25}$')
     if not valid_name_regex.match(name):
-        return render_template('signup.html', error = "Usernames must be 3-25 characters long and cannot contain special characters.", redirect = redirect_to, random_image = random_image), 400
+        return render_template('signup.html', error = "Usernames must be 3-25 characters long and cannot contain special characters.", redirect = redirect_to), 400
 
     existing_user = get_user(name)
     if existing_user:

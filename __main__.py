@@ -152,7 +152,7 @@ def handle_401(e):
     path = request.path
     full_path = quote(f"{path}?{queries}", safe = '')
 
-    return redirect(f"/login?redirect={full_path}")
+    return redirect(f"/*/login?redirect={full_path}")
 
 if __name__ == '__main__':
 	app.run()

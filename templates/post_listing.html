@@ -1,14 +1,14 @@
 <div class="post-listing w-full">
     {% if posts %}
     {% for p in posts %}
-    <div id="p{{ p.id }}" class="post p-4 w-full">
-        <p class="text-muted text-sm"><strong>{% if p.title %}{{ p.title }}{% endif %} {% if p.author %}<span class="text-green-600">{{ p.author.username }}</span>{% else %}<span class="text-blue-500">Anonymous</span>{% endif %}</strong> <span title="{{ p.age }}">{{ p.created_date }}</span> No.{{ p.id }}</p>
-        <div class="usercontent p-3">{{ p.body_html|markdown }}</div>
-        <p class="text-sm">{{ p.comment_count }} replies [<a href="./{{ p.id }}">View thread</a>]</p>
+    <div id="p{{ p.id }}" class="post">
+        <p class="post-info text-muted"><strong>{% if p.title %}{{ p.title }}{% endif %} {% if p.author %}<span class="author author-user">{{ p.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span class="post-age" title="{{ p.age }}">{{ p.created_date }}</span> No.{{ p.id }}</p>
+        <div class="usercontent">{{ p.body_html|markdown }}</div>
+        <p class="comment-count">{{ p.comment_count }} replies [<a class="post-link" href="./{{ p.id }}">View thread</a>]</p>
     </div>
     <hr />
     {% endfor %}
     {% else %}
-    <p class="text-red-600">There's nothing here... yet.</p>
+    <p class="text-danger">There's nothing here... yet.</p>
     {% endif %}
 </div>

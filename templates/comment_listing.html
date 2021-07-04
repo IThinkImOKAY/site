@@ -1,13 +1,13 @@
-<div id="commments" class="space-y-3 pb-3">
+<div id="commments">
     {% for c in comments %}
-    <div id="p{{ c.id }}" class="post post-reply inline-block w-full sm:w-auto bg-gray-200 border-b border-r border-gray-400">
-        <div class="p-3">
-            <div class="text-muted text-sm"><strong>{% if c.author %}<span class="text-green-600">{{ c.author.username }}</span>{% else %}<span class="text-blue-500">Anonymous</span>{% endif %} </strong> <span title="{{ c.age }}">{{ c.created_date }}</span> <a href="#p{{ c.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ c.id }}')" title="Reply">{{ c.id }}</a>{% if u and u.is_admin %} <form class="inline" action="/*/admin/remove/{{ c.id }}" method="post"><input type="hidden" name="formkey" value="{{ u.formkey }}" /><input type="submit" class="inline-block cursor-pointer transition duration-100 bg-red-500 hover:bg-red-600 text-white text-xs rounded p-1 font-semibold" value="remove" title="Permanently delete this post and purge it from the cache as admin" /></form>{% endif %}</div>
-            <div class="usercontent p-2">{{ c.body_html|markdown }}</div>
+    <div id="p{{ c.id }}" class="post post-reply">
+        <div class="post-content">
+            <div class="text-muted post-info"><strong>{% if c.author %}<span class="author author-user">{{ c.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %} </strong> <span class="post-age" title="{{ c.age }}">{{ c.created_date }}</span> <a href="#p{{ c.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ c.id }}')" title="Reply">{{ c.id }}</a>{% if u and u.is_admin %} <form class="inline" action="/*/admin/remove/{{ c.id }}" method="post"><input type="hidden" name="formkey" value="{{ u.formkey }}" />[<input type="submit" class="btn-link text-danger" value="delete" title="trolling" />]</form>{% endif %}</div>
+            <div class="usercontent">{{ c.body_html|markdown }}</div>
         </div>
         {% if c.mentions %}
-        <div class="post-reply reply-list bg-gray-200 px-2 pb-2">
-            <p style="font-size: 11px;">{% for re in c.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</p>
+        <div class="reply-list">
+            <p style="font-size: 11px;">{% for re in c.mentions %} <a class="reply-link" href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</p>
         </div>
         {% endif %}
     </div>

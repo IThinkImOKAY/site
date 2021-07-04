@@ -1,0 +1,521 @@
+// core scss, set variables and @import
+
+body {
+    font-family: $font-family;
+    font-size: 10pt;
+    background-color: $color-primary;
+    margin-top: 50px;
+    overflow-x: hidden;
+}
+
+#nav-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+}
+
+#site-header {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+    padding: 0.75rem;
+    background-color: $color-secondary;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .logout {
+        input[type="submit"] {           
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    }
+}
+
+#site-name {
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.125rem;
+}
+
+#favorites-listing, #header-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+#favorites-listing {
+    font-size: 0.875rem;
+}
+
+#header-controls {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+#toggle-mobile-nav {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 1rem;
+    color: $text-primary;
+}
+
+#mobile-sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    left: 0;
+    background-color: $color-secondary;
+    overflow-x: hidden;
+    transition: 0.25s;
+    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.05);
+
+    ul {
+        list-style: none;
+        padding: 15px;
+        border-bottom: 1px solid #808080;
+        margin: 0;
+
+        li {
+            white-space: nowrap;
+        }
+    }
+
+    a {
+        font-size: 1.25rem;
+        font-weight: 600;
+        display: block;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .logout {
+        input[type="submit"] {
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding-top: 2px;
+            padding-bottom: 4px;
+        }
+    }
+}
+
+#mobile-sidenav.open {
+    width: 250px;
+}
+
+#nav-close {
+    float: right;
+    display: inline-block;
+    padding: 20px;
+    font-size: 1.75rem!important;
+}
+
+#ego-boost {
+    color: #ff0000;
+}
+
+.logout {
+    display: inline;
+
+    input[type="submit"] {
+        padding: 0;
+        margin: 0;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        color: $text-muted;
+        font-family: inherit;
+    }
+
+    input[type="submit"]:hover {
+        color: $link-hover;
+    }
+
+}
+
+#theme-selector {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+#footer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px;
+
+    a {
+        display: inline-block;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .hide-mobile {
+        display: none!important;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .only-mobile {
+        display: none!important;
+    }
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #a9a9a9;
+}
+
+#board-header {
+    text-align: center;
+
+    h1 {
+        margin-bottom: 5px;
+    }
+
+    .favorite {
+        color: #f6f23f;
+    }
+
+    #toggle-fav {
+        cursor: pointer;
+    }
+}
+
+#submit-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#post-toggle-parent {
+    text-align: center;
+    margin: 5px;
+
+    a {
+        color: $text-primary;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
+#submit-post-form.hidden {
+    display: none;
+}
+
+#submit-post-form.show {
+    display: block;
+}
+
+#post-view-wrapper, #board-view-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: between;
+
+    #post-view, #board-view {
+        flex-grow: 1;
+    }
+}
+
+.usercontent {
+    a {
+        color: #1e90ff;
+        text-decoration: underline;
+    }
+
+    h1 {
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    h3 {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    h5 {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    h6 {
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+a:unvisited {
+    color: $link-unvisited;
+}
+
+a:visited {
+    color: $link-visited;
+}
+
+a:hover {
+    color: $link-hover;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #a9a9a9;
+}
+
+h1, h2, h3, h4, h5, h6, p, legend, li, strong {
+    color: $text-primary;
+}
+
+textarea, input[type="text"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0.25rem;
+    border: 1px solid gray;
+    color: $text-primary;
+    border-radius: 2px;
+    background-color: $color-secondary;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 95%;
+}
+
+.text-muted {
+    color: $text-muted;
+
+    a {
+        text-decoration: none;
+        color: $text-muted;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
+.post .text-muted {
+    color: $post-text-muted;
+
+    a {
+        color: $post-text-muted;
+    }
+}
+
+.bg-color-secondary {
+    background-color: $color-secondary;
+}
+
+.post {
+    min-width: 20%;
+    word-break: break-word;
+    padding: 5px;
+}
+
+.post-reply {
+    display: inline-block;
+    background-color: $post-reply;
+    width: 90%;
+    margin-bottom: 1.25rem;
+    padding: 10px;
+    border-color: gray;
+    border-style: solid;
+    border-width: 0 1.75px 1.75px 0;
+
+    .usercontent {
+        padding: 2px 6px;
+    }
+}
+
+.author-anon {
+    color: rgb(5, 150, 105);
+}
+
+.author-user {
+    color: rgb(37, 99, 235);
+}
+
+@media screen and (min-width: 700px) {
+    .post-reply {
+        width: auto!important;
+    }
+}
+
+.panel {
+    height: min-content;
+    width: 100%;
+
+    .title {
+        font-weight: 600;
+        border: 1px solid gray;
+        border-radius: 5px 5px 0 0;
+        padding: 0.5rem 1rem;
+    }
+
+    .body {
+        border: 1px solid gray;
+        border-radius: 0 0 5px 5px;
+        padding: 0 1rem 0.75rem 1rem;
+    }
+
+    input[type="text"], textarea {
+        margin-bottom: 0.75rem;
+    }
+
+    textarea {
+        width: 210px;
+    }
+}
+
+.text-danger {
+    color: #ED0000;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.btn-success {
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    background-color: #18A300;
+    padding: 7px 10px;
+    transition: 0.15s;
+}
+
+.btn-success:hover {
+    background-color: #148700;
+}
+
+.btn-warning {
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    background-color: #F5DD00;
+    padding: 7px 10px;
+    transition: 0.15s;
+}
+
+.btn-warning:hover {
+    background-color: #F5C000;
+}
+
+.btn-danger {
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    background-color: #ED0000;
+    padding: 7px 10px;
+    transition: 0.15s;
+}
+
+.btn-danger:hover {
+    background-color: #C70000;
+}
+
+.inline {
+    display: inline;
+}
+
+.btn-link {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: inherit;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+#submit-post-form table {
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+#submit-post-form table tbody tr td:first-child {
+    padding: 3px;
+    background-color: $submit-color;
+    border: 1px solid #a9a9a9;
+}
+
+#submit-post-form input[type="text"], #submit-post-form textarea {
+    border: 1px solid #a9a9a9;
+    padding: 3px;
+}
+
+#submit-post-form input[type="submit"] {
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid #a9a9a9;
+}
+
+legend {
+    font-weight: bold;
+}
+
+.fieldset-side {
+    width: auto;
+
+    input[type="text"], textarea {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .fieldset-side {
+        width: 250px!important;
+        float: right;
+    }
+}
+
+.settingsWrapper {
+    text-align: center;
+    width: 80%;
+    margin: 2em auto;
+}
+
+.settingsFieldset {
+    padding: 1em;
+    display: inline-block;
+    text-align: left;
+
+    textarea {
+        display: block;
+    }
+}
