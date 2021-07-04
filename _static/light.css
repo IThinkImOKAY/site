@@ -376,5 +376,7 @@ legend {
   padding: 1em;
   display: inline-block;
   text-align: left; }
+  .settingsFieldset textarea {
+    display: block; }
 
 /*# sourceMappingURL=light.css.map */
