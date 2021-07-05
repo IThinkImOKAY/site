@@ -145,3 +145,16 @@ def admin_move_post(u):
     g.db.refresh(op)
 
     return redirect(op.permalink)
+
+@app.post('/*/admin/purge_board')
+@auth_required
+@admin_required
+@validate_formkey
+def admin_purge_board(u):
+
+    board = get_board(request.form.get("board", ""), graceful = False)
+
+    g.db.query(Post).filter_by(board_id = board.id).delete(synchronize_session = False)
+    cache.delete_memoized(board.post_list)
+
+    return redirect(board.url)

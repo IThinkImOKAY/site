@@ -519,3 +519,30 @@ legend {
         display: block;
     }
 }
+
+.message-wrapper {
+    text-align: center;
+    width: 80%;
+    margin: 13rem auto 5rem;
+
+    i {
+        font-size: 5rem;
+        display: block;
+    }
+
+    h2 {
+        margin-bottom: 6px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+}

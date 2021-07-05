@@ -14,7 +14,7 @@ def get_board(boardname, u):
         abort(404)
 
     if (not u or not u.is_admin) and board.is_banned:
-        abort(404)
+        return render_template("board_banned.html", board = board, u = u), 403
 
     return render_template('board.html', board = board, u = u)
 

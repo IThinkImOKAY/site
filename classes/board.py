@@ -4,6 +4,7 @@ from __main__ import Base, cache
 from .post import *
 import time
 from flask import g
+from helpers.time import *
 
 class Board(Base):
     __tablename__ = "Boards"
@@ -34,6 +35,14 @@ class Board(Base):
     @property
     def is_banned(self):
         return self.banned_utc > 0
+
+    @property
+    def banned_string(self):
+        return time.strftime("%Y/%m/%d (%a) %H:%M:%S UTC", time.gmtime(self.banned_utc))
+
+    @property
+    def banned_agestring(self):
+        return age_string(self.banned_utc)
 
     @property
     def url(self):

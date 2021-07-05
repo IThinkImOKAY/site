@@ -20,8 +20,8 @@ def get_post(boardname, pid, u):
     if not post:
         abort(404)
 
-    if not post.can_view(u):
-        abort(404)
+    if (not u or not u.is_admin) and b.is_banned:
+        return render_template("board_banned.html", board = b, u = u), 403
 
     if post.is_top_level: return render_template('post.html', post = post, u = u)
     else: return redirect(post.permalink)
@@ -39,8 +39,8 @@ def get_post_markdown(boardname, pid, u):
     if not post:
         abort(404)
 
-    if not post.can_view(u):
-        abort(404)
+    if (not u or not u.is_admin) and b.is_banned:
+        return render_template("board_banned.html", board = b, u = u), 403
 
     return bleach.clean(post.body, tags = [])
 
@@ -64,7 +64,7 @@ def post_submit(boardname, u):
 
     board = get_board(boardname, graceful = False)
     if (not u or not u.is_admin) and board.is_banned:
-        abort(404)
+        return render_template("board_banned.html", board = board, u = u), 403
 
     post_html = render_md(body)
 

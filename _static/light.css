@@ -381,4 +381,20 @@ legend {
   .settingsFieldset textarea {
     display: block; }
 
+.message-wrapper {
+  text-align: center;
+  width: 80%;
+  margin: 13rem auto 5rem; }
+  .message-wrapper i {
+    font-size: 5rem;
+    display: block; }
+  .message-wrapper h2 {
+    margin-bottom: 6px; }
+  .message-wrapper p {
+    font-size: 14px; }
+  .message-wrapper a {
+    text-decoration: none; }
+  .message-wrapper a:hover {
+    text-decoration: underline; }
+
 /*# sourceMappingURL=light.css.map */

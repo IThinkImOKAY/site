@@ -1,4 +1,4 @@
-from flask import g, abort, request, redirect
+from flask import g, abort, request, redirect, render_template
 from bs4 import BeautifulSoup
 import re
 
@@ -28,6 +28,9 @@ def post_submit_reply(boardname, pid, u):
         return "Replies cannot have titles.", 400
 
     parent = get_post(pid, graceful = False)
+
+    if (not u or not u.is_admin) and parent.board.is_banned:
+        return render_template("board_banned.html", board = parent.board, u = u), 403
 
     if not parent.board.name == boardname:
         abort(404)

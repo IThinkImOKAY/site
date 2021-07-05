@@ -58,6 +58,11 @@
                 <input type="hidden" name="formkey" value="{{ u.formkey }}" />
                 <input type="submit" value="Unban /{{ board.name }}/" class="btn-success" />
             </form>
+            <form action="/*/admin/purge_board" method="post" style="margin-top: 0.5rem;">
+                <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+                <input type="hidden" name="board" value="{{ board.name }}" />
+                <input type="submit" value="Purge posts" class="btn-danger" />
+            </form>
             {% else %}
             <p>Ban board</p>
             <form action="/*/admin/ban/board/{{ board.id }}" method="post">
