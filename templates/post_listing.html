@@ -2,8 +2,29 @@
     {% if posts %}
     {% for p in posts %}
     <div id="p{{ p.id }}" class="post">
+        {% if p.files %}
+        <p class="file-info">File: <a href="{{ p.files[0].url }}">{{ p.files[0].name }}</a>{% if u and u.is_admin %}<br /><strong>File hash:</strong> {{ p.files[0].hash }}{% endif %}</p>
+        <div class="post-file">
+            {% if p.files[0].content_type.startswith('image/') %}
+            <a href="{{ p.files[0].url }}" target="_blank" onclick="toggleExpandImage(event, 'image-{{ p.files[0].id }}')">
+                <img src="{{ p.files[0].url }}" id="image-{{ p.files[0].id }}" class="file-collapsed" />
+            </a>
+            {% elif p.files[0].content_type.startswith('audio/') %}
+            <audio controls="">
+                <source src="{{ p.files[0].url }}" type="{{ p.files[0].content_type }}">
+                Your browser doesn't support this file :(
+            </audio>
+            {% elif p.files[0].content_type.startswith('video/') %}
+            <video width="250" height="180" controls="">
+                <source src="{{ p.files[0].url }}" type="{{ p.files[0].content_type }}">
+                Your browser doesn't support this file :(
+            </video>
+            {% endif %}
+        </div>
+        {% endif %}
         <p class="post-info text-muted"><strong>{% if p.title %}{{ p.title }}{% endif %} {% if p.author %}<span class="author author-user">{{ p.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span class="post-age" title="{{ p.age }}">{{ p.created_date }}</span> No.{{ p.id }}</p>
-        <div class="usercontent">{{ p.body_html|markdown }}</div>
+        <div class="usercontent">{{ p.body_html|markdown|truncate }}</div>
+        {% if p.body_html|len > 1000 %}<p class="post-too-long text-secondary">Post too long. Click <a class="post-link" href="./{{ p.id }}">here</a> to view the full post.</p>{% endif %}
         <p class="comment-count">{{ p.comment_count }} replies [<a class="post-link" href="./{{ p.id }}">View thread</a>]</p>
     </div>
     <hr />
