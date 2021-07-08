@@ -11,7 +11,7 @@
     <div id="submit-wrapper" >
         <div>
             <h2 id="post-toggle-parent">[<a id="post-toggle" href="javascript:togglePostForm()">Start a new thread</a>]</h2>
-            <form id="submit-post-form" class="hidden" action="/{{ board.name }}/" method="post">
+            <form id="submit-post-form" class="hidden" action="/{{ board.name }}/" method="post" enctype="multipart/form-data">
                 <table>
                     <tbody>
                         <tr>
@@ -31,6 +31,12 @@
                             <td>Comment</td>
                             <td>
                                 <textarea required="" name="body"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>File</td>
+                            <td>
+                                <input type="file" name="file" accept="image/*, audio/*, video/*" />
                             </td>
                         </tr>
                     </tbody>
