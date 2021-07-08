@@ -7,3 +7,4 @@ dump.rdb
 *.pyc
 .sass-cache/
 *.css.map
+_static/usercontent/threads/*
