@@ -4,6 +4,7 @@ from helpers.get import *
 from helpers.wrappers import *
 from helpers.markdown import *
 import threading
+import os
 
 def rerender_post(p):
     if p.is_top_level:
@@ -24,14 +25,29 @@ def admin_remove_post(pid, u):
 
     _redirect = target.board.url if target.is_top_level else target.parent.permalink
 
+    for f in target.files:
+        try:
+            os.remove(f.path)
+        except FileNotFoundError:
+            pass
+
     #rerender_thread = threading.Thread(target = rerender_replies, args = (target,))
     #rerender_thread.run()
 
     if target.is_top_level:
         cache.delete_memoized(target.board.post_list)
 
+        children_query = g.db.query(Post).filter_by(parent_id = target.id)
+
+        for x in children_query.all():
+            for f in x.files:
+                try:
+                    os.remove(f.path)
+                except FileNotFoundError:
+                    pass
+
         # delete children
-        g.db.query(Post).filter_by(parent_id = target.id).delete(synchronize_session = False)
+        children_query.delete(synchronize_session = False)
     else:
         cache.delete_memoized(target.parent.comment_list)
 
