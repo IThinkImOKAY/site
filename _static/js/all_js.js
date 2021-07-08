@@ -58,6 +58,16 @@ const toggleFavorite = (board) => {
 
 };
 
+const toggleExpandImage = (e, id) => {
+	event = e || window.event;
+	e.preventDefault();
+
+	const image = document.getElementById(id);
+
+	image.classList.toggle("file-collapsed");
+	image.classList.toggle("file-open");
+}
+
 document.addEventListener('click', e => {
     if (e.target.closest("#inner")) {
         closeNav();
