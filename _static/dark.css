@@ -126,7 +126,8 @@ body {
     display: none !important; } }
 hr {
   border: none;
-  border-top: 1px solid #a9a9a9; }
+  border-top: 1px solid #a9a9a9;
+  clear: left; }
 
 #board-header {
   text-align: center; }
@@ -157,9 +158,7 @@ hr {
   display: block; }
 
 #post-view-wrapper, #board-view-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: between; }
+  display: flex; }
   #post-view-wrapper #post-view, #post-view-wrapper #board-view, #board-view-wrapper #post-view, #board-view-wrapper #board-view {
     flex-grow: 1; }
 
@@ -194,12 +193,12 @@ a:visited {
 a:hover {
   color: #FF5349; }
 
-hr {
-  border: none;
-  border-top: 1px solid #a9a9a9; }
-
-h1, h2, h3, h4, h5, h6, p, legend, li, strong {
+h1, h2, h3, h4, h5, h6, p, legend, li, strong, input[type="file"] {
   color: #f8f4ff; }
+
+.comment-arrows {
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  float: left; }
 
 textarea, input[type="text"] {
   -webkit-appearance: none;
@@ -227,6 +226,9 @@ textarea, input[type="text"] {
   .post .text-muted a {
     color: #e5e4e2; }
 
+.text-secondary {
+  color: #e5e4e2; }
+
 .bg-color-secondary {
   background-color: #2e2e2e; }
 
@@ -235,13 +237,26 @@ textarea, input[type="text"] {
   word-break: break-word;
   padding: 5px; }
 
+.post-file {
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  float: left; }
+
+.file-collapsed {
+  max-height: 150px;
+  max-width: 150px; }
+
+.file-open {
+  max-height: 500px;
+  max-width: 500px; }
+
 .post-reply {
   display: inline-block;
   background-color: #212121;
   width: 90%;
   margin-bottom: 1.25rem;
   padding: 10px;
-  border-color: gray;
+  border-color: transparent;
   border-style: solid;
   border-width: 0 1.75px 1.75px 0; }
   .post-reply .usercontent {
