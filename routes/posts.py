@@ -4,6 +4,8 @@ from classes.post import *
 from helpers.get import *
 from helpers.wrappers import *
 import bleach
+from werkzeug.utils import secure_filename
+import os
 
 from helpers.markdown import *
 
@@ -82,6 +84,27 @@ def post_submit(boardname, u):
 
     g.db.refresh(new_post)
 
+    upload_files = []
+
+    files = request.files.getlist("file")
+    for f in files:
+
+        if not f.content_type.startswith(('image/', 'audio/', 'video')):
+            continue
+
+        save_url = os.path.join(app.config["ATTACHMENT_UPLOAD_URL"], f"{new_post.id}_{secure_filename(f.filename)}")
+
+        f.save(save_url)
+
+        new_file = File(name = f.filename,
+            content_type = f.content_type,
+            path = save_url,
+            upload_ip = request.remote_addr,
+            post_id = new_post.id)
+
+        upload_files.append(new_file)
+
+    g.db.bulk_save_objects(upload_files)
     cache.delete_memoized(new_post.board.post_list)
 
     return redirect(new_post.permalink)
