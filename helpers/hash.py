@@ -23,3 +23,17 @@ def hash_password(input) -> str:
 
 def check_password(string, hashed) -> bool:
 	return bcrypt.checkpw(base64.b64encode(hashlib.sha256(string.encode('utf-8')).digest()), hashed.encode('utf-8'))
+
+BLOCKSIZE = 65536
+
+def hash_file(path):
+
+    hasher = hashlib.md5()
+
+    with open(path, 'rb') as f:
+        buf = f.read(BLOCKSIZE)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = f.read(BLOCKSIZE)
+
+    return hasher.hexdigest()
