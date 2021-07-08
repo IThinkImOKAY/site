@@ -3,14 +3,9 @@
     <p class="comment-arrows">>> </p>
     <div id="p{{ c.id }}" class="post post-reply">
         <div class="post-content">
-            <div class="text-muted post-info"><strong>{% if c.author %}<span class="author author-user">{{ c.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %} </strong> <span class="post-age" title="{{ c.age }}">{{ c.created_date }}</span> <a href="#p{{ c.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ c.id }}')" title="Reply">{{ c.id }}</a>{% if u and u.is_admin %} <form class="inline" action="/*/admin/remove/{{ c.id }}" method="post"><input type="hidden" name="formkey" value="{{ u.formkey }}" />[<input type="submit" class="btn-link text-danger" value="delete" title="trolling" />]</form>{% endif %}</div>
+            <div class="text-muted post-info"><strong>{% if c.author %}<span class="author author-user">{{ c.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %} </strong> <span class="post-age" title="{{ c.age }}">{{ c.created_date }}</span> <a href="#p{{ c.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ c.id }}')" title="Reply">{{ c.id }}</a> <span class="reply-ids">{% for re in c.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</span>{% if u and u.is_admin %} <form class="inline" action="/*/admin/remove/{{ c.id }}" method="post"><input type="hidden" name="formkey" value="{{ u.formkey }}" />[<input type="submit" class="btn-link text-danger" value="delete" title="trolling" />]</form>{% endif %}</div>
             <div class="usercontent">{{ c.body_html|markdown }}</div>
         </div>
-        {% if c.mentions %}
-        <div class="reply-list">
-            <p style="font-size: 11px;">{% for re in c.mentions %} <a class="reply-link" href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</p>
-        </div>
-        {% endif %}
     </div>
     <br />
     {% endfor %}

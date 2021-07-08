@@ -87,7 +87,7 @@
                 {% endif %}
             </div>
             {% endif %}
-            <p class="text-muted"><strong>{% if post.title %}{{ post.title }}{% endif %} {% if post.author %}<span class="author author-user">{{ post.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span title="{{ post.age }}">{{ post.created_date }}</span> <a href="#p{{ post.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ post.id }}')" title="Reply">{{ post.id }}</a> <span id="reply-ids" class="text-xs">{% for re in post.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</span></p>
+            <p class="text-muted"><strong>{% if post.title %}{{ post.title }}{% endif %} {% if post.author %}<span class="author author-user">{{ post.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span title="{{ post.age }}">{{ post.created_date }}</span> <a href="#p{{ post.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ post.id }}')" title="Reply">{{ post.id }}</a> <span class="reply-ids">{% for re in post.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</span></p>
             <div class="usercontent">{{ post.body_html|markdown }}</div>
         </div>
         {% set comments = post.comment_list() %}

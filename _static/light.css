@@ -237,6 +237,9 @@ textarea, input[type="text"] {
   word-break: break-word;
   padding: 5px; }
 
+.reply-ids {
+  font-size: 0.7rem; }
+
 .post-file {
   margin-right: 1rem;
   margin-bottom: 0.5rem;
