@@ -5,6 +5,7 @@ import time
 from flask import g
 
 from helpers.time import age_string
+from .file import File
 
 class Post(Base):
     __tablename__ = "Posts"
@@ -38,6 +39,14 @@ class Post(Base):
         primaryjoin = "Post.parent_id == Post.id",
         backref = "comments",
         remote_side = [id]
+    )
+
+    files = relationship(
+        "File",
+        lazy = "joined",
+        primaryjoin = "Post.id == File.post_id",
+        back_populates = "post",
+        cascade = "all, delete"
     )
 
     author = relationship("User", lazy = "joined", primaryjoin = "Post.author_id == User.id", uselist = False)
@@ -90,7 +99,7 @@ class Post(Base):
 
     @cache.memoize()
     def comment_list(self, u = None):
-        return sorted([c for c in self.comments if c.can_view(u)], key = lambda x: x.created_utc, reverse = True)
+        return sorted([c for c in self.comments if c.can_view(u)], key = lambda x: x.created_utc)
 
     #@property
     #def comment_count(self):
