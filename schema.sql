@@ -5,7 +5,7 @@
 -- Dumped from database version 12.6
 -- Dumped by pg_dump version 12.6
 
--- Started on 2021-06-11 19:27:31 CEST
+-- Started on 2021-07-08 18:00:46 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -45,7 +45,7 @@ CREATE TABLE public."Posts" (
 
 
 --
--- TOC entry 208 (class 1255 OID 17851)
+-- TOC entry 210 (class 1255 OID 17851)
 -- Name: comment_count(public."Posts"); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -91,7 +91,7 @@ CREATE SEQUENCE public."Boards_id_seq"
 
 
 --
--- TOC entry 3587 (class 0 OID 0)
+-- TOC entry 3598 (class 0 OID 0)
 -- Dependencies: 202
 -- Name: Boards_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -114,7 +114,7 @@ CREATE SEQUENCE public."Posts_id_seq"
 
 
 --
--- TOC entry 3588 (class 0 OID 0)
+-- TOC entry 3599 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: Posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -157,7 +157,7 @@ CREATE SEQUENCE public."Users_id_seq"
 
 
 --
--- TOC entry 3589 (class 0 OID 0)
+-- TOC entry 3600 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: Users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
@@ -166,7 +166,48 @@ ALTER SEQUENCE public."Users_id_seq" OWNED BY public."Users".id;
 
 
 --
--- TOC entry 3435 (class 2604 OID 16409)
+-- TOC entry 209 (class 1259 OID 18330)
+-- Name: files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.files (
+    id integer NOT NULL,
+    name character varying(100),
+    path character varying(255),
+    hash character varying(255),
+    upload_ip character varying(255),
+    upload_utc integer,
+    post_id integer,
+    url character varying(255),
+    content_type character varying(50)
+);
+
+
+--
+-- TOC entry 208 (class 1259 OID 18328)
+-- Name: files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.files_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3601 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.files_id_seq OWNED BY public.files.id;
+
+
+--
+-- TOC entry 3442 (class 2604 OID 16409)
 -- Name: Boards id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -174,7 +215,7 @@ ALTER TABLE ONLY public."Boards" ALTER COLUMN id SET DEFAULT nextval('public."Bo
 
 
 --
--- TOC entry 3437 (class 2604 OID 16420)
+-- TOC entry 3444 (class 2604 OID 16420)
 -- Name: Posts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -182,7 +223,7 @@ ALTER TABLE ONLY public."Posts" ALTER COLUMN id SET DEFAULT nextval('public."Pos
 
 
 --
--- TOC entry 3440 (class 2604 OID 16497)
+-- TOC entry 3447 (class 2604 OID 16497)
 -- Name: Users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -190,7 +231,15 @@ ALTER TABLE ONLY public."Users" ALTER COLUMN id SET DEFAULT nextval('public."Use
 
 
 --
--- TOC entry 3446 (class 2606 OID 16414)
+-- TOC entry 3452 (class 2604 OID 18333)
+-- Name: files id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files ALTER COLUMN id SET DEFAULT nextval('public.files_id_seq'::regclass);
+
+
+--
+-- TOC entry 3454 (class 2606 OID 16414)
 -- Name: Boards Boards_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -199,7 +248,7 @@ ALTER TABLE ONLY public."Boards"
 
 
 --
--- TOC entry 3448 (class 2606 OID 16425)
+-- TOC entry 3456 (class 2606 OID 16425)
 -- Name: Posts Posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -208,7 +257,7 @@ ALTER TABLE ONLY public."Posts"
 
 
 --
--- TOC entry 3450 (class 2606 OID 16507)
+-- TOC entry 3458 (class 2606 OID 16507)
 -- Name: Users Users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -217,7 +266,16 @@ ALTER TABLE ONLY public."Users"
 
 
 --
--- TOC entry 3451 (class 2606 OID 16532)
+-- TOC entry 3460 (class 2606 OID 18338)
+-- Name: files files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files
+    ADD CONSTRAINT files_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3461 (class 2606 OID 16532)
 -- Name: Boards Boards_creator_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -226,7 +284,7 @@ ALTER TABLE ONLY public."Boards"
 
 
 --
--- TOC entry 3453 (class 2606 OID 16522)
+-- TOC entry 3463 (class 2606 OID 16522)
 -- Name: Posts Posts_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -235,7 +293,7 @@ ALTER TABLE ONLY public."Posts"
 
 
 --
--- TOC entry 3452 (class 2606 OID 16426)
+-- TOC entry 3462 (class 2606 OID 16426)
 -- Name: Posts Posts_board_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -244,7 +302,7 @@ ALTER TABLE ONLY public."Posts"
 
 
 --
--- TOC entry 3454 (class 2606 OID 16558)
+-- TOC entry 3464 (class 2606 OID 16558)
 -- Name: Posts Posts_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -253,7 +311,7 @@ ALTER TABLE ONLY public."Posts"
 
 
 --
--- TOC entry 3455 (class 2606 OID 16508)
+-- TOC entry 3465 (class 2606 OID 16508)
 -- Name: Users Users_banned_by_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -261,7 +319,16 @@ ALTER TABLE ONLY public."Users"
     ADD CONSTRAINT "Users_banned_by_id_fkey" FOREIGN KEY (banned_by_id) REFERENCES public."Users"(id);
 
 
--- Completed on 2021-06-11 19:27:31 CEST
+--
+-- TOC entry 3466 (class 2606 OID 18339)
+-- Name: files files_post_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files
+    ADD CONSTRAINT files_post_id_fkey FOREIGN KEY (post_id) REFERENCES public."Posts"(id);
+
+
+-- Completed on 2021-07-08 18:00:47 CEST
 
 --
 -- PostgreSQL database dump complete
