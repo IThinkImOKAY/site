@@ -24,6 +24,8 @@ app.config["CACHE_TYPE"] = "RedisCache"
 app.config["CACHE_REDIS_URL"] = environ.get("REDIS_URL")
 app.config["CACHE_DEFAULT_TIMEOUT"] = 300
 
+app.config["ATTACHMENT_UPLOAD_URL"] = "_static/usercontent/threads"
+
 limiter = Limiter(
     app,
     key_func=get_remote_address,
@@ -49,12 +51,21 @@ THEMES = [
 
 app.jinja_env.globals['defaultboards'] = ymlconfig.get('default_boards', ['/x/', '/y/', '/z/'])
 app.jinja_env.globals['sitename'] = environ.get('SITE_NAME', 'sex')
-app.jinja_env.globals['sitecolor'] = environ.get('SITE_COLOR', '#000000')
+app.jinja_env.globals['sitecolor'] = environ.get('SITE_COLOR', '000000')
 app.jinja_env.globals['themes'] = THEMES
 
 @app.template_filter('session')
 def filter_session(x, default = None):
     return session.get(x, default)
+
+@app.template_filter('len')
+def filter_len(x):
+    return len(x)
+
+@app.template_filter('truncate')
+def filter_truncate(x):
+
+    return (x[:1000] + "...") if len(x) > 1000 else x
 
 @app.before_request
 def before_request():
