@@ -171,6 +171,7 @@ body {
 hr {
     border: none;
     border-top: 1px solid #a9a9a9;
+    clear: left;
 }
 
 #board-header {
@@ -218,8 +219,6 @@ hr {
 
 #post-view-wrapper, #board-view-wrapper {
     display: flex;
-    flex-direction: row;
-    justify-content: between;
 
     #post-view, #board-view {
         flex-grow: 1;
@@ -275,13 +274,13 @@ a:hover {
     color: $link-hover;
 }
 
-hr {
-    border: none;
-    border-top: 1px solid #a9a9a9;
+h1, h2, h3, h4, h5, h6, p, legend, li, strong, input[type="file"] {
+    color: $text-primary;
 }
 
-h1, h2, h3, h4, h5, h6, p, legend, li, strong {
-    color: $text-primary;
+.comment-arrows {
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    float: left;
 }
 
 textarea, input[type="text"] {
@@ -319,6 +318,10 @@ textarea, input[type="text"] {
     }
 }
 
+.text-secondary {
+    color: $text-muted;
+}
+
 .bg-color-secondary {
     background-color: $color-secondary;
 }
@@ -329,13 +332,29 @@ textarea, input[type="text"] {
     padding: 5px;
 }
 
+.post-file {
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+    float: left;
+}
+
+.file-collapsed {
+    max-height: 150px;
+    max-width: 150px;
+}
+
+.file-open {
+    max-height: 500px;
+    max-width: 500px;
+}
+
 .post-reply {
     display: inline-block;
     background-color: $post-reply;
     width: 90%;
     margin-bottom: 1.25rem;
     padding: 10px;
-    border-color: gray;
+    border-color: $post-reply-border;
     border-style: solid;
     border-width: 0 1.75px 1.75px 0;
 
