@@ -1,4 +1,1 @@
-default_boards:
-  - /x/
-  - /pol/
-  - /sex/
+default_boards: []
