@@ -1,0 +1,13 @@
+{% if file.content_type.startswith("image/") %}
+<img src="{{ file.url }}" loading="lazy" id="image-{{ file.id }}" class="post-file file-collapsed" onclick="toggleExpandImage(event, 'image-{{ file.id }}')" />
+{% elif file.content_type.startswith("audio/") %}
+<audio controls="" class="post-file">
+    <source src="{{ file.url }}" type="{{ file.content_type }}">
+    get an actual browser retard
+</audio>
+{% elif file.content_type.startswith("video/") %}
+<video width="200" height="150" controls="" class="post-file">
+    <source src="{{ file.url }}" type="{{ file.content_type }}">
+    get an actual browser retard
+</video>
+{% endif %}
