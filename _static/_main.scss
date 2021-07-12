@@ -171,7 +171,6 @@ body {
 hr {
     border: none;
     border-top: 1px solid #a9a9a9;
-    clear: left;
 }
 
 #board-header {
@@ -318,7 +317,7 @@ textarea, input[type="text"] {
     }
 }
 
-.text-secondary {
+.text-secondary, .file-info {
     color: $text-muted;
 }
 
@@ -343,13 +342,16 @@ textarea, input[type="text"] {
 }
 
 .file-collapsed {
-    max-height: 150px;
-    max-width: 150px;
+    max-width: 125px;
+    max-height: 125px;
+    float: left;
 }
 
 .file-open {
-    max-height: 500px;
-    max-width: 500px;
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+    float: none;
 }
 
 .post-reply {

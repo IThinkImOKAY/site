@@ -126,8 +126,7 @@ body {
     display: none !important; } }
 hr {
   border: none;
-  border-top: 1px solid #a9a9a9;
-  clear: left; }
+  border-top: 1px solid #a9a9a9; }
 
 #board-header {
   text-align: center; }
@@ -226,12 +225,21 @@ textarea, input[type="text"] {
   .post .text-muted a {
     color: #212121; }
 
-.text-secondary {
+.text-secondary, .file-info {
   color: #808080; }
 
 .bg-color-secondary {
   background-color: white; }
 
+.thread {
+  clear: left; }
+
+.post-listing {
+  clear: left; }
+
+/*.op-wrapper, .post-op {
+    display: inline;
+}*/
 .post {
   min-width: 20%;
   word-break: break-word;
@@ -246,12 +254,15 @@ textarea, input[type="text"] {
   float: left; }
 
 .file-collapsed {
-  max-height: 150px;
-  max-width: 150px; }
+  max-width: 125px;
+  max-height: 125px;
+  float: left; }
 
 .file-open {
-  max-height: 500px;
-  max-width: 500px; }
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  float: none; }
 
 .post-reply {
   display: inline-block;
