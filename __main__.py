@@ -4,7 +4,7 @@ import re
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-from os import environ
+from os import environ, path
 import time
 import secrets
 from urllib.parse import quote, urlencode
@@ -13,8 +13,19 @@ from flask_limiter.util import get_remote_address
 from flaskext.markdown import Markdown
 import yaml
 
-with open('config.yml', 'r') as _ymlconfig:
-    ymlconfig = yaml.safe_load(_ymlconfig)
+#with open('config.yml', 'r') as _ymlconfig:
+#    ymlconfig = yaml.safe_load(_ymlconfig)
+
+# create config.yml from example config if it doesn't exist
+if not path.isfile('config.yml'):
+    example = open('config.example.yml', 'r')
+    configfile = open('config.yml', 'wt')
+
+    lines = example.read()
+    configfile.write(str(lines))
+
+    example.close()
+    configfile.close()
 
 app = Flask(__name__, static_folder = "./_static")
 
@@ -25,7 +36,6 @@ app.config["CACHE_REDIS_URL"] = environ.get("REDIS_URL")
 app.config["CACHE_DEFAULT_TIMEOUT"] = 300
 
 app.config["ATTACHMENT_UPLOAD_URL"] = "_static/usercontent/threads"
-app.config["MAX_FILE_SIZE"] = ymlconfig.get("max_filesize", 2)
 
 limiter = Limiter(
     app,
@@ -50,7 +60,23 @@ THEMES = [
     'Dark'
 ]
 
-app.jinja_env.globals['defaultboards'] = ymlconfig.get('default_boards', ['/x/', '/y/', '/z/'])
+def load_config():
+    with open('config.yml', 'r') as _ymlconfig:
+        ymlconfig = yaml.safe_load(_ymlconfig)
+
+        app.jinja_env.globals['defaultboards'] = ymlconfig.get('default_boards', ['/x/', '/y/', '/z/'])
+        app.config["MAX_FILE_SIZE"] = ymlconfig.get("max_filesize", 2)
+
+        return ymlconfig
+
+load_config()
+
+def dump_it(data):
+    with open('config.yml', 'w') as config_file:
+        yaml.dump(data, config_file)
+
+    load_config()
+
 app.jinja_env.globals['sitename'] = environ.get('SITE_NAME', 'sex')
 app.jinja_env.globals['sitecolor'] = environ.get('SITE_COLOR', '000000')
 app.jinja_env.globals['themes'] = THEMES

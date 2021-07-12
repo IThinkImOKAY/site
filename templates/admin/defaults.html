@@ -1,0 +1,40 @@
+{% extends "layouts/index.html" %}
+{% block title %}Manage default boards{% endblock %}
+{% block body %}
+<div class="settingsWrapper">
+    <h1>Default boards</h1>
+    <fieldset class="settingsFieldset">
+        <legend>Add or remove defaults</legend>
+        <form action="/*/admin/defaults" method="post">
+            <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+            <input type="text" required="" name="board" placeholder="board name" />
+            <input type="submit" value="toggle default" />
+        </form>
+        {% if error %}
+        <span class="text-danger">{{ error }}</span>
+        {% endif %}
+        {% if defaultboards %}
+        <hr />
+        <h3>defaults</h3>
+        <table style="width: 100%;">
+            <tbody>
+                {% for board in defaultboards %}
+                    <tr>
+                        <td>
+                            <a href="{{ board }}">{{ board }}</a>
+                        </td>
+                        <td>
+                            <form class="inline" action="/*/admin/defaults" method="post">
+                                <input type="hidden" name="formkey" value="{{ u.formkey }}" />
+                                <input type="hidden" name="board" value="{{ board }}">
+                                [<input type="submit" class="btn-link text-danger" value="remove" />]
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </fieldset>
+</div>
+{% endblock %}

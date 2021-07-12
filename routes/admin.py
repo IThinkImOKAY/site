@@ -1,5 +1,5 @@
-from __main__ import app, cache
-from flask import g, redirect
+from __main__ import app, cache, load_config, dump_it
+from flask import g, redirect, render_template
 from helpers.get import *
 from helpers.wrappers import *
 from helpers.markdown import *
@@ -57,6 +57,14 @@ def admin_ban_board(bid, u):
     reason = request.form.get("reason", "")
 
     target.ban(reason = reason)
+
+    # remove board from global defaults
+    config = dict(load_config())
+
+    if target.url in config.get("default_boards"):
+        config["default_boards"] = [x for x in config.get("default_boards") if x != target.url]
+
+        dump_it(config)
 
     return redirect(target.url)
 
@@ -179,3 +187,31 @@ def admin_purge_board(u):
     cache.delete_memoized(board.post_list)
 
     return redirect(board.url)
+
+@app.post('/*/admin/defaults')
+@auth_required
+@admin_required
+@validate_formkey
+def admin_toggle_default(u):
+
+    board = get_board(request.form.get("board").strip("/"))
+
+    if not board:
+        return render_template("admin/defaults.html", error = "that board doesn't exist", u = u), 404
+
+    config = dict(load_config())
+
+    if board.url in config.get("default_boards"):
+        config["default_boards"] = [x for x in config.get("default_boards") if x != board.url]
+    else:
+        if board.is_banned:
+            return render_template("admin/defaults.html", error = f"{board.url} is banned", u = u)
+
+        if len(config.get("default_boards")) >= 15:
+            return render_template("admin/defaults.html", error = "max 15 default boards allowed", u = u), 403
+
+        config["default_boards"].append(board.url)
+
+    dump_it(config)
+
+    return render_template("admin/defaults.html", u = u)
