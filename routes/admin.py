@@ -26,9 +26,9 @@ def admin_remove_post(pid, u):
     _redirect = target.board.url if target.is_top_level else target.parent.permalink
 
     if target.is_top_level:
-        cache.delete_memoized(target.comment_list)
-
-    cache.delete_memoized(target.board.post_list)
+        cache.delete_memoized(target.board.post_list)
+    else:
+        cache.delete_memoized(target.parent.comment_list)
 
     files = g.db.query(File).filter(File.post_id.in_(target.idlist)).all()
 
