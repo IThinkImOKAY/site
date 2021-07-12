@@ -94,11 +94,16 @@ def post_submit_reply(boardname, pid, u):
     for f in files:
 
         if not f.content_type.startswith(('image/', 'audio/', 'video')):
-            continue
+            return "file type not allowed", 403
 
         save_url = os.path.join(app.config["ATTACHMENT_UPLOAD_URL"], f"{new_reply.id}_{secure_filename(f.filename)}")
 
         f.save(save_url)
+
+        # too large file
+        if os.stat(save_url).st_size > app.config.get("MAX_FILE_SIZE")*1000000:
+            os.remove(save_url)
+            return f"file too large (max <strong>{app.config.get('MAX_FILE_SIZE')}mb</strong> allowed)", 403
 
         new_file = File(name = f.filename,
             content_type = f.content_type,

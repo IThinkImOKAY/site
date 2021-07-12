@@ -25,6 +25,7 @@ app.config["CACHE_REDIS_URL"] = environ.get("REDIS_URL")
 app.config["CACHE_DEFAULT_TIMEOUT"] = 300
 
 app.config["ATTACHMENT_UPLOAD_URL"] = "_static/usercontent/threads"
+app.config["MAX_FILE_SIZE"] = ymlconfig.get("max_filesize", 2)
 
 limiter = Limiter(
     app,
@@ -58,9 +59,9 @@ app.jinja_env.globals['themes'] = THEMES
 def filter_session(x, default = None):
     return session.get(x, default)
 
-@app.template_filter('len')
-def filter_len(x):
-    return len(x)
+@app.template_filter('app_config')
+def filter_config(x):
+    return app.config.get(x)
 
 @app.template_filter('truncate')
 def filter_truncate(x):
@@ -84,7 +85,7 @@ from helpers.wrappers import *
 @app.get('/')
 @auth_desired
 def index(u):
-    boards = g.db.query(Board).all()
+    boards = g.db.query(Board).filter_by(banned_utc = 0).all()
 
     return render_template('home.html', boards = boards, u = u)
 
@@ -94,6 +95,7 @@ from routes.posts import *
 from routes.comments import *
 from routes.login import *
 from routes.admin import *
+from routes.admin_pages import *
 
 @app.after_request
 def after_request(response):
