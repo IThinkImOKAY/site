@@ -103,7 +103,7 @@ def post_submit(boardname, u):
         # too large file
         if os.stat(save_url).st_size > app.config.get("MAX_FILE_SIZE")*1000000:
             os.remove(save_url)
-            d.db.delete(new_post)
+            g.db.delete(new_post)
             return f"file too large (max <strong>{app.config.get('MAX_FILE_SIZE')}mb</strong> allowed)", 403
 
         new_file = File(name = f.filename,
