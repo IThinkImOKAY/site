@@ -89,6 +89,9 @@ def post_submit(boardname, u):
     files = request.files.getlist("file")
     for f in files:
 
+        if not f:
+            continue
+
         if not f.content_type.startswith(('image/', 'audio/', 'video')):
             g.db.delete(new_post)
             return "file type not allowed", 403
