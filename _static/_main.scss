@@ -273,7 +273,7 @@ a:hover {
     color: $link-hover;
 }
 
-h1, h2, h3, h4, h5, h6, p, legend, li, strong, input[type="file"] {
+h1, h2, h3, h4, h5, h6, p, legend, li, strong, input[type="file"], .file-info {
     color: $text-primary;
 }
 
@@ -317,7 +317,7 @@ textarea, input[type="text"] {
     }
 }
 
-.text-secondary, .file-info {
+.text-secondary {
     color: $text-muted;
 }
 

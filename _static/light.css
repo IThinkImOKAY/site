@@ -192,7 +192,7 @@ a:visited {
 a:hover {
   color: #FF5349; }
 
-h1, h2, h3, h4, h5, h6, p, legend, li, strong, input[type="file"] {
+h1, h2, h3, h4, h5, h6, p, legend, li, strong, input[type="file"], .file-info {
   color: #1f1f1f; }
 
 .comment-arrows {
@@ -225,21 +225,12 @@ textarea, input[type="text"] {
   .post .text-muted a {
     color: #212121; }
 
-.text-secondary, .file-info {
+.text-secondary {
   color: #808080; }
 
 .bg-color-secondary {
   background-color: white; }
 
-.thread {
-  clear: left; }
-
-.post-listing {
-  clear: left; }
-
-/*.op-wrapper, .post-op {
-    display: inline;
-}*/
 .post {
   min-width: 20%;
   word-break: break-word;
