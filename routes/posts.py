@@ -9,7 +9,7 @@ import os
 
 from helpers.markdown import *
 
-@app.get('/<boardname>/<int:pid>')
+@app.get('/<boardname>/thread/<int:pid>')
 @auth_desired
 def get_post(boardname, pid, u):
 
@@ -28,7 +28,7 @@ def get_post(boardname, pid, u):
     if post.is_top_level: return render_template('post.html', post = post, u = u)
     else: return redirect(post.permalink)
 
-@app.get('/<boardname>/<int:pid>.source')
+@app.get('/<boardname>/thread/<int:pid>.source')
 @auth_desired
 def get_post_markdown(boardname, pid, u):
 
