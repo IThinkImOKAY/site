@@ -63,7 +63,7 @@ class Post(Base):
     @property
     #@cache.memoize(timeout = 900)
     def permalink(self):
-        if self.is_top_level: return f'/{self.board.name}/{self.id}'
+        if self.is_top_level: return f'/{self.board.name}/thread/{self.id}'
         else: return f'{self.parent.permalink}#p{self.id}'
 
     @property
