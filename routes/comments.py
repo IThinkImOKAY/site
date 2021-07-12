@@ -1,6 +1,7 @@
 from flask import g, abort, request, redirect, render_template
 from bs4 import BeautifulSoup
-import re
+import re, os
+from werkzeug.utils import secure_filename
 
 from __main__ import app, limiter, cache
 from classes.post import *
@@ -86,6 +87,28 @@ def post_submit_reply(boardname, pid, u):
             g.db.add(mention)
 
     g.db.refresh(new_reply)
+
+    upload_files = []
+
+    files = request.files.getlist("file")
+    for f in files:
+
+        if not f.content_type.startswith(('image/', 'audio/', 'video')):
+            continue
+
+        save_url = os.path.join(app.config["ATTACHMENT_UPLOAD_URL"], f"{new_reply.id}_{secure_filename(f.filename)}")
+
+        f.save(save_url)
+
+        new_file = File(name = f.filename,
+            content_type = f.content_type,
+            path = save_url,
+            upload_ip = request.remote_addr,
+            post_id = new_reply.id)
+
+        upload_files.append(new_file)
+
+    g.db.bulk_save_objects(upload_files)
 
     cache.delete_memoized(new_reply.parent.comment_list)
     cache.delete_memoized(new_reply.board.post_list)
