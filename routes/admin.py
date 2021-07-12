@@ -25,31 +25,23 @@ def admin_remove_post(pid, u):
 
     _redirect = target.board.url if target.is_top_level else target.parent.permalink
 
-    for f in target.files:
+    if target.is_top_level:
+        cache.delete_memoized(target.comment_list)
+
+    cache.delete_memoized(target.board.post_list)
+
+    files = g.db.query(File).filter(File.post_id.in_(target.idlist)).all()
+
+    for x in files:
         try:
-            os.remove(f.path)
+            os.remove(x.path)
         except FileNotFoundError:
             pass
+        finally:
+            g.db.delete(x)
 
-    #rerender_thread = threading.Thread(target = rerender_replies, args = (target,))
-    #rerender_thread.run()
-
-    if target.is_top_level:
-        cache.delete_memoized(target.board.post_list)
-
-        children_query = g.db.query(Post).filter_by(parent_id = target.id)
-
-        for x in children_query.all():
-            for f in x.files:
-                try:
-                    os.remove(f.path)
-                except FileNotFoundError:
-                    pass
-
-        # delete children
-        children_query.delete(synchronize_session = False)
-    else:
-        cache.delete_memoized(target.parent.comment_list)
+    for x in target.comments:
+        g.db.delete(x)
 
     g.db.delete(target)
 
@@ -170,7 +162,20 @@ def admin_purge_board(u):
 
     board = get_board(request.form.get("board", ""), graceful = False)
 
-    g.db.query(Post).filter_by(board_id = board.id).delete(synchronize_session = False)
+    posts_query = g.db.query(Post).filter_by(board_id = board.id)
+
+    idlist = [x.id for x in posts_query.all()]
+
+    files = g.db.query(File).filter(File.post_id.in_(idlist)).all()
+    for x in files:
+        try:
+            os.remove(x.path)
+        except FileNotFoundError:
+            pass
+        finally:
+            g.db.delete(x)
+
+    posts_query.delete(synchronize_session = False)
     cache.delete_memoized(board.post_list)
 
     return redirect(board.url)
