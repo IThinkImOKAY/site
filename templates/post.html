@@ -10,7 +10,7 @@
     <div id="submit-wrapper">
         <div>
             <h2 id="post-toggle-parent">[<a id="post-toggle" href="javascript:togglePostForm()">Post a reply</a>]</h2>
-            <form id="submit-post-form" class="hidden" action="/{{ post.board.name }}/{{ post.id }}" method="post">
+            <form id="submit-post-form" class="hidden" action="/{{ post.board.name }}/thread/{{ post.id }}" method="post">
                 <table>
                     <tbody>
                         <tr>
@@ -68,24 +68,9 @@
         {% endif %}
         <div id="p{{ post.id }}" class="post post-op p-4">
             {% if post.files %}
-            <p class="file-info">File: <a href="{{ post.files[0].url }}">{{ post.files[0].name }}</a>{% if u and u.is_admin %}<br /><strong>File hash:</strong> {{ post.files[0].hash }}{% endif %}</p>
-            <div class="post-file">
-                {% if post.files[0].content_type.startswith('image/') %}
-                <a href="{{ post.files[0].url }}" target="_blank" onclick="toggleExpandImage(event, 'image-{{ post.files[0].id }}')">
-                    <img src="{{ post.files[0].url }}" id="image-{{ post.files[0].id }}" class="file-collapsed" />
-                </a>
-                {% elif post.files[0].content_type.startswith('audio/') %}
-                <audio controls="">
-                    <source src="{{ post.files[0].url }}" type="{{ post.files[0].content_type }}">
-                    Your browser doesn't support this file :(
-                </audio>
-                {% elif post.files[0].content_type.startswith('video/') %}
-                <video width="250" height="180" controls="">
-                    <source src="{{ post.files[0].url }}" type="{{ post.files[0].content_type }}">
-                    Your browser doesn't support this file :(
-                </video>
-                {% endif %}
-            </div>
+            {% set file = post.files[0] %}
+            <span class="file-info">File: <a href="{{ file.url }}">{{ file.name }}</a>{% if u and u.is_admin %}<br /><strong>File hash:</strong> {{ file.hash }}{% endif %}<br/></span>
+            {% include "file.html" %}
             {% endif %}
             <p class="text-muted"><strong>{% if post.title %}{{ post.title }}{% endif %} {% if post.author %}<span class="author author-user">{{ post.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span title="{{ post.age }}">{{ post.created_date }}</span> <a href="#p{{ post.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ post.id }}')" title="Reply">{{ post.id }}</a> <span class="reply-ids">{% for re in post.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</span></p>
             <div class="usercontent">{{ post.body_html|markdown }}</div>
