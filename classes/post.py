@@ -101,6 +101,16 @@ class Post(Base):
     def comment_list(self, u = None):
         return sorted([c for c in self.comments if c.can_view(u)], key = lambda x: x.created_utc)
 
+    def preview_comments(self):
+        return self.comment_list()[-5:]
+
+    @property
+    def idlist(self):
+        if self.is_top_level:
+            return [self.id] + [x.id for x in self.comments]
+        else:
+            return [self.id]
+
     #@property
     #def comment_count(self):
     #    return len(self.comments)
