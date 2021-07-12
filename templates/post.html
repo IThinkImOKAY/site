@@ -10,7 +10,7 @@
     <div id="submit-wrapper">
         <div>
             <h2 id="post-toggle-parent">[<a id="post-toggle" href="javascript:togglePostForm()">Post a reply</a>]</h2>
-            <form id="submit-post-form" class="hidden" action="/{{ post.board.name }}/thread/{{ post.id }}" method="post">
+            <form id="submit-post-form" class="hidden" action="/{{ post.board.name }}/thread/{{ post.id }}" method="post" enctype="multipart/form-data">
                 <table>
                     <tbody>
                         <tr>
@@ -24,6 +24,12 @@
                             <td>Comment</td>
                             <td>
                                 <textarea id="re-body" required="" name="body"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>File</td>
+                            <td>
+                                <input type="file" name="file" accept="image/*, audio/*, video/*" />
                             </td>
                         </tr>
                     </tbody>
@@ -72,7 +78,7 @@
             <span class="file-info">File: <a href="{{ file.url }}">{{ file.name }}</a>{% if u and u.is_admin %}<br /><strong>File hash:</strong> {{ file.hash }}{% endif %}<br/></span>
             {% include "file.html" %}
             {% endif %}
-            <p class="text-muted"><strong>{% if post.title %}{{ post.title }}{% endif %} {% if post.author %}<span class="author author-user">{{ post.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span title="{{ post.age }}">{{ post.created_date }}</span> <a href="#p{{ post.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ post.id }}')" title="Reply">{{ post.id }}</a> <span class="reply-ids">{% for re in post.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</span></p>
+            <span class="text-muted"><strong>{% if post.title %}{{ post.title }}{% endif %} {% if post.author %}<span class="author author-user">{{ post.author.username }}</span>{% else %}<span class="author author-anon">Anonymous</span>{% endif %}</strong> <span title="{{ post.age }}">{{ post.created_date }}</span> <a href="#p{{ post.id }}" title="Link to this post">No.</a><a href="javascript:quote('{{ post.id }}')" title="Reply">{{ post.id }}</a> <span class="reply-ids">{% for re in post.mentions %} <a href="#p{{ re }}">>>{{ re }}</a>{% endfor %}</span></span>
             <div class="usercontent">{{ post.body_html|markdown }}</div>
         </div>
         {% set comments = post.comment_list() %}
